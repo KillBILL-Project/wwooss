@@ -1,1 +1,21 @@
+server:
+  servlet:
+    context-path: /killbill/api
+  port: 9090
+spring:
+  application:
+    name: KILLBILL-SERVICE
 
+---
+
+spring:
+  config:
+    activate:
+      on-profile: local
+
+
+---
+spring:
+  config:
+    activate:
+      on-profile: develop
