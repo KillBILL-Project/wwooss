@@ -14,13 +14,4 @@ public interface DocumentConfig {
     static OperationResponsePreprocessor getDocumentResponse() {
         return preprocessResponse(prettyPrint());
     }
-
-//    static FieldDescriptor getSearchResponseCodeField(List<ResponseCode> responseCodes) {
-//        String responseCodeStr = responseCodes.stream().map(responseCode ->
-//                        String.format("%s[%s] ", responseCode.getCode(), responseCode.getMessage()))
-//                .collect(Collectors.joining("/ "));
-//
-//        return fieldWithPath("code").description("응답 코드 - " + responseCodeStr);
-//    }
-
 }
