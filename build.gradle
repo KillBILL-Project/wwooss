@@ -1,7 +1,9 @@
 plugins {
 	id 'java'
-	id 'org.springframework.boot' version '3.0.6'
+	id 'org.springframework.boot' version '2.7.7'
 	id 'io.spring.dependency-management' version '1.1.0'
+	id "org.asciidoctor.jvm.convert" version "3.3.2"
+	id 'com.epages.restdocs-api-spec' version '0.16.2'
 }
 
 group = 'com.killbill'
@@ -12,6 +14,11 @@ configurations {
 	compileOnly {
 		extendsFrom annotationProcessor
 	}
+	asciidoctorExt
+}
+
+ext {
+	set('snippetsDir', file("build/generated-snippets"))
 }
 
 repositories {
@@ -20,11 +27,59 @@ repositories {
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
+
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+//	implementation 'org.springframework.restdocs:spring-restdocs-core:2.0.7.RELEASE'
+
+	// rest doc
+	testImplementation 'com.epages:restdocs-api-spec-mockmvc:0.16.2'
+//	testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc:2.0.7.RELEASE'
+
+
+	asciidoctorExt 'org.springframework.restdocs:spring-restdocs-asciidoctor'
+
+
+}
+
+openapi3 {
+	servers = [ { url = "http://localhost:8080" } ]
+	title = 'KILLBILL API restdocs with swagger'
+	description = 'kill bill API'
+	version = '0.0.1'
+	format = 'json'
+	outputFileNamePrefix = 'open-api-3-killbill-service'
+	outputDirectory = 'src/main/resources/static/docs'
 }
 
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
+asciidoctor {
+	inputs.dir snippetsDir
+	configurations 'asciidoctorExt'
+	dependsOn test
+}
+
+asciidoctor.doFirst {
+	delete file('src/main/resources/static/docs')
+}
+
+task copyDocument(type: Copy) {
+	dependsOn asciidoctor
+	from file("build/docs/asciidoc")
+	into file("src/main/resources/static/docs")
+}
+
+bootJar {
+	dependsOn asciidoctor
+	copy {
+		from asciidoctor.outputDir
+		into "src/main/resources/static/docs"
+	}
+}
+
