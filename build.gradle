@@ -33,12 +33,15 @@ dependencies {
 
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
-//	implementation 'org.springframework.restdocs:spring-restdocs-core:2.0.7.RELEASE'
+	// mysql
+	runtimeOnly 'com.mysql:mysql-connector-j'
+	// jpa
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	// jasypt
+	implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.4'
 
 	// rest doc
 	testImplementation 'com.epages:restdocs-api-spec-mockmvc:0.16.2'
-//	testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc:2.0.7.RELEASE'
-
 
 	asciidoctorExt 'org.springframework.restdocs:spring-restdocs-asciidoctor'
 
