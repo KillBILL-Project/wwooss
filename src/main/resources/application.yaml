@@ -29,6 +29,8 @@ spring:
     properties:
       hibernate:
         format_sql: true
+  elasticsearch:
+    uris: "localhost:9200"
 
 ---
 spring:
