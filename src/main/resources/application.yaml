@@ -29,8 +29,11 @@ spring:
     properties:
       hibernate:
         format_sql: true
-  elasticsearch:
-    uris: "localhost:9200"
+#  elasticsearch:
+#    uris: "localhost:9200"
+logging:
+  level:
+    org.hibernate.sql: debug
 
 ---
 spring:
