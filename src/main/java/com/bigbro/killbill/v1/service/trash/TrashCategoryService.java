@@ -1,31 +1,22 @@
 package com.bigbro.killbill.v1.service.trash;
 
-import com.bigbro.killbill.v1.domain.entity.trash.TrashCategoryEntity;
 import com.bigbro.killbill.v1.domain.request.trash.TrashCategoryRequest;
 import com.bigbro.killbill.v1.domain.response.trash.TrashCategoryResponse;
-import com.bigbro.killbill.v1.repository.trash.TrashCategoryRepository;
-import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 
-@Service
-@RequiredArgsConstructor(access = AccessLevel.PROTECTED)
-public class TrashCategoryService {
+public interface TrashCategoryService {
 
-    private final TrashCategoryRepository trashCategoryRepository;
+    /**
+     *
+     * @return TrashCategoryResponse 쓰레기 카테고리 정보 목록
+     */
+    List<TrashCategoryResponse> getTrashCategories();
 
-    @Transactional(readOnly = true)
-    public List<TrashCategoryResponse> getTrashCategories() {
-        List<TrashCategoryEntity> trashCategoryResponses = trashCategoryRepository.findAll();
-        return trashCategoryResponses.stream().map(TrashCategoryResponse::from).toList();
-    }
-
-    @Transactional
-    public void createTrashCategory(TrashCategoryRequest trashCategoryRequest) {
-        trashCategoryRepository.save(TrashCategoryEntity.from(trashCategoryRequest));
-    }
+    /**
+     *
+     * @param trashCategoryRequest 쓰레기 카테고리 생성 정보
+     */
+    void createTrashCategory(TrashCategoryRequest trashCategoryRequest);
 }
