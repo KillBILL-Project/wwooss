@@ -25,12 +25,15 @@ spring:
     database-platform: org.hibernate.dialect.MySQL8Dialect
     show-sql: true
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     properties:
       hibernate:
         format_sql: true
-  elasticsearch:
-    uris: "localhost:9200"
+#  elasticsearch:
+#    uris: "localhost:9200"
+logging:
+  level:
+    org.hibernate.sql: debug
 
 ---
 spring:
