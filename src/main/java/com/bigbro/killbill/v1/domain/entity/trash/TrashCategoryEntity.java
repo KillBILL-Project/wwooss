@@ -9,6 +9,7 @@ import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.Comment;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "trash_category",  uniqueConstraints={
@@ -25,12 +26,18 @@ import javax.persistence.*;
 public class TrashCategoryEntity extends BaseEntity {
 
     @Id
+    @Column(name = "trash_category_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long trashCategoryId;
 
     @Comment("쓰레기 카테고리 이름")
     @Column(name = "trash_category_name")
     private String trashCategoryName;
+
+
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "trash_category_id")
+    private List<TrashInfoEntity> trashInfoEntityList;
 
     public static TrashCategoryEntity from(TrashCategoryRequest trashCategoryRequest) {
         return TrashCategoryEntity.builder()
