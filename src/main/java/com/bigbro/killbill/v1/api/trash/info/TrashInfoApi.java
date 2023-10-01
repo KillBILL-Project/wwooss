@@ -2,16 +2,14 @@ package com.bigbro.killbill.v1.api.trash.info;
 
 import com.bigbro.killbill.v1.common.KillBillResponse;
 import com.bigbro.killbill.v1.common.KillBillResponseUtil;
+import com.bigbro.killbill.v1.domain.request.trash.info.TrashInfoRequest;
 import com.bigbro.killbill.v1.domain.response.trash.TrashInfoResponse;
 import com.bigbro.killbill.v1.service.trash.info.TrashInfoService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -24,5 +22,14 @@ public class TrashInfoApi {
     @GetMapping
     public ResponseEntity<KillBillResponse<List<TrashInfoResponse>>> getTrashInfoByCategoryId(@RequestParam(value = "category-id") Long categoryId) {
         return ResponseEntity.ok(KillBillResponseUtil.responseOkAddData(trashInfoService.getTrashInfoByCategoryId(categoryId)));
+    }
+
+    /**
+     * 내부 API
+     * 쓰레기 정보 생성 api
+     */
+    @PostMapping
+    public ResponseEntity<KillBillResponse<TrashInfoResponse>> createTrashInfo(@RequestBody @Valid TrashInfoRequest trashInfoRequest) {
+        return ResponseEntity.ok(KillBillResponseUtil.responseOkAddData(trashInfoService.createTrashInfo(trashInfoRequest)));
     }
 }

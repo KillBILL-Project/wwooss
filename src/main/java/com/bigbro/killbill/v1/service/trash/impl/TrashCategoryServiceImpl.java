@@ -1,7 +1,7 @@
 package com.bigbro.killbill.v1.service.trash.impl;
 
 import com.bigbro.killbill.v1.domain.entity.trash.TrashCategoryEntity;
-import com.bigbro.killbill.v1.domain.request.trash.TrashCategoryRequest;
+import com.bigbro.killbill.v1.domain.request.trash.category.TrashCategoryRequest;
 import com.bigbro.killbill.v1.domain.response.trash.TrashCategoryResponse;
 import com.bigbro.killbill.v1.repository.trash.category.TrashCategoryRepository;
 import com.bigbro.killbill.v1.service.trash.category.TrashCategoryService;

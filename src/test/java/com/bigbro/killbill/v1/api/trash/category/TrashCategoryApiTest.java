@@ -1,9 +1,8 @@
 package com.bigbro.killbill.v1.api.trash.category;
 
 import com.bigbro.killbill.v1.annotation.TestController;
-import com.bigbro.killbill.v1.api.trash.category.TrashCategoryApi;
 import com.bigbro.killbill.v1.config.DocumentConfig;
-import com.bigbro.killbill.v1.domain.request.trash.TrashCategoryRequest;
+import com.bigbro.killbill.v1.domain.request.trash.category.TrashCategoryRequest;
 import com.bigbro.killbill.v1.domain.response.trash.TrashCategoryResponse;
 import com.bigbro.killbill.v1.service.trash.category.TrashCategoryService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -83,8 +82,8 @@ class TrashCategoryApiTest {
                         .content(objectMapper.writeValueAsString(trashCategoryRequest))
                 )
                 .andExpect(status().isOk())
-                .andDo(document("get-trash-categoies",
-                                resourceDetails().tags("쓰레기 카테고리 가져오기"),
+                .andDo(document("create-trash-categoies",
+                                resourceDetails().tags("쓰레기 카테고리 생성"),
                                 DocumentConfig.getDocumentRequest(),
                                 DocumentConfig.getDocumentResponse(),
                                 responseFields(

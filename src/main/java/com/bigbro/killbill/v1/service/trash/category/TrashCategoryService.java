@@ -1,6 +1,6 @@
 package com.bigbro.killbill.v1.service.trash.category;
 
-import com.bigbro.killbill.v1.domain.request.trash.TrashCategoryRequest;
+import com.bigbro.killbill.v1.domain.request.trash.category.TrashCategoryRequest;
 import com.bigbro.killbill.v1.domain.response.trash.TrashCategoryResponse;
 
 import java.util.List;

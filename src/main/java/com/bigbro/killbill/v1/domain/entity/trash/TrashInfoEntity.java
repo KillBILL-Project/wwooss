@@ -1,6 +1,7 @@
 package com.bigbro.killbill.v1.domain.entity.trash;
 
 import com.bigbro.killbill.v1.domain.entity.base.BaseEntity;
+import com.bigbro.killbill.v1.domain.request.trash.info.TrashInfoRequest;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -43,5 +44,16 @@ public class TrashInfoEntity extends BaseEntity {
 
     @Column(name = "trash_category_id")
     private Long trashCategoryId;
+
+    public static TrashInfoEntity of(TrashInfoRequest trashInfoRequest, Long trashCategoryId) {
+        return TrashInfoEntity.builder()
+                .name(trashInfoRequest.getName())
+                .size(trashInfoRequest.getSize())
+                .weight(trashInfoRequest.getWeight())
+                .carbonEmissionPerGram(trashInfoRequest.getCarbonEmissionPerGram())
+                .refund(trashInfoRequest.getRefund())
+                .trashCategoryId(trashCategoryId)
+                .build();
+    }
 
 }

@@ -1,4 +1,4 @@
-package com.bigbro.killbill.v1.domain.request.trash;
+package com.bigbro.killbill.v1.domain.request.trash.category;
 
 import lombok.*;
 import javax.validation.constraints.NotNull;

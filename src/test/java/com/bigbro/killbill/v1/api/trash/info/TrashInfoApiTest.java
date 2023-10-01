@@ -2,8 +2,10 @@ package com.bigbro.killbill.v1.api.trash.info;
 
 import com.bigbro.killbill.v1.annotation.TestController;
 import com.bigbro.killbill.v1.config.DocumentConfig;
+import com.bigbro.killbill.v1.domain.request.trash.info.TrashInfoRequest;
 import com.bigbro.killbill.v1.domain.response.trash.TrashInfoResponse;
 import com.bigbro.killbill.v1.service.trash.info.TrashInfoService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,7 @@ import java.util.List;
 
 import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.document;
 import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.resourceDetails;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
@@ -32,6 +35,8 @@ class TrashInfoApiTest {
 
     @MockBean
     private TrashInfoService trashInfoService;
+
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Test
     @DisplayName("쓰레기 정보 가져오기")
@@ -71,6 +76,54 @@ class TrashInfoApiTest {
                                         fieldWithPath("data[].weight").description("쓰레기 무게"),
                                         fieldWithPath("data[].refund").description("쓰레기 환급금"),
                                         fieldWithPath("data[].carbonEmissionPerGram").description("그램당 탄소 배출 양")
+                                )
+                        )
+                );
+    }
+
+    @Test
+    @DisplayName("쓰레기 정보 생성")
+    void createTrashCategory() throws Exception {
+        TrashInfoRequest trashInfoRequest = TrashInfoRequest.builder()
+                .name("플라스틱")
+                .size(1)
+                .weight(1D)
+                .carbonEmissionPerGram(1D)
+                .refund(1)
+                .trashCategoryId(1L)
+                .build();
+
+        TrashInfoResponse trashInfoResponse = TrashInfoResponse.builder()
+                .trashInfoId(1L)
+                .name("플라스틱")
+                .size(1)
+                .weight(1D)
+                .refund(1)
+                .carbonEmissionPerGram(1D)
+                .build();
+
+        given(this.trashInfoService.createTrashInfo(any())).willReturn(trashInfoResponse);
+
+        this.mockMvc.perform(RestDocumentationRequestBuilders.post("/api/v1/trash-info")
+                        .contextPath("/api")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(trashInfoRequest))
+                )
+                .andExpect(status().isOk())
+                .andDo(document("create-trash-info",
+                                resourceDetails().tags("쓰레기 정보 생성"),
+                                DocumentConfig.getDocumentRequest(),
+                                DocumentConfig.getDocumentResponse(),
+                                responseFields(
+                                        fieldWithPath("code").description("응답 코드"),
+                                        fieldWithPath("title").description("응답 코드 별 클라이언트 노출 제목"),
+                                        fieldWithPath("message").description("응답 코드 별 클라이언트 노출 메세지"),
+                                        fieldWithPath("data.trashInfoId").description("쓰레기 정보 ID"),
+                                        fieldWithPath("data.name").description("쓰레기 이름"),
+                                        fieldWithPath("data.size").description("쓰레기 크기"),
+                                        fieldWithPath("data.weight").description("쓰레기 무게"),
+                                        fieldWithPath("data.refund").description("쓰레기 환급금"),
+                                        fieldWithPath("data.carbonEmissionPerGram").description("그램당 쓰래기 탄소 배출량")
                                 )
                         )
                 );
