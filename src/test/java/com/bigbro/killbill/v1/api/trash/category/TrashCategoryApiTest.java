@@ -1,4 +1,4 @@
-package com.bigbro.killbill.v1.api.trash;
+package com.bigbro.killbill.v1.api.trash.category;
 
 import com.bigbro.killbill.v1.annotation.TestController;
 import com.bigbro.killbill.v1.api.trash.category.TrashCategoryApi;
