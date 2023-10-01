@@ -1,12 +1,10 @@
-package com.bigbro.killbill.v1.api.trash;
+package com.bigbro.killbill.v1.api.trash.category;
 
 import com.bigbro.killbill.v1.common.KillBillResponse;
 import com.bigbro.killbill.v1.common.KillBillResponseUtil;
 import com.bigbro.killbill.v1.domain.request.trash.TrashCategoryRequest;
 import com.bigbro.killbill.v1.domain.response.trash.TrashCategoryResponse;
-import com.bigbro.killbill.v1.domain.response.trash.TrashCategoryWithInfoResponse;
-import com.bigbro.killbill.v1.domain.response.trash.TrashInfoResponse;
-import com.bigbro.killbill.v1.service.trash.TrashCategoryService;
+import com.bigbro.killbill.v1.service.trash.category.TrashCategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,11 +22,6 @@ public class TrashCategoryApi {
     @GetMapping
     public ResponseEntity<KillBillResponse<List<TrashCategoryResponse>>> getTrashCategories() {
         return ResponseEntity.ok(KillBillResponseUtil.responseOkAddData(trashCategoryService.getTrashCategories()));
-    }
-
-    @GetMapping("/{category-id}")
-    public ResponseEntity<KillBillResponse<TrashCategoryWithInfoResponse>> getTrashCategoryByCategoryId(@PathVariable("category-id") Long categoryId) {
-        return ResponseEntity.ok(KillBillResponseUtil.responseOkAddData(trashCategoryService.getTrashCategoryByCategoryId(categoryId)));
     }
 
     /**

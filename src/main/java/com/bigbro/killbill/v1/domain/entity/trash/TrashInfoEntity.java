@@ -41,4 +41,7 @@ public class TrashInfoEntity extends BaseEntity {
     @Column(name = "refund")
     private Integer refund;
 
+    @Column(name = "trash_category_id")
+    private Long trashCategoryId;
+
 }

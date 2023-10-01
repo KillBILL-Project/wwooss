@@ -1,10 +1,11 @@
 package com.bigbro.killbill.v1.api.trash;
 
 import com.bigbro.killbill.v1.annotation.TestController;
+import com.bigbro.killbill.v1.api.trash.category.TrashCategoryApi;
 import com.bigbro.killbill.v1.config.DocumentConfig;
 import com.bigbro.killbill.v1.domain.request.trash.TrashCategoryRequest;
 import com.bigbro.killbill.v1.domain.response.trash.TrashCategoryResponse;
-import com.bigbro.killbill.v1.service.trash.TrashCategoryService;
+import com.bigbro.killbill.v1.service.trash.category.TrashCategoryService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
