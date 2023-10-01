@@ -31,6 +31,10 @@ public class TrashCategoryApi {
         return ResponseEntity.ok(KillBillResponseUtil.responseOkAddData(trashCategoryService.getTrashCategoryByCategoryId(categoryId)));
     }
 
+    /**
+     * 내부 API
+     * 카테고리 생성
+     */
     @PostMapping
     public ResponseEntity<KillBillResponse<Void>> createTrashCategory(@RequestBody @Valid TrashCategoryRequest trashCategoryRequest) {
         trashCategoryService.createTrashCategory(trashCategoryRequest);
