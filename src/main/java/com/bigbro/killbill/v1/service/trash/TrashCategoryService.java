@@ -16,6 +16,7 @@ public interface TrashCategoryService {
     List<TrashCategoryResponse> getTrashCategories();
 
     /**
+     * @param categoryId 쓰레기 카테고리 ID
      *
      * @return TrashCategoryResponse 쓰레기 카테고리 정보 목록
      */
