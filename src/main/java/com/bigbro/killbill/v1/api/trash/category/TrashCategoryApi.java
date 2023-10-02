@@ -32,6 +32,6 @@ public class TrashCategoryApi {
     public ResponseEntity<KillBillResponse<Void>> createTrashCategory(@RequestBody @Valid TrashCategoryRequest trashCategoryRequest) {
         trashCategoryService.createTrashCategory(trashCategoryRequest);
 
-        return KillBillResponseUtil.responseOkNoData();
+        return KillBillResponseUtil.responseCreatedNoData();
     }
 }

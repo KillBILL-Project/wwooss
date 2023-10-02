@@ -30,6 +30,6 @@ public class TrashInfoApi {
      */
     @PostMapping
     public ResponseEntity<KillBillResponse<TrashInfoResponse>> createTrashInfo(@RequestBody @Valid TrashInfoRequest trashInfoRequest) {
-        return KillBillResponseUtil.responseOkAddData(trashInfoService.createTrashInfo(trashInfoRequest));
+        return KillBillResponseUtil.responseCreatedAddData(trashInfoService.createTrashInfo(trashInfoRequest));
     }
 }

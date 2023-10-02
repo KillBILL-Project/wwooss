@@ -3,6 +3,7 @@ package com.bigbro.killbill.v1.common;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import static com.bigbro.killbill.v1.common.KillBillResponseCode.CREATED_SUCCESS;
 import static com.bigbro.killbill.v1.common.KillBillResponseCode.SUCCESS;
 
 public class KillBillResponseUtil {
@@ -13,6 +14,14 @@ public class KillBillResponseUtil {
 
     public static <T> ResponseEntity <KillBillResponse<T>> responseOkAddData(T data) {
         return killbillResponseEntity(SUCCESS, data);
+    }
+
+    public static <T> ResponseEntity <KillBillResponse<T>> responseCreatedNoData() {
+        return killbillNoDataResponseEntity(CREATED_SUCCESS);
+    }
+
+    public static <T> ResponseEntity <KillBillResponse<T>> responseCreatedAddData(T data) {
+        return killbillResponseEntity(CREATED_SUCCESS, data);
     }
 
 

@@ -10,7 +10,7 @@ import org.springframework.http.HttpStatus;
 public enum KillBillResponseCode {
     // Success
     SUCCESS(HttpStatus.OK, "안내", "정상 처리 되었습니다."),
-    CREATED_SUCCESS(HttpStatus.CREATED, "안내", "정상적으로 생성되었습니다."),
+    CREATED_SUCCESS(HttpStatus.CREATED, "안내", "정상적으로 생성 되었습니다."),
     NO_CONTENT_SUCCESS(HttpStatus.NO_CONTENT, "안내", "정상 처리 되었습니다."),
 
     // client error
