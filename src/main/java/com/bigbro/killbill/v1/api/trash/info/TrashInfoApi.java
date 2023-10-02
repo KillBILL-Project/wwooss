@@ -20,7 +20,7 @@ public class TrashInfoApi {
     private final TrashInfoService trashInfoService;
 
     @GetMapping
-    public ResponseEntity<KillBillResponse<List<TrashInfoResponse>>> getTrashInfoByCategoryId(@RequestParam(value = "category-id") Long categoryId) {
+    public ResponseEntity<KillBillResponse<List<TrashInfoResponse>>> getTrashInfoByCategoryId(@RequestParam(value = "categoryId") Long categoryId) {
         return ResponseEntity.ok(KillBillResponseUtil.responseOkAddData(trashInfoService.getTrashInfoByCategoryId(categoryId)));
     }
 
