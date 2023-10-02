@@ -21,7 +21,7 @@ public class TrashInfoApi {
 
     @GetMapping
     public ResponseEntity<KillBillResponse<List<TrashInfoResponse>>> getTrashInfoByCategoryId(@RequestParam(value = "categoryId") Long categoryId) {
-        return ResponseEntity.ok(KillBillResponseUtil.responseOkAddData(trashInfoService.getTrashInfoByCategoryId(categoryId)));
+        return KillBillResponseUtil.responseOkAddData(trashInfoService.getTrashInfoByCategoryId(categoryId));
     }
 
     /**
@@ -30,6 +30,6 @@ public class TrashInfoApi {
      */
     @PostMapping
     public ResponseEntity<KillBillResponse<TrashInfoResponse>> createTrashInfo(@RequestBody @Valid TrashInfoRequest trashInfoRequest) {
-        return ResponseEntity.ok(KillBillResponseUtil.responseOkAddData(trashInfoService.createTrashInfo(trashInfoRequest)));
+        return KillBillResponseUtil.responseOkAddData(trashInfoService.createTrashInfo(trashInfoRequest));
     }
 }
