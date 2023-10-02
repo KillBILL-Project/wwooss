@@ -19,21 +19,21 @@ public class GlobalException {
 
     @ExceptionHandler(Exception.class)
     public <T> ResponseEntity<KillBillResponse<T>> serverExceptionHandler(final Exception e, final HttpServletRequest request) {
-        log.error("serverExceptionHandler: {} {}", e.getMessage(), request.getRequestURL());
+        log.error("serverExceptionHandler: {} / url: {} \n {}", e.getMessage(), request.getRequestURL(), e.getStackTrace());
 
         return KillBillResponseUtil.killbillNoDataResponseEntity(INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler(value = DataIntegrityViolationException.class)
     public <T> ResponseEntity<KillBillResponse<T>> sqlIntegrityConstraintExceptionHandler(final DataIntegrityViolationException e, final HttpServletRequest request) {
-        log.error("DataIntegrityViolationException: {} {}", e.getMessage(), request.getRequestURL());
+        log.error("DataIntegrityViolationException: {} / url: {}", e.getMessage(), request.getRequestURL());
 
         return KillBillResponseUtil.killbillNoDataResponseEntity(DUPLICATION_VALUE);
     }
 
     @ExceptionHandler(value = DataNotFoundException.class)
     public ResponseEntity<KillBillResponse<Object>> DataNotFoundExceptionHandler(final DataNotFoundException e, final HttpServletRequest request) {
-        log.error("DataNotFoundException: {} {}", e.getMessage(), request.getRequestURL());
+        log.error("DataNotFoundException: {} / url: {}", e.getMessage(), request.getRequestURL());
 
         return KillBillResponseUtil.killbillNoDataResponseEntity(e.getCode(), e.getTitle(), e.getMessage());
     }
