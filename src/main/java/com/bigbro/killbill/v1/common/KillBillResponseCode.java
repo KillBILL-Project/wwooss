@@ -9,7 +9,7 @@ import lombok.Getter;
 public enum KillBillResponseCode {
     SUCCESS("2000", "안내", "정상 처리 되었습니다."),
 
-    // bad request => 4XXX
+    // client error => 4XXX
     NOT_FOUND_DATA("4000", "안내", "존재 하지 않는 값 입니다."),
 
     // server error => 5XXX
