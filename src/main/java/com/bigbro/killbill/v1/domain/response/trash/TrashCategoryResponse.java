@@ -1,6 +1,6 @@
 package com.bigbro.killbill.v1.domain.response.trash;
 
-import com.bigbro.killbill.v1.domain.entity.trash.TrashCategoryEntity;
+import com.bigbro.killbill.v1.domain.entity.trash.TrashCategory;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,10 +15,10 @@ public class TrashCategoryResponse {
 
     private String trashCategoryName;
 
-    public static TrashCategoryResponse from(TrashCategoryEntity trashCategoryEntity) {
+    public static TrashCategoryResponse from(TrashCategory trashCategory) {
         return TrashCategoryResponse.builder()
-                .trashCategoryId(trashCategoryEntity.getTrashCategoryId())
-                .trashCategoryName(trashCategoryEntity.getTrashCategoryName())
+                .trashCategoryId(trashCategory.getTrashCategoryId())
+                .trashCategoryName(trashCategory.getTrashCategoryName())
                 .build();
     }
 }

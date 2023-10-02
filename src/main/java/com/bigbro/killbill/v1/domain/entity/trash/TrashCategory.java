@@ -23,7 +23,7 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @SuperBuilder
 @Getter
-public class TrashCategoryEntity extends BaseEntity {
+public class TrashCategory extends BaseEntity {
 
     @Id
     @Column(name = "trash_category_id")
@@ -34,8 +34,8 @@ public class TrashCategoryEntity extends BaseEntity {
     @Column(name = "trash_category_name")
     private String trashCategoryName;
 
-    public static TrashCategoryEntity from(TrashCategoryRequest trashCategoryRequest) {
-        return TrashCategoryEntity.builder()
+    public static TrashCategory from(TrashCategoryRequest trashCategoryRequest) {
+        return TrashCategory.builder()
                 .trashCategoryName(trashCategoryRequest.getCategoryName())
                 .build();
     }
