@@ -1,7 +1,7 @@
 package com.bigbro.killbill.v1.domain.entity.trash;
 
 import com.bigbro.killbill.v1.domain.entity.base.BaseEntity;
-import com.bigbro.killbill.v1.domain.request.trash.TrashCategoryRequest;
+import com.bigbro.killbill.v1.domain.request.trash.category.TrashCategoryRequest;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,6 +9,7 @@ import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.Comment;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "trash_category",  uniqueConstraints={
@@ -25,6 +26,7 @@ import javax.persistence.*;
 public class TrashCategoryEntity extends BaseEntity {
 
     @Id
+    @Column(name = "trash_category_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long trashCategoryId;
 

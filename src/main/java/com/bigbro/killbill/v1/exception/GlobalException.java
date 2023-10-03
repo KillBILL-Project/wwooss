@@ -28,4 +28,9 @@ public class GlobalException {
         return ResponseEntity.ok(KillBillResponseUtil.responseCustomMessageNoData(DUPLICATION_VALUE));
     }
 
+    @ExceptionHandler(value = DataNotFoundException.class)
+    public <T> ResponseEntity<KillBillResponse<T>> DataNotFoundExceptionHandler(DataNotFoundException e) {
+        return ResponseEntity.ok(KillBillResponseUtil.responseCustomMessageNoData(e.getCode(), e.getTitle(), e.getMessage()));
+    }
+
 }

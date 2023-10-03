@@ -34,4 +34,12 @@ public class KillBillResponse<T> {
                 .data(data)
                 .build();
     }
+
+    public static <T> KillBillResponse<T> of(String code, String title, String message) {
+        return KillBillResponse.<T>builder()
+                .code(code)
+                .title(title)
+                .message(message)
+                .build();
+    }
 }
