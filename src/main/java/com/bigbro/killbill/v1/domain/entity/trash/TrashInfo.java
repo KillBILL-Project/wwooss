@@ -15,7 +15,7 @@ import javax.persistence.*;
 @SuperBuilder
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class TrashInfoEntity extends BaseEntity {
+public class TrashInfo extends BaseEntity {
 
     @Id
     @Column(name = "trash_info_id")
@@ -44,16 +44,16 @@ public class TrashInfoEntity extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "trash_category_id")
-    private TrashCategoryEntity trashCategoryEntity;
+    private TrashCategory trashCategory;
 
-    public static TrashInfoEntity of(TrashInfoRequest trashInfoRequest, TrashCategoryEntity trashCategoryEntity) {
-        return TrashInfoEntity.builder()
+    public static TrashInfo of(TrashInfoRequest trashInfoRequest, TrashCategory trashCategory) {
+        return TrashInfo.builder()
                 .name(trashInfoRequest.getName())
                 .size(trashInfoRequest.getSize())
                 .weight(trashInfoRequest.getWeight())
                 .carbonEmissionPerGram(trashInfoRequest.getCarbonEmissionPerGram())
                 .refund(trashInfoRequest.getRefund())
-                .trashCategoryEntity(trashCategoryEntity)
+                .trashCategory(trashCategory)
                 .build();
     }
 

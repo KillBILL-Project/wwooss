@@ -1,7 +1,8 @@
 package com.bigbro.killbill.v1.service.trash.impl;
 
-import com.bigbro.killbill.v1.domain.entity.trash.TrashCategoryEntity;
-import com.bigbro.killbill.v1.domain.entity.trash.TrashInfoEntity;
+import com.bigbro.killbill.v1.common.KillBillResponseCode;
+import com.bigbro.killbill.v1.domain.entity.trash.TrashCategory;
+import com.bigbro.killbill.v1.domain.entity.trash.TrashInfo;
 import com.bigbro.killbill.v1.domain.response.trash.TrashInfoResponse;
 import com.bigbro.killbill.v1.exception.DataNotFoundException;
 import com.bigbro.killbill.v1.repository.trash.category.TrashCategoryRepository;
@@ -14,6 +15,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.tuple;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -40,32 +42,50 @@ public class TrashInfoServiceImplTest {
     @Test
     @DisplayName("쓰레기 정보 목록 불러오기")
     void findTrashInfoList() {
-        TrashCategoryEntity trashCategoryEntity = TrashCategoryEntity.builder()
+        TrashCategory trashCategory = TrashCategory.builder()
                 .trashCategoryId(1L)
                 .trashCategoryName("플라스틱")
                 .build();
 
-        List<TrashInfoEntity> trashInfoEntityList = List.of(
-                TrashInfoEntity.builder()
-                        .trashInfoId(1L)
-                        .name("플라스틱")
-                        .size(1)
-                        .weight(1D)
-                        .refund(1)
-                        .carbonEmissionPerGram(1D)
-                        .build()
-        );
-        List<TrashInfoResponse> trashInfoResponseList = trashInfoEntityList.stream().map(TrashInfoResponse::from).toList();
+        TrashInfo plastic = TrashInfo.builder()
+                .trashInfoId(1L)
+                .name("플라스틱")
+                .size(1)
+                .weight(1D)
+                .refund(1)
+                .carbonEmissionPerGram(1D)
+                .build();
+        TrashInfo can = TrashInfo.builder()
+                .trashInfoId(2L)
+                .name("캔")
+                .size(2)
+                .weight(3D)
+                .refund(10)
+                .carbonEmissionPerGram(2D)
+                .build();
 
-        given(trashCategoryRepository.findById(1L)).willReturn(Optional.ofNullable(trashCategoryEntity));
-        given(trashInfoRepository.findTrashInfoEntitiesByTrashCategoryEntity(trashCategoryEntity)).willReturn(trashInfoEntityList);
+        List<TrashInfo> trashInfoList = List.of(plastic, can);
 
-        Optional<TrashCategoryEntity> findCategoryEntity = trashCategoryRepository.findById(1L);
-        List<TrashInfoEntity> trashInfoEntities = trashInfoRepository.findTrashInfoEntitiesByTrashCategoryEntity(trashCategoryEntity);
+        List<TrashInfoResponse> trashInfoResponseList = trashInfoList.stream().map(TrashInfoResponse::from).toList();
+
+        given(trashCategoryRepository.findById(1L)).willReturn(Optional.ofNullable(trashCategory));
+        given(trashInfoRepository.findTrashInfoEntitiesByTrashCategory(trashCategory)).willReturn(trashInfoList);
+
+        Optional<TrashCategory> findCategoryEntity = trashCategoryRepository.findById(1L);
+        List<TrashInfo> trashInfoEntities = trashInfoRepository.findTrashInfoEntitiesByTrashCategory(trashCategory);
 
         assertThat(findCategoryEntity).isNotNull();
+        assertThat(trashInfoEntities)
+                .filteredOn("name", "캔")
+                .containsOnly(can);
+        assertThat(trashInfoEntities)
+                .extracting("name", "refund")
+                .contains(
+                        tuple("플라스틱", 1),
+                        tuple("캔", 10)
+                );
 
-        then(findCategoryEntity).equals(trashCategoryEntity);
+        then(findCategoryEntity).equals(trashCategory);
         then(trashInfoEntities).equals(trashInfoResponseList);
     }
 
@@ -76,7 +96,7 @@ public class TrashInfoServiceImplTest {
 
         DataNotFoundException exception = assertThrows(DataNotFoundException.class, () -> trashInfoService.getTrashInfoByCategoryId(1L));
 
-        assertEquals("4000", exception.getCode());
+        assertEquals(KillBillResponseCode.NOT_FOUND_DATA.getCode(), exception.getCode());
         assertEquals("해당 쓰레기 카테고리가 존재하지 않습니다.", exception.getMessage());
     }
 

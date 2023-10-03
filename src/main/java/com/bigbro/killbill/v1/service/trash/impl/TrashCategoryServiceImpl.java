@@ -1,6 +1,6 @@
 package com.bigbro.killbill.v1.service.trash.impl;
 
-import com.bigbro.killbill.v1.domain.entity.trash.TrashCategoryEntity;
+import com.bigbro.killbill.v1.domain.entity.trash.TrashCategory;
 import com.bigbro.killbill.v1.domain.request.trash.category.TrashCategoryRequest;
 import com.bigbro.killbill.v1.domain.response.trash.TrashCategoryResponse;
 import com.bigbro.killbill.v1.repository.trash.category.TrashCategoryRepository;
@@ -22,13 +22,13 @@ public class TrashCategoryServiceImpl implements TrashCategoryService {
     @Override
     @Transactional(readOnly = true)
     public List<TrashCategoryResponse> getTrashCategories() {
-        List<TrashCategoryEntity> trashCategoryResponses = trashCategoryRepository.findAll();
+        List<TrashCategory> trashCategoryResponses = trashCategoryRepository.findAll();
         return trashCategoryResponses.stream().map(TrashCategoryResponse::from).toList();
     }
 
     @Override
     @Transactional
     public void createTrashCategory(TrashCategoryRequest trashCategoryRequest) {
-        trashCategoryRepository.save(TrashCategoryEntity.from(trashCategoryRequest));
+        trashCategoryRepository.save(TrashCategory.from(trashCategoryRequest));
     }
 }

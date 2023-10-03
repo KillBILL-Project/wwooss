@@ -1,13 +1,10 @@
 package com.bigbro.killbill.v1.domain.response.trash;
 
-import com.bigbro.killbill.v1.domain.entity.trash.TrashCategoryEntity;
-import com.bigbro.killbill.v1.domain.entity.trash.TrashInfoEntity;
+import com.bigbro.killbill.v1.domain.entity.trash.TrashInfo;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-
-import java.util.List;
 
 @Builder
 @Getter
@@ -31,14 +28,14 @@ public class TrashInfoResponse {
     // 환불 금액
     private Integer refund;
 
-    public static TrashInfoResponse from(TrashInfoEntity trashInfoEntity) {
+    public static TrashInfoResponse from(TrashInfo trashInfo) {
         return TrashInfoResponse.builder()
-                .trashInfoId(trashInfoEntity.getTrashInfoId())
-                .name(trashInfoEntity.getName())
-                .size(trashInfoEntity.getSize())
-                .weight(trashInfoEntity.getWeight())
-                .carbonEmissionPerGram(trashInfoEntity.getCarbonEmissionPerGram())
-                .refund(trashInfoEntity.getRefund())
+                .trashInfoId(trashInfo.getTrashInfoId())
+                .name(trashInfo.getName())
+                .size(trashInfo.getSize())
+                .weight(trashInfo.getWeight())
+                .carbonEmissionPerGram(trashInfo.getCarbonEmissionPerGram())
+                .refund(trashInfo.getRefund())
                 .build();
     }
 }
