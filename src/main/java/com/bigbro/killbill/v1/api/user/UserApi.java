@@ -19,6 +19,6 @@ public class UserApi {
 
     @GetMapping
     public ResponseEntity<KillBillResponse<GetUserResponse>> test() {
-        return ResponseEntity.ok(KillBillResponseUtil.responseOkAddData(this.userService.test()));
+        return KillBillResponseUtil.responseOkAddData(this.userService.test());
     }
 }

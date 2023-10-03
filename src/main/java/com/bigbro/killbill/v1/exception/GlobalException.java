@@ -4,33 +4,38 @@ import com.bigbro.killbill.v1.common.KillBillResponse;
 import com.bigbro.killbill.v1.common.KillBillResponseUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import javax.servlet.http.HttpServletRequest;
+
 import static com.bigbro.killbill.v1.common.KillBillResponseCode.DUPLICATION_VALUE;
+import static com.bigbro.killbill.v1.common.KillBillResponseCode.INTERNAL_SERVER_ERROR;
 
 @ControllerAdvice
 @Slf4j
 public class GlobalException {
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<Object> serverExceptionHandler(Exception ex) {
-        if (ex instanceof NullPointerException) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    public <T> ResponseEntity<KillBillResponse<T>> serverExceptionHandler(final Exception e, final HttpServletRequest request) {
+        log.error("serverExceptionHandler: {} / url: {} \n {}", e.getMessage(), request.getRequestURL(), e.getStackTrace());
+
+        return KillBillResponseUtil.killbillNoDataResponseEntity(INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler(value = DataIntegrityViolationException.class)
-    public <T> ResponseEntity<KillBillResponse<T>> sqlIntegrityConstraintExceptionHandler(DataIntegrityViolationException e) {
-        return ResponseEntity.ok(KillBillResponseUtil.responseCustomMessageNoData(DUPLICATION_VALUE));
+    public <T> ResponseEntity<KillBillResponse<T>> sqlIntegrityConstraintExceptionHandler(final DataIntegrityViolationException e, final HttpServletRequest request) {
+        log.error("DataIntegrityViolationException: {} / url: {}", e.getMessage(), request.getRequestURL());
+
+        return KillBillResponseUtil.killbillNoDataResponseEntity(DUPLICATION_VALUE);
     }
 
     @ExceptionHandler(value = DataNotFoundException.class)
-    public <T> ResponseEntity<KillBillResponse<T>> DataNotFoundExceptionHandler(DataNotFoundException e) {
-        return ResponseEntity.ok(KillBillResponseUtil.responseCustomMessageNoData(e.getCode(), e.getTitle(), e.getMessage()));
+    public ResponseEntity<KillBillResponse<Object>> DataNotFoundExceptionHandler(final DataNotFoundException e, final HttpServletRequest request) {
+        log.error("DataNotFoundException: {} / url: {}", e.getMessage(), request.getRequestURL());
+
+        return KillBillResponseUtil.killbillNoDataResponseEntity(e.getCode(), e.getTitle(), e.getMessage());
     }
 
 }

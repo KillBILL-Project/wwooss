@@ -4,13 +4,14 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import org.springframework.http.HttpStatus;
 
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @Builder
 @Getter
 public class KillBillResponse<T> {
 
-    private String code;
+    private HttpStatus code;
 
     private String title;
 
@@ -26,20 +27,28 @@ public class KillBillResponse<T> {
                 .build();
     }
 
-    public static <T> KillBillResponse<T> of(KillBillResponseCode responseCode, T data) {
-        return KillBillResponse.<T>builder()
-                .code(responseCode.getCode())
-                .title(responseCode.getTitle())
-                .message(responseCode.getMessage())
-                .data(data)
-                .build();
-    }
-
-    public static <T> KillBillResponse<T> of(String code, String title, String message) {
+    public static <T> KillBillResponse<T> of(HttpStatus code, String title, String message, T data) {
         return KillBillResponse.<T>builder()
                 .code(code)
                 .title(title)
                 .message(message)
+                .data(data)
+                .build();
+    }
+
+    public static <T> KillBillResponse<T> of(HttpStatus code, String title, String message) {
+        return KillBillResponse.<T>builder()
+                .code(code)
+                .title(title)
+                .message(message)
+                .build();
+    }
+
+    public static <T> KillBillResponse<T> of(KillBillResponseCode killBillResponseCode, T data) {
+        return KillBillResponse.<T>builder()
+                .code(killBillResponseCode.getCode())
+                .title(killBillResponseCode.getTitle())
+                .message(killBillResponseCode.getMessage())
                 .build();
     }
 }

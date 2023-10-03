@@ -21,7 +21,7 @@ public class TrashCategoryApi {
 
     @GetMapping
     public ResponseEntity<KillBillResponse<List<TrashCategoryResponse>>> getTrashCategories() {
-        return ResponseEntity.ok(KillBillResponseUtil.responseOkAddData(trashCategoryService.getTrashCategories()));
+        return KillBillResponseUtil.responseOkAddData(trashCategoryService.getTrashCategories());
     }
 
     /**
@@ -32,6 +32,6 @@ public class TrashCategoryApi {
     public ResponseEntity<KillBillResponse<Void>> createTrashCategory(@RequestBody @Valid TrashCategoryRequest trashCategoryRequest) {
         trashCategoryService.createTrashCategory(trashCategoryRequest);
 
-        return ResponseEntity.ok(KillBillResponseUtil.responseOkNoData());
+        return KillBillResponseUtil.responseCreatedNoData();
     }
 }
