@@ -42,17 +42,18 @@ public class TrashInfoEntity extends BaseEntity {
     @Column(name = "refund")
     private Integer refund;
 
-    @Column(name = "trash_category_id")
-    private Long trashCategoryId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "trash_category_id")
+    private TrashCategoryEntity trashCategoryEntity;
 
-    public static TrashInfoEntity of(TrashInfoRequest trashInfoRequest, Long trashCategoryId) {
+    public static TrashInfoEntity of(TrashInfoRequest trashInfoRequest, TrashCategoryEntity trashCategoryEntity) {
         return TrashInfoEntity.builder()
                 .name(trashInfoRequest.getName())
                 .size(trashInfoRequest.getSize())
                 .weight(trashInfoRequest.getWeight())
                 .carbonEmissionPerGram(trashInfoRequest.getCarbonEmissionPerGram())
                 .refund(trashInfoRequest.getRefund())
-                .trashCategoryId(trashCategoryId)
+                .trashCategoryEntity(trashCategoryEntity)
                 .build();
     }
 

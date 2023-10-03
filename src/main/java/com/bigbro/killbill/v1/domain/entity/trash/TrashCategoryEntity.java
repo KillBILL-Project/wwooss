@@ -34,11 +34,6 @@ public class TrashCategoryEntity extends BaseEntity {
     @Column(name = "trash_category_name")
     private String trashCategoryName;
 
-
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "trash_category_id")
-    private List<TrashInfoEntity> trashInfoEntityList;
-
     public static TrashCategoryEntity from(TrashCategoryRequest trashCategoryRequest) {
         return TrashCategoryEntity.builder()
                 .trashCategoryName(trashCategoryRequest.getCategoryName())

@@ -28,7 +28,7 @@ public class TrashInfoServiceImpl implements TrashInfoService {
     @Transactional(readOnly = true)
     public List<TrashInfoResponse> getTrashInfoByCategoryId(Long categoryId) {
         TrashCategoryEntity trashCategoryEntity = trashCategoryRepository.findById(categoryId).orElseThrow(() -> new DataNotFoundException(KillBillResponseCode.NOT_FOUND_DATA, "해당 쓰레기 카테고리가 존재하지 않습니다."));
-        List<TrashInfoEntity> trashInfoEntityList = trashInfoRepository.findTrashInfoEntitiesByTrashCategoryId(trashCategoryEntity.getTrashCategoryId());
+        List<TrashInfoEntity> trashInfoEntityList = trashInfoRepository.findTrashInfoEntitiesByTrashCategoryEntity(trashCategoryEntity);
 
         return trashInfoEntityList.stream().map(TrashInfoResponse::from).toList();
     }
@@ -37,7 +37,7 @@ public class TrashInfoServiceImpl implements TrashInfoService {
     @Transactional
     public TrashInfoResponse createTrashInfo(TrashInfoRequest trashInfoRequest) {
         TrashCategoryEntity trashCategoryEntity = trashCategoryRepository.findById(trashInfoRequest.getTrashCategoryId()).orElseThrow(() -> new DataNotFoundException(KillBillResponseCode.NOT_FOUND_DATA, "해당 쓰레기 카테고리가 존재하지 않습니다."));
-        TrashInfoEntity trashInfoEntity = trashInfoRepository.save(TrashInfoEntity.of(trashInfoRequest, trashCategoryEntity.getTrashCategoryId()));
+        TrashInfoEntity trashInfoEntity = trashInfoRepository.save(TrashInfoEntity.of(trashInfoRequest, trashCategoryEntity));
 
         return TrashInfoResponse.from(trashInfoEntity);
     }
