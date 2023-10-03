@@ -58,7 +58,7 @@ public class TrashInfoServiceImplTest {
         List<TrashInfoResponse> trashInfoResponseList = trashInfoList.stream().map(TrashInfoResponse::from).toList();
 
         given(trashCategoryRepository.findById(1L)).willReturn(Optional.ofNullable(trashCategory));
-        given(trashInfoRepository.findTrashInfoEntitiesByTrashCategory(1L)).willReturn(trashInfoList);
+        given(trashInfoRepository.findTrashInfoEntitiesByTrashCategory(trashCategory)).willReturn(trashInfoList);
 
         Optional<TrashCategory> findCategoryEntity = trashCategoryRepository.findById(1L);
         List<TrashInfo> trashInfoEntities = trashInfoRepository.findTrashInfoEntitiesByTrashCategory(trashCategory);

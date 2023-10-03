@@ -7,5 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface TrashInfoRepository extends JpaRepository<TrashInfo, Long> {
-    List<TrashInfo> findTrashInfoEntitiesByTrashCategoryId(TrashCategory trashCategory);
+    List<TrashInfo> findTrashInfoEntitiesByTrashCategory(TrashCategory trashCategory);
 }
