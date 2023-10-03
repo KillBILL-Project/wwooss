@@ -31,6 +31,7 @@ public class TrashCanContentsServiceImpl implements TrashCanContentsService {
         User user = userRepository.findById(userId).orElseThrow(() -> new DataNotFoundException(KillBillResponseCode.NOT_FOUND_DATA, "존재하지 않는 유저입니다."));
         TrashInfo trashInfo = trashInfoRepository.findById(trashCanContentsRequest.getTrashInfoId()).orElseThrow(() -> new DataNotFoundException(KillBillResponseCode.NOT_FOUND_DATA, "존재하지 않는 쓰레기 정보 입니다."));
 
+        // TODO : 쓰레기 로그 테이블 생성 후 로그도 저장 로직 추가
         trashCanContentsRepository.save(TrashCanContents.of(trashInfo, user, trashCanContentsRequest.getTrashCount()));
     }
 }
