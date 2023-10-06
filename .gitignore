@@ -42,4 +42,4 @@ out/
 /libs
 
 ### static ###
-src/main/resources/static/docs/open-api-3-killbill-service.json
+src/main/resources/static/docs/open-api-3-wwooss-service.json

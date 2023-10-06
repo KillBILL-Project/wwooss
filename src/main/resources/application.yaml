@@ -4,7 +4,7 @@ server:
   port: 9090
 spring:
   application:
-    name: KILLBILL-SERVICE
+    name: WWOOSS-SERVICE
 
 ---
 
