@@ -45,7 +45,6 @@ class TrashInfoApiTest {
                 List.of(TrashInfoResponse.builder()
                         .trashInfoId(1L)
                         .name("플라스틱")
-                        .size(1)
                         .weight(1D)
                         .refund(1)
                         .carbonEmissionPerGram(1D)
@@ -72,7 +71,6 @@ class TrashInfoApiTest {
                                         fieldWithPath("message").description("응답 코드 별 클라이언트 노출 메세지"),
                                         fieldWithPath("data[].trashInfoId").description("쓰레기 정보 id"),
                                         fieldWithPath("data[].name").description("쓰레기 이름"),
-                                        fieldWithPath("data[].size").description("쓰레기 크기"),
                                         fieldWithPath("data[].weight").description("쓰레기 무게"),
                                         fieldWithPath("data[].refund").description("쓰레기 환급금"),
                                         fieldWithPath("data[].carbonEmissionPerGram").description("그램당 탄소 배출 양")
@@ -86,7 +84,6 @@ class TrashInfoApiTest {
     void createTrashCategory() throws Exception {
         TrashInfoRequest trashInfoRequest = TrashInfoRequest.builder()
                 .name("플라스틱")
-                .size(1)
                 .weight(1D)
                 .carbonEmissionPerGram(1D)
                 .refund(1)
@@ -96,7 +93,6 @@ class TrashInfoApiTest {
         TrashInfoResponse trashInfoResponse = TrashInfoResponse.builder()
                 .trashInfoId(1L)
                 .name("플라스틱")
-                .size(1)
                 .weight(1D)
                 .refund(1)
                 .carbonEmissionPerGram(1D)
@@ -120,7 +116,6 @@ class TrashInfoApiTest {
                                         fieldWithPath("message").description("응답 코드 별 클라이언트 노출 메세지"),
                                         fieldWithPath("data.trashInfoId").description("쓰레기 정보 ID"),
                                         fieldWithPath("data.name").description("쓰레기 이름"),
-                                        fieldWithPath("data.size").description("쓰레기 크기"),
                                         fieldWithPath("data.weight").description("쓰레기 무게"),
                                         fieldWithPath("data.refund").description("쓰레기 환급금"),
                                         fieldWithPath("data.carbonEmissionPerGram").description("그램당 쓰래기 탄소 배출량")

@@ -47,7 +47,6 @@ class TrashCanContentsServiceImplTest {
                 TrashInfo.builder()
                         .trashInfoId(1L)
                         .name("플라스틱")
-                        .size(1)
                         .weight(1D)
                         .refund(1)
                         .carbonEmissionPerGram(1D)

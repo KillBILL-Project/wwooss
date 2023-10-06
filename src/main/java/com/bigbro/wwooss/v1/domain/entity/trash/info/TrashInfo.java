@@ -11,6 +11,12 @@ import org.hibernate.annotations.Comment;
 
 import javax.persistence.*;
 
+/**
+ * 쓰레기 정보 기준은 최소 10으로 해서 메타 데이터 입력
+ * 아래의 값은 기준 10으로 적용
+ * log, contents에 size 값 기입 => 10을 기준으로 size * 10
+ */
+
 @Entity
 @Table(name = "trash_info")
 @SuperBuilder
@@ -26,10 +32,6 @@ public class TrashInfo extends BaseEntity {
     @Comment("쓰레기 이름")
     @Column(name = "name")
     private String name;
-
-    @Comment("쓰레기 크기")
-    @Column(name = "size")
-    private Integer size;
 
     @Comment("쓰레기 무게 (gram)")
     @Column(name = "weight")
@@ -50,7 +52,6 @@ public class TrashInfo extends BaseEntity {
     public static TrashInfo of(TrashInfoRequest trashInfoRequest, TrashCategory trashCategory) {
         return TrashInfo.builder()
                 .name(trashInfoRequest.getName())
-                .size(trashInfoRequest.getSize())
                 .weight(trashInfoRequest.getWeight())
                 .carbonEmissionPerGram(trashInfoRequest.getCarbonEmissionPerGram())
                 .refund(trashInfoRequest.getRefund())

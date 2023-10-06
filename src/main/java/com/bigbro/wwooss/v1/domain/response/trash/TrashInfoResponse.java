@@ -32,7 +32,6 @@ public class TrashInfoResponse {
         return TrashInfoResponse.builder()
                 .trashInfoId(trashInfo.getTrashInfoId())
                 .name(trashInfo.getName())
-                .size(trashInfo.getSize())
                 .weight(trashInfo.getWeight())
                 .carbonEmissionPerGram(trashInfo.getCarbonEmissionPerGram())
                 .refund(trashInfo.getRefund())
