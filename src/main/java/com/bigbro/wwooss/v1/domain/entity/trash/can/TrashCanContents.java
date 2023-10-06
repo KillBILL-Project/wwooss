@@ -1,6 +1,7 @@
-package com.bigbro.wwooss.v1.domain.entity.trash;
+package com.bigbro.wwooss.v1.domain.entity.trash.can;
 
 import com.bigbro.wwooss.v1.domain.entity.base.BaseEntity;
+import com.bigbro.wwooss.v1.domain.entity.trash.info.TrashInfo;
 import com.bigbro.wwooss.v1.domain.entity.user.User;
 import lombok.AccessLevel;
 import lombok.Getter;

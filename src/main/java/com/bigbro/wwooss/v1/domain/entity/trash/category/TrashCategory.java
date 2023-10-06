@@ -1,4 +1,4 @@
-package com.bigbro.wwooss.v1.domain.entity.trash;
+package com.bigbro.wwooss.v1.domain.entity.trash.category;
 
 import com.bigbro.wwooss.v1.domain.entity.base.BaseEntity;
 import com.bigbro.wwooss.v1.domain.request.trash.category.TrashCategoryRequest;

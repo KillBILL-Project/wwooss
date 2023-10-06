@@ -1,6 +1,6 @@
 package com.bigbro.wwooss.v1.service.trash.impl;
 
-import com.bigbro.wwooss.v1.domain.entity.trash.TrashCategory;
+import com.bigbro.wwooss.v1.domain.entity.trash.category.TrashCategory;
 import com.bigbro.wwooss.v1.domain.request.trash.category.TrashCategoryRequest;
 import com.bigbro.wwooss.v1.domain.response.trash.TrashCategoryResponse;
 import com.bigbro.wwooss.v1.repository.trash.category.TrashCategoryRepository;
