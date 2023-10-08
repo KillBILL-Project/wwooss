@@ -12,10 +12,6 @@ public class TrashInfoRequest {
 
     @NotNull(message = "쓰레기 이름은 필수입니다.")
     private String name;
-
-    @NotNull(message = "쓰레기 크기는 필수입니다.")
-    private Integer size;
-
     @NotNull(message = "쓰레기 무게는 필수입니다.")
     private Double weight;
 

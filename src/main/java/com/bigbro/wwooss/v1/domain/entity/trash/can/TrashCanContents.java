@@ -46,10 +46,11 @@ public class TrashCanContents extends BaseEntity {
     @JoinColumn(name = "trash_info_id")
     private TrashInfo trashInfo;
 
-    public static TrashCanContents of(TrashInfo trashInfo, User user, Long trashCount) {
+    public static TrashCanContents of(TrashInfo trashInfo, User user, Long trashCount, Integer size) {
         return TrashCanContents.builder()
                 .trashCount(trashCount)
                 .user(user)
+                .size(size)
                 .trashInfo(trashInfo)
                 .build();
     }

@@ -41,4 +41,13 @@ public class TrashLog extends BaseEntity {
 
     // TODO: trash history 추가 작업 필요
 
+    public static TrashLog of(User user, TrashInfo trashInfo, Long trashCount, Integer size) {
+        return TrashLog.builder()
+                .user(user)
+                .trashInfo(trashInfo)
+                .trashCount(trashCount)
+                .size(size)
+                .build();
+    }
+
 }

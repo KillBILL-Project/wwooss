@@ -53,7 +53,7 @@ class TrashInfoApiTest {
         given(this.trashInfoService.getTrashInfoByCategoryId(1L)).willReturn(trashInfoResponseList);
 
         this.mockMvc.perform(RestDocumentationRequestBuilders.get("/api/v1/trash-info")
-                        .param("category-id", "1")
+                        .param("categoryId", "1")
                         .contextPath("/api")
                         .contentType(MediaType.APPLICATION_JSON)
                 )
@@ -63,7 +63,7 @@ class TrashInfoApiTest {
                                 DocumentConfig.getDocumentRequest(),
                                 DocumentConfig.getDocumentResponse(),
                                 requestParameters(
-                                        parameterWithName("category-id").description("카테고리 ID")
+                                        parameterWithName("categoryId").description("카테고리 ID")
                                 ),
                                 responseFields(
                                         fieldWithPath("code").description("응답 코드"),
@@ -105,7 +105,7 @@ class TrashInfoApiTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(trashInfoRequest))
                 )
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andDo(document("create-trash-info",
                                 resourceDetails().tags("쓰레기 정보 생성"),
                                 DocumentConfig.getDocumentRequest(),

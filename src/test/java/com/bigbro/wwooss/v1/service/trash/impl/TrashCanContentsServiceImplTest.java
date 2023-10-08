@@ -6,6 +6,7 @@ import com.bigbro.wwooss.v1.enumType.LoginType;
 import com.bigbro.wwooss.v1.repository.trash.can.TrashCanContentsRepository;
 import com.bigbro.wwooss.v1.repository.trash.info.TrashInfoRepository;
 import com.bigbro.wwooss.v1.repository.user.UserRepository;
+import com.bigbro.wwooss.v1.service.trash.log.TrashLogService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -31,6 +32,9 @@ class TrashCanContentsServiceImplTest {
 
     @Mock
     private TrashCanContentsRepository trashCanContentsRepository;
+
+    @Mock
+    private TrashLogService trashLogService;
 
     @InjectMocks
     private TrashCanContentsServiceImpl trashCanContentsService;

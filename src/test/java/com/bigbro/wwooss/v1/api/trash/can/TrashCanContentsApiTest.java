@@ -37,6 +37,7 @@ class TrashCanContentsApiTest {
     void createTrashCanContents() throws Exception {
         TrashCanContentsRequest trashCanContentsRequest = TrashCanContentsRequest.builder()
                 .trashCount(1L)
+                .size(1)
                 .trashInfoId(1L)
                 .build();
 

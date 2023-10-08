@@ -16,9 +16,6 @@ public class TrashInfoResponse {
     // 쓰레기 이름
     private String name;
 
-    // 쓰레기 사이즈
-    private Integer size;
-
     // 쓰레기 무게 (gram)
     private Double weight;
 
