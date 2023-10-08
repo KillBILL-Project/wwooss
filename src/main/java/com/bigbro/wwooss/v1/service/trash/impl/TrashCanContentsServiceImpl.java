@@ -14,6 +14,7 @@ import com.bigbro.wwooss.v1.service.trash.can.TrashCanHistoryService;
 import com.bigbro.wwooss.v1.service.trash.log.TrashLogService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +22,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
+@Slf4j
 public class TrashCanContentsServiceImpl implements TrashCanContentsService {
 
     private final UserRepository userRepository;
@@ -48,7 +50,10 @@ public class TrashCanContentsServiceImpl implements TrashCanContentsService {
     public void deleteTrashCanContents(Long userId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new DataNotFoundException(WwoossResponseCode.NOT_FOUND_DATA, "존재하지 않는 유저입니다."));
         List<TrashCanContents> trashCanContentsList = trashCanContentsRepository.findAllByUser(user);
-        if(trashCanContentsList.isEmpty()) return;
+        if(trashCanContentsList.isEmpty()) {
+            log.info("버려진 쓰레기가 존재하지 않습니다.");
+            return;
+        };
 
         trashCanHistoryService.createTrashCanHistory(trashCanContentsList, user);
         trashCanContentsRepository.deleteAll(trashCanContentsList);

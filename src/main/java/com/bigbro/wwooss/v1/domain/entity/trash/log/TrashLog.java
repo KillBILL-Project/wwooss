@@ -53,4 +53,8 @@ public class TrashLog extends BaseEntity {
                 .build();
     }
 
+    public void updateTrashHistory(TrashCanHistory trashCanHistory) {
+        this.trashCanHistory = trashCanHistory;
+    }
+
 }

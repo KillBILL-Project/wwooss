@@ -42,12 +42,11 @@ public class TrashCanHistory extends BaseEntity {
     @Builder.Default
     private List<TrashLog> trashLogList = new ArrayList<>();
 
-    public static TrashCanHistory of(Double carbonEmission, Long refund, User user, List<TrashLog> trashLogList) {
+    public static TrashCanHistory of(Double carbonEmission, Long refund, User user) {
         return TrashCanHistory.builder()
                 .carbonEmission(carbonEmission)
                 .refund(refund)
                 .user(user)
-                .trashLogList(trashLogList)
                 .build();
     }
 }

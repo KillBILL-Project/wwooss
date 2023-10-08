@@ -19,7 +19,7 @@ public class TrashInfoResponse {
     // 쓰레기 무게 (gram)
     private Double weight;
 
-    // 1그램당 탄소 배출량
+    // 표준 탄소 배출량
     private Double standardCarbonEmission;
 
     // 환불 금액

@@ -7,6 +7,7 @@ import com.bigbro.wwooss.v1.domain.entity.user.User;
 import com.bigbro.wwooss.v1.repository.trash.can.TrashCanHistoryRepository;
 import com.bigbro.wwooss.v1.repository.trash.log.TrashLogRepository;
 import com.bigbro.wwooss.v1.service.trash.can.TrashCanHistoryService;
+import com.bigbro.wwooss.v1.service.trash.log.TrashLogService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,7 +21,7 @@ public class TrashCanHistoryServiceImpl implements TrashCanHistoryService {
 
     private final TrashCanHistoryRepository trashCanHistoryRepository;
 
-    private final TrashLogRepository trashLogRepository;
+    private final TrashLogService trashLogService;
 
     @Override
     @Transactional
@@ -37,7 +38,7 @@ public class TrashCanHistoryServiceImpl implements TrashCanHistoryService {
             totalRefund += amountOfTrash * trashCanContents.getTrashInfo().getRefund();
         }
 
-        List<TrashLog> trashLogList = trashLogRepository.findAllByUserAndTrashCanHistoryNull(user);
-        trashCanHistoryRepository.save(TrashCanHistory.of(totalCarbonEmission, totalRefund, user, trashLogList));
+        TrashCanHistory savedTrashCanHistory = trashCanHistoryRepository.save(TrashCanHistory.of(totalCarbonEmission, totalRefund, user));
+        trashLogService.updateTrashLogTrashHistory(savedTrashCanHistory, user);
     }
 }
