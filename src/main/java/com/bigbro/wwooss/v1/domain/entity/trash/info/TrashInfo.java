@@ -37,13 +37,13 @@ public class TrashInfo extends BaseEntity {
     @Column(name = "weight")
     private Double weight;
 
-    @Comment("그램당 탄소 배출량")
-    @Column(name = "carbon_emission_per_gram")
-    private Double carbonEmissionPerGram;
+    @Comment("표준 탄소 배출량 - 10 단위 기준")
+    @Column(name = "standard_carbon_emission")
+    private Double standardCarbonEmission;
 
     @Comment("환급 금액")
     @Column(name = "refund")
-    private Integer refund;
+    private Long refund;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "trash_category_id")
@@ -53,7 +53,7 @@ public class TrashInfo extends BaseEntity {
         return TrashInfo.builder()
                 .name(trashInfoRequest.getName())
                 .weight(trashInfoRequest.getWeight())
-                .carbonEmissionPerGram(trashInfoRequest.getCarbonEmissionPerGram())
+                .standardCarbonEmission(trashInfoRequest.getStandardCarbonEmission())
                 .refund(trashInfoRequest.getRefund())
                 .trashCategory(trashCategory)
                 .build();

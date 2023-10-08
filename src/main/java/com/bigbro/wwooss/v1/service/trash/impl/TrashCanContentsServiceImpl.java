@@ -10,11 +10,14 @@ import com.bigbro.wwooss.v1.repository.trash.can.TrashCanContentsRepository;
 import com.bigbro.wwooss.v1.repository.trash.info.TrashInfoRepository;
 import com.bigbro.wwooss.v1.repository.user.UserRepository;
 import com.bigbro.wwooss.v1.service.trash.can.TrashCanContentsService;
+import com.bigbro.wwooss.v1.service.trash.can.TrashCanHistoryService;
 import com.bigbro.wwooss.v1.service.trash.log.TrashLogService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
@@ -28,6 +31,8 @@ public class TrashCanContentsServiceImpl implements TrashCanContentsService {
 
     private final TrashLogService trashLogService;
 
+    private final TrashCanHistoryService trashCanHistoryService;
+
     @Override
     @Transactional
     public void createTrashCanContents(TrashCanContentsRequest trashCanContentsRequest, Long userId) {
@@ -37,4 +42,16 @@ public class TrashCanContentsServiceImpl implements TrashCanContentsService {
         trashCanContentsRepository.save(TrashCanContents.of(trashInfo, user, trashCanContentsRequest.getTrashCount(), trashCanContentsRequest.getSize()));
         trashLogService.createTrashLog(user, trashInfo, trashCanContentsRequest.getTrashCount(), trashCanContentsRequest.getSize());
     }
+
+    @Override
+    @Transactional
+    public void deleteTrashCanContents(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new DataNotFoundException(WwoossResponseCode.NOT_FOUND_DATA, "존재하지 않는 유저입니다."));
+        List<TrashCanContents> trashCanContentsList = trashCanContentsRepository.findAllByUser(user);
+        if(trashCanContentsList.isEmpty()) return;
+
+        trashCanHistoryService.createTrashCanHistory(trashCanContentsList, user);
+        trashCanContentsRepository.deleteAll(trashCanContentsList);
+    }
+
 }

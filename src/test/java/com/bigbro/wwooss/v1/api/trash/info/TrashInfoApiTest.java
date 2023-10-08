@@ -46,8 +46,8 @@ class TrashInfoApiTest {
                         .trashInfoId(1L)
                         .name("플라스틱")
                         .weight(1D)
-                        .refund(1)
-                        .carbonEmissionPerGram(1D)
+                        .refund(1L)
+                        .standardCarbonEmission(1D)
                         .build());
 
         given(this.trashInfoService.getTrashInfoByCategoryId(1L)).willReturn(trashInfoResponseList);
@@ -73,7 +73,7 @@ class TrashInfoApiTest {
                                         fieldWithPath("data[].name").description("쓰레기 이름"),
                                         fieldWithPath("data[].weight").description("쓰레기 무게"),
                                         fieldWithPath("data[].refund").description("쓰레기 환급금"),
-                                        fieldWithPath("data[].carbonEmissionPerGram").description("그램당 탄소 배출 양")
+                                        fieldWithPath("data[].standardCarbonEmission").description("그램당 탄소 배출 양")
                                 )
                         )
                 );
@@ -85,8 +85,8 @@ class TrashInfoApiTest {
         TrashInfoRequest trashInfoRequest = TrashInfoRequest.builder()
                 .name("플라스틱")
                 .weight(1D)
-                .carbonEmissionPerGram(1D)
-                .refund(1)
+                .standardCarbonEmission(1D)
+                .refund(1L)
                 .trashCategoryId(1L)
                 .build();
 
@@ -94,8 +94,8 @@ class TrashInfoApiTest {
                 .trashInfoId(1L)
                 .name("플라스틱")
                 .weight(1D)
-                .refund(1)
-                .carbonEmissionPerGram(1D)
+                .refund(1L)
+                .standardCarbonEmission(1D)
                 .build();
 
         given(this.trashInfoService.createTrashInfo(any())).willReturn(trashInfoResponse);
@@ -118,7 +118,7 @@ class TrashInfoApiTest {
                                         fieldWithPath("data.name").description("쓰레기 이름"),
                                         fieldWithPath("data.weight").description("쓰레기 무게"),
                                         fieldWithPath("data.refund").description("쓰레기 환급금"),
-                                        fieldWithPath("data.carbonEmissionPerGram").description("그램당 쓰래기 탄소 배출량")
+                                        fieldWithPath("data.standardCarbonEmission").description("그램당 쓰래기 탄소 배출량")
                                 )
                         )
                 );

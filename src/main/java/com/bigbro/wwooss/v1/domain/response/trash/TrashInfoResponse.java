@@ -20,17 +20,17 @@ public class TrashInfoResponse {
     private Double weight;
 
     // 1그램당 탄소 배출량
-    private Double carbonEmissionPerGram;
+    private Double standardCarbonEmission;
 
     // 환불 금액
-    private Integer refund;
+    private Long refund;
 
     public static TrashInfoResponse from(TrashInfo trashInfo) {
         return TrashInfoResponse.builder()
                 .trashInfoId(trashInfo.getTrashInfoId())
                 .name(trashInfo.getName())
                 .weight(trashInfo.getWeight())
-                .carbonEmissionPerGram(trashInfo.getCarbonEmissionPerGram())
+                .standardCarbonEmission(trashInfo.getStandardCarbonEmission())
                 .refund(trashInfo.getRefund())
                 .build();
     }

@@ -52,8 +52,8 @@ class TrashCanContentsServiceImplTest {
                         .trashInfoId(1L)
                         .name("플라스틱")
                         .weight(1D)
-                        .refund(1)
-                        .carbonEmissionPerGram(1D)
+                        .refund(1L)
+                        .standardCarbonEmission(1D)
                         .build();
 
         given(userRepository.findById(1L)).willReturn(Optional.ofNullable(user));
