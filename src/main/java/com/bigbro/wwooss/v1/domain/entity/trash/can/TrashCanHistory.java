@@ -4,6 +4,7 @@ import com.bigbro.wwooss.v1.domain.entity.base.BaseEntity;
 import com.bigbro.wwooss.v1.domain.entity.trash.log.TrashLog;
 import com.bigbro.wwooss.v1.domain.entity.user.User;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -37,7 +38,8 @@ public class TrashCanHistory extends BaseEntity {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "trash_log")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "trashCanHistory")
+    @Builder.Default
     private List<TrashLog> trashLogList = new ArrayList<>();
 
     public static TrashCanHistory of(Double carbonEmission, Long refund, User user, List<TrashLog> trashLogList) {
