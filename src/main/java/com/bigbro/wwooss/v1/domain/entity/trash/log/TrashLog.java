@@ -1,6 +1,7 @@
 package com.bigbro.wwooss.v1.domain.entity.trash.log;
 
 import com.bigbro.wwooss.v1.domain.entity.base.BaseEntity;
+import com.bigbro.wwooss.v1.domain.entity.trash.can.TrashCanHistory;
 import com.bigbro.wwooss.v1.domain.entity.trash.info.TrashInfo;
 import com.bigbro.wwooss.v1.domain.entity.user.User;
 import lombok.AccessLevel;
@@ -39,7 +40,9 @@ public class TrashLog extends BaseEntity {
     @JoinColumn(name = "trash_info_id")
     private TrashInfo trashInfo;
 
-    // TODO: trash history 추가 작업 필요
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "trash_can_history_id")
+    private TrashCanHistory trashCanHistory;
 
     public static TrashLog of(User user, TrashInfo trashInfo, Long trashCount, Integer size) {
         return TrashLog.builder()
