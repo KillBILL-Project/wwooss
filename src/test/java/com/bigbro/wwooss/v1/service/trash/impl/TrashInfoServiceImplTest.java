@@ -79,8 +79,8 @@ public class TrashInfoServiceImplTest {
         assertThat(trashInfoEntities)
                 .extracting("name", "refund")
                 .contains(
-                        tuple("플라스틱", 1),
-                        tuple("캔", 10)
+                        tuple("플라스틱", 1L),
+                        tuple("캔", 10L)
                 );
 
         then(findCategoryEntity).equals(trashCategory);
@@ -88,7 +88,7 @@ public class TrashInfoServiceImplTest {
     }
 
     @Test
-    @DisplayName("쓰레기 정보 목록 불러오기")
+    @DisplayName("쓰레기 정보 목록 불러오기 실패")
     void findTrashInfoListFail() {
         given(trashCategoryRepository.findById(1L)).willReturn(Optional.empty());
 
