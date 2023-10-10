@@ -60,4 +60,26 @@ class TrashCanContentsApiTest {
                         )
                 );
     }
+
+    @Test
+    @DisplayName("쓰레기통 비우기")
+    void deleteTrashCanContents() throws Exception {
+        this.mockMvc.perform(RestDocumentationRequestBuilders.delete("/api/v1/trash-can-contents")
+                        .contextPath("/api")
+                        .contentType(MediaType.APPLICATION_JSON)
+                )
+                .andExpect(status().isOk())
+                .andDo(document("delete-trash-can-contents",
+                                resourceDetails().tags("쓰레기통 비우기"),
+                                DocumentConfig.getDocumentRequest(),
+                                DocumentConfig.getDocumentResponse(),
+                                responseFields(
+                                        fieldWithPath("code").description("응답 코드"),
+                                        fieldWithPath("title").description("응답 코드 별 클라이언트 노출 제목"),
+                                        fieldWithPath("message").description("응답 코드 별 클라이언트 노출 메세지"),
+                                        fieldWithPath("data").description("응답 데이터 없음")
+                                )
+                        )
+                );
+    }
 }
