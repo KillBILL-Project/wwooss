@@ -1,6 +1,7 @@
 package com.bigbro.wwooss.v1.domain.entity.user;
 
 import com.bigbro.wwooss.v1.domain.entity.base.BaseEntity;
+import com.bigbro.wwooss.v1.enumType.Gender;
 import com.bigbro.wwooss.v1.enumType.LoginType;
 import com.bigbro.wwooss.v1.enumType.UserRole;
 import lombok.*;
@@ -30,9 +31,18 @@ public class User extends BaseEntity {
     @Enumerated(value = EnumType.STRING)
     private UserRole userRole;
 
+    @Comment("성별")
+    @Column(name = "gender")
+    @Enumerated(value = EnumType.STRING)
+    private Gender gender;
+
     @Comment("유저 이메일")
     @Column(name = "email")
     private String email;
+
+    @Comment("나이")
+    @Column(name = "age")
+    private Integer age;
 
     @Comment("로그인 타입 - [Email / Apple / Google]")
     @Column(name = "login_type")
