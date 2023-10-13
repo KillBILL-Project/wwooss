@@ -16,12 +16,6 @@ public class TrashInfoResponse {
     // 쓰레기 이름
     private String name;
 
-    // 쓰레기 무게 (gram)
-    private Double weight;
-
-    // 표준 탄소 배출량
-    private Double standardCarbonEmission;
-
     // 환불 금액
     private Long refund;
 
@@ -29,8 +23,6 @@ public class TrashInfoResponse {
         return TrashInfoResponse.builder()
                 .trashInfoId(trashInfo.getTrashInfoId())
                 .name(trashInfo.getName())
-                .weight(trashInfo.getWeight())
-                .standardCarbonEmission(trashInfo.getStandardCarbonEmission())
                 .refund(trashInfo.getRefund())
                 .build();
     }

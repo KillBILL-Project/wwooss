@@ -3,6 +3,7 @@ package com.bigbro.wwooss.v1.service.trash.impl;
 import com.bigbro.wwooss.v1.common.WwoossResponseCode;
 import com.bigbro.wwooss.v1.domain.entity.trash.can.TrashCanContents;
 import com.bigbro.wwooss.v1.domain.entity.trash.can.TrashCanHistory;
+import com.bigbro.wwooss.v1.domain.entity.trash.info.TrashInfo;
 import com.bigbro.wwooss.v1.domain.entity.user.User;
 import com.bigbro.wwooss.v1.domain.response.trash.TrashCanHistoryListResponse;
 import com.bigbro.wwooss.v1.domain.response.trash.TrashCanHistoryResponse;
@@ -33,16 +34,21 @@ public class TrashCanHistoryServiceImpl implements TrashCanHistoryService {
     @Override
     @Transactional
     public void createTrashCanHistory(List<TrashCanContents> trashCanContentsList, User user) {
-        long totalRefund = 0L;
-        double totalCarbonEmission = 0D;
+        final long WEIGHT_INTERVAL = 3;
+
+        long totalRefund = 0;
+        double totalCarbonEmission = 0;
 
         for (TrashCanContents trashCanContents : trashCanContentsList) {
-            // size : 0 ~ 100 (10단위)
-            // 표준 쓰레기 탄소량 기준 10
-            Long amountOfTrash = trashCanContents.getTrashCount() * (trashCanContents.getSize() / 10);
+            TrashInfo trashInfo = trashCanContents.getTrashInfo();
 
-            totalCarbonEmission += amountOfTrash * trashCanContents.getTrashInfo().getStandardCarbonEmission();
-            totalRefund += amountOfTrash * trashCanContents.getTrashInfo().getRefund();
+            // size : 0 ~ 100 (10단위)
+            // 버린 쓰레기 양 * 버린 쓰레기 사이즈의 무게
+            Double amountOfTrash =
+                    trashCanContents.getTrashCount() * ( trashInfo.getWeight() + WEIGHT_INTERVAL * (trashCanContents.getSize()));
+
+            totalCarbonEmission += amountOfTrash * trashInfo.getCarbonEmissionPerGram();
+            totalRefund += (long) (amountOfTrash * trashInfo.getRefund());
         }
 
         TrashCanHistory savedTrashCanHistory = trashCanHistoryRepository.save(TrashCanHistory.of(totalCarbonEmission, totalRefund, user));

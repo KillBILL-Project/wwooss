@@ -33,13 +33,13 @@ public class TrashInfo extends BaseEntity {
     @Column(name = "name")
     private String name;
 
-    @Comment("쓰레기 무게 (gram)")
+    @Comment("최소 쓰레기 무게 (gram)")
     @Column(name = "weight")
     private Double weight;
 
-    @Comment("표준 탄소 배출량 - 10 단위 기준")
-    @Column(name = "standard_carbon_emission")
-    private Double standardCarbonEmission;
+    @Comment("1g당 탄소 배출량")
+    @Column(name = "carbon_emission_per_gram")
+    private Double carbonEmissionPerGram;
 
     @Comment("환급 금액")
     @Column(name = "refund")
@@ -53,7 +53,7 @@ public class TrashInfo extends BaseEntity {
         return TrashInfo.builder()
                 .name(trashInfoRequest.getName())
                 .weight(trashInfoRequest.getWeight())
-                .standardCarbonEmission(trashInfoRequest.getStandardCarbonEmission())
+                .carbonEmissionPerGram(trashInfoRequest.getCarbonEmissionPerGram())
                 .refund(trashInfoRequest.getRefund())
                 .trashCategory(trashCategory)
                 .build();

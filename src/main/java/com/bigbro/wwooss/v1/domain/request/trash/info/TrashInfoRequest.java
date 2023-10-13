@@ -15,8 +15,8 @@ public class TrashInfoRequest {
     @NotNull(message = "쓰레기 무게는 필수입니다.")
     private Double weight;
 
-    @NotNull(message = "표준 탄소 배출량은 필수입니다.")
-    private Double standardCarbonEmission;
+    @NotNull(message = "1g당 탄소 배출량은 필수입니다.")
+    private Double carbonEmissionPerGram;
 
     @NotNull(message = "환급금은 필수입니다.")
     private Long refund;
