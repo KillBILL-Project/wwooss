@@ -42,7 +42,7 @@ public class TrashCanHistoryServiceImpl implements TrashCanHistoryService {
         for (TrashCanContents trashCanContents : trashCanContentsList) {
             TrashInfo trashInfo = trashCanContents.getTrashInfo();
 
-            // size : 0 ~ 100 (10단위)
+            // size : 0 ~ 10
             // 버린 쓰레기 양 * 버린 쓰레기 사이즈의 무게
             Double amountOfTrash =
                     trashCanContents.getTrashCount() * ( trashInfo.getWeight() + WEIGHT_INTERVAL * (trashCanContents.getSize()));
