@@ -52,14 +52,14 @@ public class TrashInfoServiceImplTest {
                 .name("플라스틱")
                 .weight(1D)
                 .refund(1L)
-                .standardCarbonEmission(1D)
+                .carbonEmissionPerGram(1D)
                 .build();
         TrashInfo can = TrashInfo.builder()
                 .trashInfoId(2L)
                 .name("캔")
                 .weight(3D)
                 .refund(10L)
-                .standardCarbonEmission(2D)
+                .carbonEmissionPerGram(2D)
                 .build();
 
         List<TrashInfo> trashInfoList = List.of(plastic, can);

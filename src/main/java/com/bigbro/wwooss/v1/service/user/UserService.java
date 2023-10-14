@@ -1,14 +1,12 @@
 package com.bigbro.wwooss.v1.service.user;
 
-import com.bigbro.wwooss.v1.domain.response.user.GetUserResponse;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+public interface UserService {
 
-@Service
-@RequiredArgsConstructor
-public class UserService {
-
-    public GetUserResponse test() {
-        return GetUserResponse.of(1L, "YSW");
-    }
+    /**
+     * 푸쉬 동의 여부 번경
+     *
+     * @param pushConsent 동의 여부
+     * @param userId 유저 ID
+     */
+    public void updatePushConsentStatus(boolean pushConsent, long userId);
 }
