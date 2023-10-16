@@ -65,4 +65,8 @@ public class User extends BaseEntity {
     @Column(name = "refresh_token")
     private String refreshToken;
 
+    public void updatePushConsent(boolean pushConsent) {
+        this.pushConsent = pushConsent;
+    }
+
 }
