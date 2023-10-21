@@ -1,6 +1,7 @@
 package com.bigbro.wwooss.v1.service.trash.can;
 
 import com.bigbro.wwooss.v1.domain.request.trash.can.TrashCanContentsRequest;
+import com.bigbro.wwooss.v1.domain.response.trash.EmptyTrashResultResponse;
 
 public interface TrashCanContentsService {
 
@@ -16,5 +17,5 @@ public interface TrashCanContentsService {
      *
      * @param userId
      */
-    void deleteTrashCanContents(Long userId);
+    EmptyTrashResultResponse deleteTrashCanContents(Long userId);
 }

@@ -9,4 +9,5 @@ import java.util.List;
 public interface TrashCanContentsRepository extends JpaRepository<TrashCanContents, Long> {
 
     List<TrashCanContents> findAllByUser(User user);
+
 }

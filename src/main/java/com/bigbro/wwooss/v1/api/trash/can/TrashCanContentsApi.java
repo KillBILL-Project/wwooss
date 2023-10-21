@@ -3,6 +3,7 @@ package com.bigbro.wwooss.v1.api.trash.can;
 import com.bigbro.wwooss.v1.common.WwoossResponse;
 import com.bigbro.wwooss.v1.common.WwoossResponseUtil;
 import com.bigbro.wwooss.v1.domain.request.trash.can.TrashCanContentsRequest;
+import com.bigbro.wwooss.v1.domain.response.trash.EmptyTrashResultResponse;
 import com.bigbro.wwooss.v1.service.trash.can.TrashCanContentsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -26,10 +27,8 @@ public class TrashCanContentsApi {
     }
 
     @DeleteMapping
-    public ResponseEntity<WwoossResponse<Void>> deleteTrashCanContentsList() {
+    public ResponseEntity<WwoossResponse<EmptyTrashResultResponse>> deleteTrashCanContentsList() {
         // TODO : userId 넣기
-        trashCanContentsService.deleteTrashCanContents(1L);
-
-        return WwoossResponseUtil.responseOkNoData();
+        return WwoossResponseUtil.responseOkAddData(trashCanContentsService.deleteTrashCanContents(1L));
     }
 }

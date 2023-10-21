@@ -2,6 +2,7 @@ package com.bigbro.wwooss.v1.service.trash.can;
 
 import com.bigbro.wwooss.v1.domain.entity.trash.can.TrashCanContents;
 import com.bigbro.wwooss.v1.domain.entity.user.User;
+import com.bigbro.wwooss.v1.domain.response.trash.EmptyTrashResultResponse;
 import com.bigbro.wwooss.v1.domain.response.trash.TrashCanHistoryListResponse;
 import org.springframework.data.domain.Pageable;
 
@@ -15,7 +16,7 @@ public interface TrashCanHistoryService {
      * @param trashCanContentsList 쓰레기 내용물
      * @param user
      */
-    void createTrashCanHistory(List<TrashCanContents> trashCanContentsList, User user);
+    EmptyTrashResultResponse createTrashCanHistory(List<TrashCanContents> trashCanContentsList, User user);
 
     /**
      * 쓰레기통 비우기 히스토리 조회 (무한 스크롤)

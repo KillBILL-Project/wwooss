@@ -5,6 +5,7 @@ import com.bigbro.wwooss.v1.domain.entity.trash.can.TrashCanContents;
 import com.bigbro.wwooss.v1.domain.entity.trash.info.TrashInfo;
 import com.bigbro.wwooss.v1.domain.entity.user.User;
 import com.bigbro.wwooss.v1.domain.request.trash.can.TrashCanContentsRequest;
+import com.bigbro.wwooss.v1.domain.response.trash.EmptyTrashResultResponse;
 import com.bigbro.wwooss.v1.exception.DataNotFoundException;
 import com.bigbro.wwooss.v1.repository.trash.can.TrashCanContentsRepository;
 import com.bigbro.wwooss.v1.repository.trash.info.TrashInfoRepository;
@@ -47,16 +48,18 @@ public class TrashCanContentsServiceImpl implements TrashCanContentsService {
 
     @Override
     @Transactional
-    public void deleteTrashCanContents(Long userId) {
+    public EmptyTrashResultResponse deleteTrashCanContents(Long userId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new DataNotFoundException(WwoossResponseCode.NOT_FOUND_DATA, "존재하지 않는 유저입니다."));
         List<TrashCanContents> trashCanContentsList = trashCanContentsRepository.findAllByUser(user);
         if(trashCanContentsList.isEmpty()) {
             log.info("버려진 쓰레기가 존재하지 않습니다.");
-            return;
+            return null;
         };
 
-        trashCanHistoryService.createTrashCanHistory(trashCanContentsList, user);
+        EmptyTrashResultResponse emptyTrashResultResponse = trashCanHistoryService.createTrashCanHistory(trashCanContentsList, user);
         trashCanContentsRepository.deleteAll(trashCanContentsList);
+
+        return emptyTrashResultResponse;
     }
 
 }
