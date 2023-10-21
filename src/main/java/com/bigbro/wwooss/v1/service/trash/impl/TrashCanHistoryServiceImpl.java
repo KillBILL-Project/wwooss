@@ -41,7 +41,9 @@ public class TrashCanHistoryServiceImpl implements TrashCanHistoryService {
         long totalRefund = 0;
         double totalCarbonEmission = 0;
 
+        // 카테고리별 환급금 총합
         HashMap<String, Long> refundByCategory = new HashMap<>();
+        // 카테고리별 탄소 배출량 총합
         HashMap<String, Double> carbonEmissionByCategory = new HashMap<>();
 
         for (TrashCanContents trashCanContents : trashCanContentsList) {
