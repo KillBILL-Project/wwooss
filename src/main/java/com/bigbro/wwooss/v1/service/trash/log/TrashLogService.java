@@ -3,6 +3,10 @@ package com.bigbro.wwooss.v1.service.trash.log;
 import com.bigbro.wwooss.v1.domain.entity.trash.can.TrashCanHistory;
 import com.bigbro.wwooss.v1.domain.entity.trash.info.TrashInfo;
 import com.bigbro.wwooss.v1.domain.entity.user.User;
+import com.bigbro.wwooss.v1.domain.response.trash.TrashLogListResponse;
+import org.springframework.data.domain.Pageable;
+
+import java.time.LocalDateTime;
 
 public interface TrashLogService {
 
@@ -21,4 +25,13 @@ public interface TrashLogService {
      * user
      */
     void updateTrashLogTrashHistory(TrashCanHistory trashCanHistory, User user);
+
+    /**
+     * 월단위 쓰레기 로그 가져오기
+     * date가 null일 경우 전체 데이터
+     * @param pageable
+     * @param userId
+     * @param date
+     */
+    TrashLogListResponse getTrashLogList(Long userId, LocalDateTime date, Pageable pageable);
 }

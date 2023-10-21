@@ -35,7 +35,7 @@ public class TrashCategory extends BaseEntity {
 
     public static TrashCategory from(TrashCategoryRequest trashCategoryRequest) {
         return TrashCategory.builder()
-                .trashCategoryName(trashCategoryRequest.getCategoryName())
+                .trashCategoryName(trashCategoryRequest.getTrashCategoryName())
                 .build();
     }
 }
