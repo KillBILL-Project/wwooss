@@ -1,6 +1,8 @@
 package com.bigbro.wwooss.v1.service.trash.impl;
 
 import com.bigbro.wwooss.v1.common.WwoossResponseCode;
+import com.bigbro.wwooss.v1.domain.dto.CarbonEmissionByTrashCategory;
+import com.bigbro.wwooss.v1.domain.dto.RefundByTrashCategory;
 import com.bigbro.wwooss.v1.domain.entity.trash.can.TrashCanContents;
 import com.bigbro.wwooss.v1.domain.entity.trash.can.TrashCanHistory;
 import com.bigbro.wwooss.v1.domain.entity.trash.info.TrashInfo;
@@ -20,7 +22,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 @Service

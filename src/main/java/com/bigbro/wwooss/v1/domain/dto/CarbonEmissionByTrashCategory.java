@@ -1,4 +1,4 @@
-package com.bigbro.wwooss.v1.domain.response.trash;
+package com.bigbro.wwooss.v1.domain.dto;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

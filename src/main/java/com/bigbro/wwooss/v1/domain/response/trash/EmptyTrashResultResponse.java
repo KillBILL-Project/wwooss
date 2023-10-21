@@ -1,5 +1,7 @@
 package com.bigbro.wwooss.v1.domain.response.trash;
 
+import com.bigbro.wwooss.v1.domain.dto.CarbonEmissionByTrashCategory;
+import com.bigbro.wwooss.v1.domain.dto.RefundByTrashCategory;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
