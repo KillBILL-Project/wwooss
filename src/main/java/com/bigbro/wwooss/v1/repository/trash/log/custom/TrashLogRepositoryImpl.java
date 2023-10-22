@@ -24,7 +24,7 @@ public class TrashLogRepositoryImpl implements TrashLogRepositoryCustom {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public Slice<TrashLog> findByUserAndDateBetweenOneMonth(User user, String date, Pageable pageable) {
+    public Slice<TrashLog> findByUserAndDate(User user, String date, Pageable pageable) {
 
         JPAQuery<TrashLog> trashLogJPAQuery = queryFactory.selectFrom(trashLog)
                 .where(searchDateFilter(date))

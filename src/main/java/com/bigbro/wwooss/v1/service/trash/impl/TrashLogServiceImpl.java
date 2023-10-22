@@ -45,7 +45,7 @@ public class TrashLogServiceImpl implements TrashLogService {
     @Override
     public TrashLogListResponse getTrashLogList(Long userId, String date, Pageable pageable) {
         User user = userRepository.findById(userId).orElseThrow(() -> new DataNotFoundException(WwoossResponseCode.NOT_FOUND_DATA, "존재하지 않는 유저입니다."));
-        Slice<TrashLog> trashLogList = trashLogRepository.findByUserAndDateBetweenOneMonth(user, date, pageable);
+        Slice<TrashLog> trashLogList = trashLogRepository.findByUserAndDate(user, date, pageable);
 
         return TrashLogListResponse.of(trashLogList.hasNext(), trashLogList.getContent().stream().map(TrashLogResponse::of).toList());
     }
