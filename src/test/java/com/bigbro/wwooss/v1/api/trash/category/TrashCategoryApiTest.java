@@ -72,7 +72,7 @@ class TrashCategoryApiTest {
     @DisplayName("쓰레기 카테고리 생성")
     void createTrashCategory() throws Exception {
         TrashCategoryRequest trashCategoryRequest = TrashCategoryRequest.builder()
-                .categoryName("플라스틱")
+                .trashCategoryName("플라스틱")
                 .build();
 
 

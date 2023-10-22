@@ -29,11 +29,16 @@ spring:
     properties:
       hibernate:
         format_sql: true
+        highlight_sql: true
 #  elasticsearch:
 #    uris: "localhost:9200"
 logging:
   level:
-    org.hibernate.sql: debug
+    org:
+      hibernate:
+        sql: debug
+        type.descriptor.sql: trace
+
 
 ---
 spring:

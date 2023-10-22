@@ -10,7 +10,7 @@ import javax.validation.constraints.NotNull;
 public class TrashCategoryRequest {
 
     @NotNull(message = "쓰레기 카테고리 이름은 필수입니다.")
-    private String categoryName;
+    private String trashCategoryName;
 
     // TODO : 이미지 추가
 }
