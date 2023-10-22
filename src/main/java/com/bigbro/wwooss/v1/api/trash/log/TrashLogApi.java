@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
+import java.time.YearMonth;
 
 @RestController
 @RequestMapping("/v1/trash-log")
@@ -24,7 +25,9 @@ public class TrashLogApi {
     private final TrashLogService trashLogService;
 
     @GetMapping
-    private ResponseEntity<WwoossResponse<TrashLogListResponse>> getTrashLog(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) @Nullable LocalDateTime date, Pageable pageable) {
+    private ResponseEntity<WwoossResponse<TrashLogListResponse>> getTrashLog(
+            @RequestParam @Nullable String date,
+            Pageable pageable) {
         return WwoossResponseUtil.responseOkAddData(trashLogService.getTrashLogList(1L, date, pageable));
     }
 }

@@ -24,7 +24,7 @@ public class TrashLogRepositoryImpl implements TrashLogRepositoryCustom {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public Slice<TrashLog> findByUserAndDateBetweenOneMonth(User user, LocalDateTime date, Pageable pageable) {
+    public Slice<TrashLog> findByUserAndDateBetweenOneMonth(User user, String date, Pageable pageable) {
 
         JPAQuery<TrashLog> trashLogJPAQuery = queryFactory.selectFrom(trashLog)
                 .where(searchDateFilter(date))
@@ -33,10 +33,21 @@ public class TrashLogRepositoryImpl implements TrashLogRepositoryCustom {
         return PagingUtil.getSlice(trashLogJPAQuery, pageable);
     }
 
-    private BooleanExpression searchDateFilter(LocalDateTime date) {
+    private BooleanExpression searchDateFilter(String date) {
         if (Objects.isNull(date)) return null;
 
-        return trashLog.createdAt.between(date.with(TemporalAdjusters.firstDayOfMonth()), date.with(TemporalAdjusters.lastDayOfMonth()));
+        String[] splitDate = date.split("-");
+
+        return splitDate.length == 1 ? searchYear((Integer.parseInt(splitDate[0])))
+                : searchMonthAndDay(Integer.parseInt(splitDate[0]), Integer.parseInt(splitDate[1]));
+    }
+
+    private BooleanExpression searchYear(int year) {
+        return trashLog.createdAt.year().eq(year);
+    }
+
+    private BooleanExpression searchMonthAndDay(int year, int month) {
+        return trashLog.createdAt.year().eq(year).and(trashLog.createdAt.month().eq(month));
     }
 
 }

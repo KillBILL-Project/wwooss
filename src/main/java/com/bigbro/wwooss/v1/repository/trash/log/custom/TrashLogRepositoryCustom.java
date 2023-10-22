@@ -9,5 +9,5 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface TrashLogRepositoryCustom {
-    Slice<TrashLog> findByUserAndDateBetweenOneMonth(User user, LocalDateTime date, Pageable pageable);
+    Slice<TrashLog> findByUserAndDateBetweenOneMonth(User user, String date, Pageable pageable);
 }
