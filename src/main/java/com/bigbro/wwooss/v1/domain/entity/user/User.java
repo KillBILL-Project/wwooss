@@ -1,6 +1,7 @@
 package com.bigbro.wwooss.v1.domain.entity.user;
 
 import com.bigbro.wwooss.v1.domain.entity.base.BaseEntity;
+import com.bigbro.wwooss.v1.domain.request.auth.UserRegistrationRequest;
 import com.bigbro.wwooss.v1.enumType.LoginType;
 import com.bigbro.wwooss.v1.enumType.UserRole;
 import lombok.*;
@@ -21,23 +22,40 @@ public class User extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
 
-    @Comment("유저 이름")
-    @Column(name = "user_name")
-    private String userName;
-
+    @Builder.Default
     @Comment("유저 권한")
     @Column(name = "user_role")
     @Enumerated(value = EnumType.STRING)
-    private UserRole userRole;
+    private UserRole userRole = UserRole.USER;
 
     @Comment("유저 이메일")
     @Column(name = "email")
     private String email;
 
+    @Comment("유저 패스워드")
+    @Column(name = "password")
+    private String password;
+
     @Comment("로그인 타입 - [Email / Apple / Google]")
     @Column(name = "login_type")
     @Enumerated(value = EnumType.STRING)
     private LoginType loginType;
+
+    @Comment("유저 나이")
+    @Column(name = "age")
+    private int age;
+
+    @Comment("유저 성별")
+    @Column(name = "gender")
+    private String gender;
+
+    @Comment("유저 국가")
+    @Column(name = "country")
+    private String country;
+
+    @Comment("유저 지역")
+    @Column(name = "region")
+    private String region;
 
     @Comment("마케팅 수신 동의")
     @Column(name = "marketing_consent")
@@ -54,5 +72,43 @@ public class User extends BaseEntity {
     @Comment("refresh token")
     @Column(name = "refresh_token")
     private String refreshToken;
+
+    public static User of(User user, String encodedPassword, String refreshToken) {
+        return User.builder()
+                .email(user.getEmail())
+                .password(encodedPassword)
+                .loginType(user.getLoginType())
+                .age(user.getAge())
+                .gender(user.getGender())
+                .country(user.getCountry())
+                .region(user.getRegion())
+                .refreshToken(refreshToken)
+                .build();
+    }
+
+    public static User of(User user, String refreshToken) {
+        return User.builder()
+                .email(user.getEmail())
+                .password(user.getPassword())
+                .loginType(user.getLoginType())
+                .age(user.getAge())
+                .gender(user.getGender())
+                .country(user.getCountry())
+                .region(user.getRegion())
+                .refreshToken(refreshToken)
+                .build();
+    }
+
+    public static User from(UserRegistrationRequest userRegistrationRequest) {
+        return User.builder()
+                .email(userRegistrationRequest.getEmail())
+                .password(userRegistrationRequest.getPassword())
+                .loginType(userRegistrationRequest.getLoginType())
+                .age(userRegistrationRequest.getAge())
+                .gender(userRegistrationRequest.getGender())
+                .country(userRegistrationRequest.getCountry())
+                .region(userRegistrationRequest.getRegion())
+                .build();
+    }
 
 }
