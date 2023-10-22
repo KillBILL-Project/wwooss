@@ -28,7 +28,10 @@ public interface TrashLogService {
 
     /**
      * 월단위 쓰레기 로그 가져오기
-     * date가 null일 경우 전체 데이터
+     * date 유형
+     * null :  전체 데이터
+     * YYYY-MM : 해당 연,월 데이터
+     * YYYY : 해당 연 데이터
      * @param pageable
      * @param userId
      * @param date
