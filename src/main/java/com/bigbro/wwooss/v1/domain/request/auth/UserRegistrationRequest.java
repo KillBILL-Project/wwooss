@@ -12,4 +12,5 @@ public class UserRegistrationRequest {
     private String gender;
     private String country;
     private String region;
+    private boolean pushConsent;
 }

@@ -2,7 +2,7 @@ package com.bigbro.wwooss.v1.api.user;
 
 import com.bigbro.wwooss.v1.common.WwoossResponse;
 import com.bigbro.wwooss.v1.common.WwoossResponseUtil;
-import com.bigbro.wwooss.v1.domain.response.user.GetUserResponse;
+import com.bigbro.wwooss.v1.domain.response.auth.UserResponse;
 import com.bigbro.wwooss.v1.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +17,7 @@ public class UserApi {
     private final UserService userService;
 
     @GetMapping
-    public ResponseEntity<WwoossResponse<GetUserResponse>> test() {
-        return WwoossResponseUtil.responseOkAddData(this.userService.test());
+    public ResponseEntity<WwoossResponse<UserResponse>> getUserInfo() {
+        return WwoossResponseUtil.responseOkAddData(userService.getUserInfo());
     }
 }

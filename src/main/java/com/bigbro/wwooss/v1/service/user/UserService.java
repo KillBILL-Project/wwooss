@@ -1,14 +1,12 @@
 package com.bigbro.wwooss.v1.service.user;
 
-import com.bigbro.wwooss.v1.domain.response.user.GetUserResponse;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+import com.bigbro.wwooss.v1.domain.response.auth.UserResponse;
 
-@Service
-@RequiredArgsConstructor
-public class UserService {
+public interface UserService {
 
-    public GetUserResponse test() {
-        return GetUserResponse.of(1L, "YSW");
-    }
+    /**
+     *
+     * @return 로그인 한 유저의 정보
+     */
+    UserResponse getUserInfo();
 }
