@@ -49,6 +49,7 @@ public class WwoossResponse<T> {
                 .code(WwoossResponseCode.getCode())
                 .title(WwoossResponseCode.getTitle())
                 .message(WwoossResponseCode.getMessage())
+                .data(data)
                 .build();
     }
 }
