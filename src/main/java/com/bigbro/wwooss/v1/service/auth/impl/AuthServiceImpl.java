@@ -62,7 +62,7 @@ public class AuthServiceImpl implements AuthService {
     public void logout() {}
 
     public Boolean existsUser(UserExistsRequest userExistsRequest) {
-        return userRepository.existsUserByEmailAndLoginType(userExistsRequest.getEmail(), userExistsRequest.getLoginType());
+        return userRepository.findUserByEmailAndLoginType(userExistsRequest.getEmail(), userExistsRequest.getLoginType()).isEmpty();
     }
 
     public UserResponse register(UserRegistrationRequest userRegistrationRequest, HttpServletResponse response) {
