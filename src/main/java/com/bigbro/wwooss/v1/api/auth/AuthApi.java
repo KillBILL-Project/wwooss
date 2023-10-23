@@ -5,16 +5,11 @@ import com.bigbro.wwooss.v1.common.WwoossResponseUtil;
 import com.bigbro.wwooss.v1.domain.request.auth.UserExistsRequest;
 import com.bigbro.wwooss.v1.domain.request.auth.UserLoginRequest;
 import com.bigbro.wwooss.v1.domain.request.auth.UserRegistrationRequest;
-import com.bigbro.wwooss.v1.domain.response.auth.UserResponse;
+import com.bigbro.wwooss.v1.domain.response.auth.TokenResponse;
 import com.bigbro.wwooss.v1.service.auth.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import javax.servlet.http.HttpServletResponse;
+import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RequestMapping("/v1/auth")
@@ -24,22 +19,29 @@ public class AuthApi {
     private final AuthService authService;
 
     @PostMapping("/login")
-    public ResponseEntity<WwoossResponse<UserResponse>> login(@RequestBody(required = false) UserLoginRequest userLoginRequest, HttpServletResponse response) {
-        return WwoossResponseUtil.responseOkAddData(authService.login(userLoginRequest, response));
+    public ResponseEntity<WwoossResponse<TokenResponse>> login(@RequestBody UserLoginRequest userLoginRequest) {
+        return WwoossResponseUtil.responseOkAddData(authService.login(userLoginRequest));
+    }
+
+    @PostMapping("/reissue")
+    public ResponseEntity<WwoossResponse<TokenResponse>> reissue() {
+        return WwoossResponseUtil.responseOkAddData(authService.reissue());
     }
 
     @PostMapping("/logout")
     public ResponseEntity<WwoossResponse<Void>> logout() {
+        authService.logout();
         return WwoossResponseUtil.responseOkNoData();
     }
 
     @PostMapping("/register")
-    public ResponseEntity<WwoossResponse<UserResponse>> registerUser(@RequestBody UserRegistrationRequest userRegistrationRequest, HttpServletResponse response) {
-        return WwoossResponseUtil.responseOkAddData(authService.register(userRegistrationRequest, response));
+    public ResponseEntity<WwoossResponse<TokenResponse>> registerUser(@RequestBody UserRegistrationRequest userRegistrationRequest) {
+        return WwoossResponseUtil.responseOkAddData(authService.register(userRegistrationRequest));
     }
 
     @PostMapping("/exist")
     public ResponseEntity<WwoossResponse<Boolean>> checkExistence(@RequestBody UserExistsRequest userExistsRequest) {
         return WwoossResponseUtil.responseOkAddData(authService.existsUser(userExistsRequest));
     }
+
 }

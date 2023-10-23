@@ -75,6 +75,7 @@ public class User extends BaseEntity {
 
     public static User of(User user, String encodedPassword, String refreshToken) {
         return User.builder()
+                .userId(user.getUserId())
                 .email(user.getEmail())
                 .password(encodedPassword)
                 .loginType(user.getLoginType())
@@ -88,6 +89,7 @@ public class User extends BaseEntity {
 
     public static User of(User user, String refreshToken) {
         return User.builder()
+                .userId(user.getUserId())
                 .email(user.getEmail())
                 .password(user.getPassword())
                 .loginType(user.getLoginType())

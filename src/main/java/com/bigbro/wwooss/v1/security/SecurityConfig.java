@@ -1,6 +1,5 @@
 package com.bigbro.wwooss.v1.security;
 
-import com.bigbro.wwooss.v1.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,7 +19,6 @@ public class SecurityConfig {
 
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
-    private final UserRepository userRepository;
     private final TokenProvider tokenProvider;
 
     @Bean
@@ -41,7 +39,7 @@ public class SecurityConfig {
                         .antMatchers("/v1/auth/**").permitAll()
                         .antMatchers("/v1/**").hasRole("USER")
                         .anyRequest().hasRole("ADMIN"))
-                .addFilterBefore(new CustomAuthenticationProcessingFilter(userRepository, tokenProvider), UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(new CustomAuthenticationProcessingFilter(tokenProvider), UsernamePasswordAuthenticationFilter.class);
         return httpSecurity.build();
     }
 

@@ -1,12 +1,13 @@
 package com.bigbro.wwooss.v1.service.auth.impl;
 
+import com.bigbro.wwooss.v1.domain.response.auth.TokenResponse;
+import com.bigbro.wwooss.v1.security.TokenInfo;
 import com.bigbro.wwooss.v1.security.TokenProvider;
 import com.bigbro.wwooss.v1.common.WwoossResponseCode;
 import com.bigbro.wwooss.v1.domain.entity.user.User;
 import com.bigbro.wwooss.v1.domain.request.auth.UserExistsRequest;
 import com.bigbro.wwooss.v1.domain.request.auth.UserLoginRequest;
 import com.bigbro.wwooss.v1.domain.request.auth.UserRegistrationRequest;
-import com.bigbro.wwooss.v1.domain.response.auth.UserResponse;
 import com.bigbro.wwooss.v1.enumType.LoginType;
 import com.bigbro.wwooss.v1.exception.DataNotFoundException;
 import com.bigbro.wwooss.v1.repository.user.UserRepository;
@@ -17,10 +18,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpServletResponse;
-
-import static com.bigbro.wwooss.v1.security.TokenProvider.setBearerToken;
-
 @Slf4j
 @RequiredArgsConstructor
 @Service
@@ -30,16 +27,7 @@ public class AuthServiceImpl implements AuthService {
     private final PasswordEncoder passwordEncoder;
     private final TokenProvider tokenProvider;
 
-    public UserResponse login(UserLoginRequest userLoginRequest, HttpServletResponse response) {
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        if (principal instanceof User user) {
-            user = (User) principal;
-            return UserResponse.from(user);
-        }
-
-        if (userLoginRequest == null) throw new DataNotFoundException(WwoossResponseCode.NOT_FOUND_DATA, "로그인 정보가 없습니다.");
-
+    public TokenResponse login(UserLoginRequest userLoginRequest) {
 
         String userEmail = userLoginRequest.getEmail();
         LoginType userLoginType = userLoginRequest.getLoginType();
@@ -50,38 +38,54 @@ public class AuthServiceImpl implements AuthService {
             throw new DataNotFoundException(WwoossResponseCode.NOT_FOUND_DATA, "일치하는 유저정보가 없습니다.");
         }
 
-        String accessToken = tokenProvider.generateAccessToken(user);
-        String refreshToken = tokenProvider.generateRefreshToken(user);
+        TokenResponse tokenResponse = tokenProvider.getTokenResponse(user, "init");
+        user = User.of(user, tokenResponse.getRefreshToken());
 
-        response.addHeader("Authorization", setBearerToken(accessToken));
-        response.addHeader("Refresh_Token", setBearerToken(refreshToken));
+        userRepository.save(user);
 
-        return UserResponse.from(user);
+        return tokenResponse;
     }
 
-    public void logout() {}
+    public void logout() {
+        String refreshToken = (String) SecurityContextHolder.getContext().getAuthentication().getCredentials();
+        TokenInfo tokenInfo = tokenProvider.getTokenInfo(refreshToken);
+        User user = userRepository.findById(tokenInfo.getUserId()).orElseThrow();
+        User loggedOutUser = User.of(user, null);
+
+        userRepository.save(loggedOutUser);
+
+    }
 
     public Boolean existsUser(UserExistsRequest userExistsRequest) {
         return userRepository.findUserByEmailAndLoginType(userExistsRequest.getEmail(), userExistsRequest.getLoginType()).isEmpty();
     }
 
-    public UserResponse register(UserRegistrationRequest userRegistrationRequest, HttpServletResponse response) {
+    public TokenResponse register(UserRegistrationRequest userRegistrationRequest) {
         User user = User.from(userRegistrationRequest);
-        String accessToken = tokenProvider.generateAccessToken(user);
-        String refreshToken = tokenProvider.generateRefreshToken(user);
-
-        response.addHeader("Authorization", setBearerToken(accessToken));
-        response.addHeader("Refresh_Token", setBearerToken(refreshToken));
+        TokenResponse tokenResponse = tokenProvider.getTokenResponse(user, "init");
 
         if (LoginType.EMAIL == user.getLoginType()) {
             String encodedPassword = passwordEncoder.encode(user.getPassword());
-            user = User.of(user, encodedPassword, refreshToken);
+            user = User.of(user, encodedPassword, tokenResponse.getRefreshToken());
         } else {
-            user = User.of(user, refreshToken);
+            user = User.of(user, tokenResponse.getRefreshToken());
         }
 
         userRepository.save(user);
 
-        return UserResponse.from(user);
+        return tokenResponse;
+    }
+
+    public TokenResponse reissue() {
+        String refreshToken = (String) SecurityContextHolder.getContext().getAuthentication().getCredentials();
+
+        TokenInfo tokenInfo = tokenProvider.getTokenInfo(refreshToken);
+        User user = userRepository.findById(tokenInfo.getUserId()).orElseThrow();
+
+        if (!refreshToken.equals(user.getRefreshToken())) {
+            throw new IllegalStateException();
+        }
+
+        return tokenProvider.getTokenResponse(user, "reissue");
     }
 }

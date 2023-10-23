@@ -1,10 +1,6 @@
 package com.bigbro.wwooss.v1.security;
 
-import com.bigbro.wwooss.v1.common.WwoossResponseCode;
-import com.bigbro.wwooss.v1.domain.entity.user.User;
 import com.bigbro.wwooss.v1.enumType.UserRole;
-import com.bigbro.wwooss.v1.exception.DataNotFoundException;
-import com.bigbro.wwooss.v1.repository.user.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -23,17 +19,13 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 
-import static com.bigbro.wwooss.v1.security.TokenProvider.setBearerToken;
-
 @Slf4j
 public class CustomAuthenticationProcessingFilter extends AbstractAuthenticationProcessingFilter {
 
     private final TokenProvider tokenProvider;
-    private final UserRepository userRepository;
 
-    public CustomAuthenticationProcessingFilter(UserRepository userRepository, TokenProvider tokenProvider) {
+    public CustomAuthenticationProcessingFilter(TokenProvider tokenProvider) {
         super("/v1/**");
-        this.userRepository = userRepository;
         this.tokenProvider = tokenProvider;
     }
 
@@ -48,24 +40,15 @@ public class CustomAuthenticationProcessingFilter extends AbstractAuthentication
 
         String token = parseBearerToken(requestTokenHeader);
         TokenInfo tokenInfo = tokenProvider.getTokenInfo(token);
-        User user = userRepository.findById(tokenInfo.getUserId()).orElseThrow(() -> new DataNotFoundException(WwoossResponseCode.NOT_FOUND_DATA, "존재하지 않는 유저입니다."));
-        Collection<? extends GrantedAuthority> authorities = getAuthorities(user.getUserRole());
-
-        String type = tokenInfo.getType();
 
         if (tokenProvider.isTokenExpired(token)) {
-            setUnauthorizedUser(response);
+            return setUnauthorizedUser(response);
         }
 
-        if (type.equals("access")) {
-            return new UsernamePasswordAuthenticationToken(user, token, authorities);
-        } else if ("refresh".equals(type)) {
-            String accessToken = tokenProvider.generateAccessToken(user);
-            response.addHeader("Authorization", setBearerToken(accessToken));
-            return new UsernamePasswordAuthenticationToken(user, accessToken, authorities);
-        }
+        String userEmail = tokenInfo.getUserEmail();
+        Collection<? extends GrantedAuthority> authorities = getAuthorities(tokenInfo.getUserRole());
 
-        return setUnauthorizedUser(response);
+        return new UsernamePasswordAuthenticationToken(userEmail, token, authorities);
     }
 
     @Override
@@ -78,8 +61,8 @@ public class CustomAuthenticationProcessingFilter extends AbstractAuthentication
         return token.substring(7);
     }
 
-    private Collection<? extends GrantedAuthority> getAuthorities(UserRole role) {
-        return List.of(new SimpleGrantedAuthority(role.toString()));
+    private Collection<? extends GrantedAuthority> getAuthorities(UserRole userRole) {
+        return List.of(new SimpleGrantedAuthority(userRole.toString()));
     }
 
     private Authentication setUnauthorizedUser(HttpServletResponse response) throws IOException {

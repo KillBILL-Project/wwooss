@@ -1,6 +1,7 @@
 package com.bigbro.wwooss.v1.security;
 
 import com.bigbro.wwooss.v1.domain.entity.user.User;
+import com.bigbro.wwooss.v1.domain.response.auth.TokenResponse;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -26,11 +27,11 @@ public class TokenProvider implements InitializingBean {
 
     public TokenProvider(
             @Value("${jwt.secret}") String secret,
-            @Value("${jwt.access-token-validity-in-seconds}") long accessTokenValidityInSeconds,
-            @Value("${jwt.refresh-token-validity-in-seconds}") long refreshTokenValidityInMilliseconds) {
+            @Value("${jwt.access-token-validity-in-milliseconds}") long accessTokenValidityInMilliseconds,
+            @Value("${jwt.refresh-token-validity-in-milliseconds}") long refreshTokenValidityInMilliseconds) {
         this.secret = secret;
-        this.accessTokenValidityInMilliseconds = accessTokenValidityInSeconds * 1000;
-        this.refreshTokenValidityInMilliseconds = refreshTokenValidityInMilliseconds * 1000;
+        this.accessTokenValidityInMilliseconds = accessTokenValidityInMilliseconds;
+        this.refreshTokenValidityInMilliseconds = refreshTokenValidityInMilliseconds;
     }
 
     @Override
@@ -39,24 +40,31 @@ public class TokenProvider implements InitializingBean {
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public String generateAccessToken(User user) {
+    public String generateToken(User user, String tokenType) {
+        Date expiration = "access".equals(tokenType)
+                ? new Date(System.currentTimeMillis() + this.accessTokenValidityInMilliseconds)
+                : new Date(System.currentTimeMillis() + this.refreshTokenValidityInMilliseconds);
+
         return Jwts.builder()
-                .claim("type", "access")
                 .claim("userId", user.getUserId())
+                .claim("userEmail", user.getEmail())
+                .claim("userRole", user.getUserRole())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + this.accessTokenValidityInMilliseconds))
+                .setExpiration(expiration)
                 .signWith(key, SignatureAlgorithm.HS512)
                 .compact();
     }
 
-    public String generateRefreshToken(User user) {
-        return Jwts.builder()
-                .claim("type", "refresh")
-                .claim("userId", user.getUserId())
-                .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + this.refreshTokenValidityInMilliseconds))
-                .signWith(key, SignatureAlgorithm.HS512)
-                .compact();
+    public TokenResponse getTokenResponse(User user, String type) {
+        String accessToken = generateToken(user, "access");
+        String refreshToken = "init".equals(type) ? generateToken(user, "refresh") : null;
+        Long refreshTokenExpiresIn = "init".equals(type) ? refreshTokenValidityInMilliseconds : null;
+        return TokenResponse.builder()
+                .accessToken(accessToken)
+                .expiresIn(accessTokenValidityInMilliseconds)
+                .refreshToken(refreshToken)
+                .refreshTokenExpiresIn(refreshTokenExpiresIn)
+                .build();
     }
 
     public TokenInfo getTokenInfo(String token) {
