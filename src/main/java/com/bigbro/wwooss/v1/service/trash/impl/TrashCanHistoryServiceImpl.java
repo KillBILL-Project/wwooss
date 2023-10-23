@@ -17,6 +17,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -103,9 +104,9 @@ public class TrashCanHistoryServiceImpl implements TrashCanHistoryService {
 
     @Override
     @Transactional(readOnly = true)
-    public TrashCanHistoryListResponse findTrashCanHistoryList(Long userId, Pageable pageable) {
+    public TrashCanHistoryListResponse findTrashCanHistoryList(Long userId, String date, Pageable pageable) {
         User user = userRepository.findById(userId).orElseThrow(() -> new DataNotFoundException(WwoossResponseCode.NOT_FOUND_DATA, "존재하지 않는 유저입니다."));
-        Page<TrashCanHistory> trashCanHistories = trashCanHistoryRepository.findTrashCanHistoriesByUser(user, pageable);
+        Slice<TrashCanHistory> trashCanHistories = trashCanHistoryRepository.findTrashCanHistoriesByUserAndDate(user, date, pageable);
         List<TrashCanHistoryResponse> trashCanHistoryResponseList = trashCanHistories.stream().map((TrashCanHistoryResponse::from)).toList();
 
         return TrashCanHistoryListResponse.of(trashCanHistories.hasNext(), trashCanHistoryResponseList);

@@ -50,10 +50,11 @@ class TrashCanHistoryApiTest {
                 .trashCanHistoryResponseList(trashCanHistoryResponseList)
                 .build();
 
-        given(this.trashCanHistoryService.findTrashCanHistoryList(any(), any())).willReturn(trashCanHistoryListResponse);
+        given(this.trashCanHistoryService.findTrashCanHistoryList(any(), any(), any())).willReturn(trashCanHistoryListResponse);
 
         this.mockMvc.perform(RestDocumentationRequestBuilders.get("/api/v1/trash-can-histories")
                         .contextPath("/api")
+                        .param("date", "2023-10")
                         .param("size", "10")
                         .param("page", "0")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -64,6 +65,7 @@ class TrashCanHistoryApiTest {
                                 DocumentConfig.getDocumentRequest(),
                                 DocumentConfig.getDocumentResponse(),
                                 requestParameters(
+                                        parameterWithName("date").description("조회 날짜 : [null / YYYY-MM / YYYY]").optional(),
                                         parameterWithName("page").description("현재 페이지"),
                                         parameterWithName("size").description("한 페이지 당 결과값").optional()
                                 ),

@@ -61,7 +61,7 @@ class TrashLogApiTest {
         given(this.trashLogService.getTrashLogList(any(), any(), any())).willReturn(trashInfoResponseList);
 
         this.mockMvc.perform(RestDocumentationRequestBuilders.get("/api/v1/trash-log")
-                        .param("date", "2023-10-01T00:00:00.000Z")
+                        .param("date", "2023-10")
                         .param("size", "15")
                         .param("page", "1")
                         .contextPath("/api")
@@ -73,7 +73,7 @@ class TrashLogApiTest {
                                 DocumentConfig.getDocumentRequest(),
                                 DocumentConfig.getDocumentResponse(),
                                 requestParameters(
-                                        parameterWithName("date").description("조회 날짜 : ISO 타").optional(),
+                                        parameterWithName("date").description("조회 날짜 : [null / YYYY-MM / YYYY]").optional(),
                                         parameterWithName("size").description("조회 size").optional(),
                                         parameterWithName("page").description("조회 page").optional()
                                 ),
