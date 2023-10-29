@@ -38,7 +38,11 @@ logging:
       hibernate:
         sql: debug
         type.descriptor.sql: trace
-
+jwt:
+  header: Authorization
+  secret: c2lsdmVybmluZS10ZWNoLXNwcmluZy1ib290LWp3dC10dXRvcmlhbC1zZWNyZXQtc2lsdmVybmluZS10ZWNoLXNwcmluZy1ib290LWp3dC10dXRvcmlhbC1zZWNyZXQK
+  access-token-validity-in-milliseconds: 86400000
+  refresh-token-validity-in-milliseconds: 86400000000
 
 ---
 spring:

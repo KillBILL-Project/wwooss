@@ -2,6 +2,7 @@ package com.bigbro.wwooss.v1.api.user;
 
 import com.bigbro.wwooss.v1.common.WwoossResponse;
 import com.bigbro.wwooss.v1.common.WwoossResponseUtil;
+import com.bigbro.wwooss.v1.domain.response.auth.UserResponse;
 import com.bigbro.wwooss.v1.domain.request.user.UpdatePushConsentRequest;
 import com.bigbro.wwooss.v1.service.user.UserService;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,11 @@ import javax.validation.Valid;
 public class UserApi {
     private final UserService userService;
 
+    @GetMapping
+    public ResponseEntity<WwoossResponse<UserResponse>> getUserInfo() {
+        return WwoossResponseUtil.responseOkAddData(userService.getUserInfo());
+    }
+  
     @PatchMapping("/push-consent")
     public ResponseEntity<WwoossResponse<Void>> updatePushConsentStatus(@RequestBody @Valid UpdatePushConsentRequest updatePushConsentRequest) {
 
