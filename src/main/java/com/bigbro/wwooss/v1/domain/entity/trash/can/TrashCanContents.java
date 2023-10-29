@@ -1,6 +1,7 @@
-package com.bigbro.wwooss.v1.domain.entity.trash;
+package com.bigbro.wwooss.v1.domain.entity.trash.can;
 
 import com.bigbro.wwooss.v1.domain.entity.base.BaseEntity;
+import com.bigbro.wwooss.v1.domain.entity.trash.info.TrashInfo;
 import com.bigbro.wwooss.v1.domain.entity.user.User;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -33,18 +34,23 @@ public class TrashCanContents extends BaseEntity {
     @Column(name = "trash_count")
     private Long trashCount;
 
-    @ManyToOne
+    @Comment("쓰레기 크기 - 10 단위")
+    @Column(name = "size")
+    private Integer size;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "trash_info_id")
     private TrashInfo trashInfo;
 
-    public static TrashCanContents of(TrashInfo trashInfo, User user, Long trashCount) {
+    public static TrashCanContents of(TrashInfo trashInfo, User user, Long trashCount, Integer size) {
         return TrashCanContents.builder()
                 .trashCount(trashCount)
                 .user(user)
+                .size(size)
                 .trashInfo(trashInfo)
                 .build();
     }

@@ -29,16 +29,21 @@ spring:
     properties:
       hibernate:
         format_sql: true
+        highlight_sql: true
 #  elasticsearch:
 #    uris: "localhost:9200"
 logging:
   level:
-    org.hibernate.sql: debug
+    org:
+      hibernate:
+        sql: debug
+        type.descriptor.sql: trace
 jwt:
   header: Authorization
   secret: c2lsdmVybmluZS10ZWNoLXNwcmluZy1ib290LWp3dC10dXRvcmlhbC1zZWNyZXQtc2lsdmVybmluZS10ZWNoLXNwcmluZy1ib290LWp3dC10dXRvcmlhbC1zZWNyZXQK
   access-token-validity-in-milliseconds: 86400000
   refresh-token-validity-in-milliseconds: 86400000000
+
 ---
 spring:
   config:

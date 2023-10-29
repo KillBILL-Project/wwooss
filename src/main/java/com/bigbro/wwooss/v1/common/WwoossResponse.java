@@ -11,7 +11,7 @@ import org.springframework.http.HttpStatus;
 @Getter
 public class WwoossResponse<T> {
 
-    private HttpStatus code;
+    private int code;
 
     private String title;
 
@@ -21,7 +21,7 @@ public class WwoossResponse<T> {
 
     public static <T> WwoossResponse<T> from(WwoossResponseCode responseCode) {
         return WwoossResponse.<T>builder()
-                .code(responseCode.getCode())
+                .code(responseCode.getCode().value())
                 .title(responseCode.getTitle())
                 .message(responseCode.getMessage())
                 .build();
@@ -29,7 +29,7 @@ public class WwoossResponse<T> {
 
     public static <T> WwoossResponse<T> of(HttpStatus code, String title, String message, T data) {
         return WwoossResponse.<T>builder()
-                .code(code)
+                .code(code.value())
                 .title(title)
                 .message(message)
                 .data(data)
@@ -38,7 +38,7 @@ public class WwoossResponse<T> {
 
     public static <T> WwoossResponse<T> of(HttpStatus code, String title, String message) {
         return WwoossResponse.<T>builder()
-                .code(code)
+                .code(code.value())
                 .title(title)
                 .message(message)
                 .build();
@@ -46,7 +46,7 @@ public class WwoossResponse<T> {
 
     public static <T> WwoossResponse<T> of(WwoossResponseCode WwoossResponseCode, T data) {
         return WwoossResponse.<T>builder()
-                .code(WwoossResponseCode.getCode())
+                .code(WwoossResponseCode.getCode().value())
                 .title(WwoossResponseCode.getTitle())
                 .message(WwoossResponseCode.getMessage())
                 .data(data)

@@ -1,6 +1,6 @@
 package com.bigbro.wwooss.v1.domain.response.trash;
 
-import com.bigbro.wwooss.v1.domain.entity.trash.TrashCategory;
+import com.bigbro.wwooss.v1.domain.entity.trash.category.TrashCategory;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

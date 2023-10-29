@@ -15,7 +15,7 @@ public interface TrashInfoService {
     List<TrashInfoResponse> getTrashInfoByCategoryId(Long categoryId);
 
     /**
-     * @param trashInfoRequest 쓰레기 기본 정보 데이터 ( size , weight etc...)
+     * @param trashInfoRequest 쓰레기 기본 정보 데이터 ( weight etc...)
      *
      * @return TrashInfoResponse 쓰레기 카테고리 정보 목록
      */

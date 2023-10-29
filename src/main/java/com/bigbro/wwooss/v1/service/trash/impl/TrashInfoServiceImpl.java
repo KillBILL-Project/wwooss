@@ -1,8 +1,8 @@
 package com.bigbro.wwooss.v1.service.trash.impl;
 
 import com.bigbro.wwooss.v1.common.WwoossResponseCode;
-import com.bigbro.wwooss.v1.domain.entity.trash.TrashCategory;
-import com.bigbro.wwooss.v1.domain.entity.trash.TrashInfo;
+import com.bigbro.wwooss.v1.domain.entity.trash.category.TrashCategory;
+import com.bigbro.wwooss.v1.domain.entity.trash.info.TrashInfo;
 import com.bigbro.wwooss.v1.domain.request.trash.info.TrashInfoRequest;
 import com.bigbro.wwooss.v1.domain.response.trash.TrashInfoResponse;
 import com.bigbro.wwooss.v1.exception.DataNotFoundException;

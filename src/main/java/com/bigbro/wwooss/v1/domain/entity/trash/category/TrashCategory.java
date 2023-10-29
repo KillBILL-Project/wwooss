@@ -1,4 +1,4 @@
-package com.bigbro.wwooss.v1.domain.entity.trash;
+package com.bigbro.wwooss.v1.domain.entity.trash.category;
 
 import com.bigbro.wwooss.v1.domain.entity.base.BaseEntity;
 import com.bigbro.wwooss.v1.domain.request.trash.category.TrashCategoryRequest;
@@ -35,7 +35,7 @@ public class TrashCategory extends BaseEntity {
 
     public static TrashCategory from(TrashCategoryRequest trashCategoryRequest) {
         return TrashCategory.builder()
-                .trashCategoryName(trashCategoryRequest.getCategoryName())
+                .trashCategoryName(trashCategoryRequest.getTrashCategoryName())
                 .build();
     }
 }

@@ -2,6 +2,7 @@ package com.bigbro.wwooss.v1.domain.entity.user;
 
 import com.bigbro.wwooss.v1.domain.entity.base.BaseEntity;
 import com.bigbro.wwooss.v1.domain.request.auth.UserRegistrationRequest;
+import com.bigbro.wwooss.v1.enumType.Gender;
 import com.bigbro.wwooss.v1.enumType.LoginType;
 import com.bigbro.wwooss.v1.enumType.UserRole;
 import lombok.*;
@@ -28,6 +29,11 @@ public class User extends BaseEntity {
     @Enumerated(value = EnumType.STRING)
     private UserRole userRole = UserRole.USER;
 
+    @Comment("성별")
+    @Column(name = "gender")
+    @Enumerated(value = EnumType.STRING)
+    private Gender gender;
+
     @Comment("유저 이메일")
     @Column(name = "email")
     private String email;
@@ -36,18 +42,14 @@ public class User extends BaseEntity {
     @Column(name = "password")
     private String password;
 
+    @Comment("나이")
+    @Column(name = "age")
+    private Integer age;
+
     @Comment("로그인 타입 - [Email / Apple / Google]")
     @Column(name = "login_type")
     @Enumerated(value = EnumType.STRING)
     private LoginType loginType;
-
-    @Comment("유저 나이")
-    @Column(name = "age")
-    private int age;
-
-    @Comment("유저 성별")
-    @Column(name = "gender")
-    private String gender;
 
     @Comment("유저 국가")
     @Column(name = "country")
@@ -111,6 +113,10 @@ public class User extends BaseEntity {
                 .country(userRegistrationRequest.getCountry())
                 .region(userRegistrationRequest.getRegion())
                 .build();
+    }
+  
+    public void updatePushConsent(boolean pushConsent) {
+        this.pushConsent = pushConsent;
     }
 
 }

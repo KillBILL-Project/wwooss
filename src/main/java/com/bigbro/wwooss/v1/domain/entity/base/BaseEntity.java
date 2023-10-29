@@ -1,6 +1,7 @@
 package com.bigbro.wwooss.v1.domain.entity.base;
 
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.CreationTimestamp;
@@ -13,6 +14,7 @@ import java.time.LocalDateTime;
 
 @MappedSuperclass
 @SuperBuilder
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EntityListeners(AuditingEntityListener.class)
 public abstract class BaseEntity {
@@ -22,7 +24,6 @@ public abstract class BaseEntity {
 //    private Long createdBy;
 //    @LastModifiedBy
 //    private Long updatedBy;
-
 
     @CreationTimestamp
     private LocalDateTime createdAt;

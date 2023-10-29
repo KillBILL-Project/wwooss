@@ -1,7 +1,7 @@
 package com.bigbro.wwooss.v1.repository.trash.info;
 
-import com.bigbro.wwooss.v1.domain.entity.trash.TrashCategory;
-import com.bigbro.wwooss.v1.domain.entity.trash.TrashInfo;
+import com.bigbro.wwooss.v1.domain.entity.trash.category.TrashCategory;
+import com.bigbro.wwooss.v1.domain.entity.trash.info.TrashInfo;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

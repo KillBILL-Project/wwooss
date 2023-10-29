@@ -4,7 +4,7 @@ import com.bigbro.wwooss.v1.annotation.TestController;
 import com.bigbro.wwooss.v1.config.DocumentConfig;
 import com.bigbro.wwooss.v1.domain.request.trash.category.TrashCategoryRequest;
 import com.bigbro.wwooss.v1.domain.response.trash.TrashCategoryResponse;
-import com.bigbro.wwooss.v1.service.trash.category.TrashCategoryService;
+import com.bigbro.wwooss.v1.service.trash.impl.TrashCategoryServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -33,7 +33,7 @@ class TrashCategoryApiTest {
     private MockMvc mockMvc;
 
     @MockBean
-    private TrashCategoryService trashCategoryService;
+    private TrashCategoryServiceImpl trashCategoryService;
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -53,7 +53,7 @@ class TrashCategoryApiTest {
                         .contentType(MediaType.APPLICATION_JSON)
                 )
                 .andExpect(status().isOk())
-                .andDo(document("get-trash-categoies",
+                .andDo(document("get-trash-categories",
                             resourceDetails().tags("쓰레기 카테고리 가져오기"),
                             DocumentConfig.getDocumentRequest(),
                             DocumentConfig.getDocumentResponse(),
@@ -72,7 +72,7 @@ class TrashCategoryApiTest {
     @DisplayName("쓰레기 카테고리 생성")
     void createTrashCategory() throws Exception {
         TrashCategoryRequest trashCategoryRequest = TrashCategoryRequest.builder()
-                .categoryName("플라스틱")
+                .trashCategoryName("플라스틱")
                 .build();
 
 
@@ -81,7 +81,7 @@ class TrashCategoryApiTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(trashCategoryRequest))
                 )
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andDo(document("create-trash-categoies",
                                 resourceDetails().tags("쓰레기 카테고리 생성"),
                                 DocumentConfig.getDocumentRequest(),
