@@ -1,2 +1,5 @@
 rootProject.name = 'wwooss'
-include "wwooss-api", "wwooss-domain-rds", "wwooss-common"
+include "wwooss-api",
+        "wwooss-domain-rds",
+        "wwooss-common",
+        "wwooss-batch"
