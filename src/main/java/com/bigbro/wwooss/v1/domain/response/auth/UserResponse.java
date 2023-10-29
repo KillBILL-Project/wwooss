@@ -1,6 +1,7 @@
 package com.bigbro.wwooss.v1.domain.response.auth;
 
 import com.bigbro.wwooss.v1.domain.entity.user.User;
+import com.bigbro.wwooss.v1.enumType.Gender;
 import com.bigbro.wwooss.v1.enumType.LoginType;
 import lombok.Builder;
 import lombok.Getter;
@@ -11,7 +12,7 @@ public class UserResponse {
     private String email;
     private LoginType loginType;
     private int age;
-    private String gender;
+    private Gender gender;
     private String country;
     private String region;
     private boolean marketingConsent;

@@ -1,5 +1,6 @@
 package com.bigbro.wwooss.v1.domain.request.auth;
 
+import com.bigbro.wwooss.v1.enumType.Gender;
 import com.bigbro.wwooss.v1.enumType.LoginType;
 import lombok.Getter;
 
@@ -9,7 +10,7 @@ public class UserRegistrationRequest {
     private String password;
     private LoginType loginType;
     private int age;
-    private String gender;
+    private Gender gender;
     private String country;
     private String region;
     private boolean pushConsent;
