@@ -14,9 +14,19 @@ import com.bigbro.wwooss.v1.repository.user.UserRepository;
 import com.bigbro.wwooss.v1.service.auth.AuthService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.*;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpServerErrorException;
+import org.springframework.web.client.ResourceAccessException;
+import org.springframework.web.client.RestTemplate;
+
+import java.util.Collections;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -26,7 +36,9 @@ public class AuthServiceImpl implements AuthService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final TokenProvider tokenProvider;
+    private final RestTemplate restTemplate;
 
+    @Transactional
     public TokenResponse login(UserLoginRequest userLoginRequest) {
 
         String userEmail = userLoginRequest.getEmail();
@@ -36,16 +48,25 @@ public class AuthServiceImpl implements AuthService {
         if (userLoginType == LoginType.EMAIL
                 && (!passwordEncoder.matches(userLoginRequest.getPassword(), user.getPassword()))) {
             throw new DataNotFoundException(WwoossResponseCode.NOT_FOUND_DATA, "일치하는 유저정보가 없습니다.");
+        } else if ( userLoginType == LoginType.GOOGLE) {
+            String serverAuthCode = userLoginRequest.getGoogleAuthCode();
+            boolean isValidGoogleLogin = validateGoogleSignIn(serverAuthCode);
+
         }
 
-        TokenResponse tokenResponse = tokenProvider.getTokenResponse(user, "init");
-        user = User.of(user, tokenResponse.getRefreshToken());
+        String accessToken = tokenProvider.generateToken(user, "access");
+        String refreshToken = tokenProvider.generateToken(user, "refresh");
+        user = User.of(user, refreshToken);
 
         userRepository.save(user);
 
-        return tokenResponse;
+        return TokenResponse.builder()
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
+                .build();
     }
 
+    @Transactional
     public void logout() {
         String refreshToken = (String) SecurityContextHolder.getContext().getAuthentication().getCredentials();
         TokenInfo tokenInfo = tokenProvider.getTokenInfo(refreshToken);
@@ -53,27 +74,32 @@ public class AuthServiceImpl implements AuthService {
         User loggedOutUser = User.of(user, null);
 
         userRepository.save(loggedOutUser);
-
     }
 
     public Boolean existsUser(UserExistsRequest userExistsRequest) {
         return userRepository.findUserByEmailAndLoginType(userExistsRequest.getEmail(), userExistsRequest.getLoginType()).isEmpty();
     }
 
+    @Transactional
     public TokenResponse register(UserRegistrationRequest userRegistrationRequest) {
         User user = User.from(userRegistrationRequest);
-        TokenResponse tokenResponse = tokenProvider.getTokenResponse(user, "init");
+
+        String accessToken = tokenProvider.generateToken(user, "access");
+        String refreshToken = tokenProvider.generateToken(user, "refresh");
 
         if (LoginType.EMAIL == user.getLoginType()) {
             String encodedPassword = passwordEncoder.encode(user.getPassword());
-            user = User.of(user, encodedPassword, tokenResponse.getRefreshToken());
+            user = User.of(user, encodedPassword, refreshToken);
         } else {
-            user = User.of(user, tokenResponse.getRefreshToken());
+            user = User.of(user, refreshToken);
         }
 
         userRepository.save(user);
 
-        return tokenResponse;
+        return TokenResponse.builder()
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
+                .build();
     }
 
     public TokenResponse reissue() {
@@ -86,6 +112,34 @@ public class AuthServiceImpl implements AuthService {
             throw new IllegalStateException();
         }
 
-        return tokenProvider.getTokenResponse(user, "reissue");
+        String accessToken = tokenProvider.generateToken(user, "access");
+
+        return TokenResponse.builder().accessToken(accessToken).build();
+    }
+
+    private static final String TOKEN_URL = "https://oauth2.googleapis.com/token";
+    private static final String CLIENT_ID = "1361813122-mn0eqsjcn0aar3cvr8on3grfo7agfi0h.apps.googleusercontent.com";
+    private static final String CLIENT_SECRET = "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";
+    private static final String REDIRECT_URI = "http://localhost:8080/callback";
+
+    public Boolean validateGoogleSignIn(String serverAuthCode) {
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.add("Content-Type", "application/x-www-form-urlencoded");
+
+            MultiValueMap<String, String> requestBody = new LinkedMultiValueMap<>();
+            requestBody.add("code", serverAuthCode);
+            requestBody.add("client_id", CLIENT_ID);
+            requestBody.add("client_secret", CLIENT_SECRET);
+            requestBody.add("redirect_uri", REDIRECT_URI);
+            requestBody.add("grant_type", "authorization_code");
+
+            HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(requestBody, headers);
+            ResponseEntity<Void> responseEntity = restTemplate.exchange(TOKEN_URL, HttpMethod.POST, request, Void.class);
+
+            return responseEntity.getStatusCode() == HttpStatus.OK;
+        } catch (HttpClientErrorException | HttpServerErrorException | ResourceAccessException e) {
+            return false;
+        }
     }
 }

@@ -6,11 +6,6 @@ import lombok.Getter;
 @Builder
 @Getter
 public class TokenResponse {
-
-    @Builder.Default
-    private String tokenType = "bearer";
     private String accessToken;
-    private Long expiresIn;
     private String refreshToken;
-    private Long refreshTokenExpiresIn;
 }

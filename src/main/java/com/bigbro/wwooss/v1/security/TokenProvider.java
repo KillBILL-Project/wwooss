@@ -19,20 +19,14 @@ import java.util.Date;
 @Component
 public class TokenProvider implements InitializingBean {
 
-    private final String secret;
-    private final long accessTokenValidityInMilliseconds;
-    private final long refreshTokenValidityInMilliseconds;
+    @Value("${jwt.secret}")
+    private String secret;
+    @Value("${jwt.access-token-validity-in-milliseconds}")
+    private long accessTokenValidityInMilliseconds;
+    @Value("${jwt.refresh-token-validity-in-milliseconds}")
+    private long refreshTokenValidityInMilliseconds;
 
     private Key key;
-
-    public TokenProvider(
-            @Value("${jwt.secret}") String secret,
-            @Value("${jwt.access-token-validity-in-milliseconds}") long accessTokenValidityInMilliseconds,
-            @Value("${jwt.refresh-token-validity-in-milliseconds}") long refreshTokenValidityInMilliseconds) {
-        this.secret = secret;
-        this.accessTokenValidityInMilliseconds = accessTokenValidityInMilliseconds;
-        this.refreshTokenValidityInMilliseconds = refreshTokenValidityInMilliseconds;
-    }
 
     @Override
     public void afterPropertiesSet() {
@@ -53,18 +47,6 @@ public class TokenProvider implements InitializingBean {
                 .setExpiration(expiration)
                 .signWith(key, SignatureAlgorithm.HS512)
                 .compact();
-    }
-
-    public TokenResponse getTokenResponse(User user, String type) {
-        String accessToken = generateToken(user, "access");
-        String refreshToken = "init".equals(type) ? generateToken(user, "refresh") : null;
-        Long refreshTokenExpiresIn = "init".equals(type) ? refreshTokenValidityInMilliseconds : null;
-        return TokenResponse.builder()
-                .accessToken(accessToken)
-                .expiresIn(accessTokenValidityInMilliseconds)
-                .refreshToken(refreshToken)
-                .refreshTokenExpiresIn(refreshTokenExpiresIn)
-                .build();
     }
 
     public TokenInfo getTokenInfo(String token) {
