@@ -1,0 +1,73 @@
+plugins {
+    id "org.asciidoctor.jvm.convert" version "3.3.2"
+    id 'com.epages.restdocs-api-spec' version '0.16.2'
+}
+
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+    asciidoctorExt
+}
+
+ext {
+    set('snippetsDir', file("build/generated-snippets"))
+}
+
+dependencies {
+    implementation project(path: ':wwooss-domain-rds')
+    implementation project(path: ':wwooss-common')
+    // rest doc
+    testImplementation 'com.epages:restdocs-api-spec-mockmvc:0.16.2'
+    asciidoctorExt 'org.springframework.restdocs:spring-restdocs-asciidoctor'
+    // security
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+
+    // jwt
+    implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+openapi3 {
+    servers = [ { url = "http://localhost:8080" } ]
+    title = 'WWOOSS API restdocs with swagger'
+    description = 'wwooss bill API'
+    version = '0.0.1'
+    format = 'json'
+    outputFileNamePrefix = 'open-api-3-wwooss-service'
+    outputDirectory = 'src/main/resources/static/docs'
+}
+
+
+asciidoctor {
+    inputs.dir snippetsDir
+    configurations 'asciidoctorExt'
+    dependsOn test
+}
+
+asciidoctor.doFirst {
+    delete file('src/main/resources/static/docs')
+}
+
+task copyDocument(type: Copy) {
+    dependsOn asciidoctor
+    from file("build/docs/asciidoc")
+    into file("src/main/resources/static/docs")
+}
+
+
+bootJar {
+    dependsOn asciidoctor
+    copy {
+        from asciidoctor.outputDir
+        into "src/main/resources/static/docs"
+    }
+}

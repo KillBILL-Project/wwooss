@@ -1,0 +1,10 @@
+// core 에서는 bootjar로 패키징 할 필요가 없으므로 추가
+bootJar.enabled = false
+jar.enabled = true
+
+dependencies {
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
