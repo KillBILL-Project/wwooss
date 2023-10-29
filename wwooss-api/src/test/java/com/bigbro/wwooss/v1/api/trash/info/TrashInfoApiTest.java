@@ -24,6 +24,7 @@ import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @TestController
@@ -51,6 +52,7 @@ class TrashInfoApiTest {
         given(this.trashInfoService.getTrashInfoByCategoryId(1L)).willReturn(trashInfoResponseList);
 
         this.mockMvc.perform(RestDocumentationRequestBuilders.get("/api/v1/trash-info")
+                        .with(csrf().asHeader())
                         .param("categoryId", "1")
                         .contextPath("/api")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -95,6 +97,7 @@ class TrashInfoApiTest {
         given(this.trashInfoService.createTrashInfo(any())).willReturn(trashInfoResponse);
 
         this.mockMvc.perform(RestDocumentationRequestBuilders.post("/api/v1/trash-info")
+                        .with(csrf().asHeader())
                         .contextPath("/api")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(trashInfoRequest))

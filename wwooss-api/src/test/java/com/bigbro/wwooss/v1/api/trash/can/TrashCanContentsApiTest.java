@@ -26,6 +26,8 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWit
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+
 @TestController
 @WebMvcTest(TrashCanContentsApi.class)
 class TrashCanContentsApiTest {
@@ -48,6 +50,7 @@ class TrashCanContentsApiTest {
                 .build();
 
         this.mockMvc.perform(RestDocumentationRequestBuilders.post("/api/v1/trash-can-contents")
+                        .with(csrf().asHeader())
                         .contextPath("/api")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(trashCanContentsRequest))
@@ -78,6 +81,7 @@ class TrashCanContentsApiTest {
         given(this.trashCanContentsService.deleteTrashCanContents(1L)).willReturn(emptyTrashResultResponse);
 
         this.mockMvc.perform(RestDocumentationRequestBuilders.delete("/api/v1/trash-can-contents")
+                        .with(csrf().asHeader())
                         .contextPath("/api")
                         .contentType(MediaType.APPLICATION_JSON)
                 )

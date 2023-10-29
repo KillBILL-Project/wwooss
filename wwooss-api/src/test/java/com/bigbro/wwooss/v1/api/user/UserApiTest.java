@@ -18,6 +18,7 @@ import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.docume
 import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.resourceDetails;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @TestController
@@ -40,6 +41,7 @@ class UserApiTest {
                 .build();
 
         this.mockMvc.perform(RestDocumentationRequestBuilders.patch("/api/v1/user/push-consent")
+                        .with(csrf().asHeader())
                         .contextPath("/api")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(pushConsentRequest))

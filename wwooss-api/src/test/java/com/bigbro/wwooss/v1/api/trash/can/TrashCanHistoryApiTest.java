@@ -25,6 +25,7 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWit
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @TestController
@@ -53,6 +54,7 @@ class TrashCanHistoryApiTest {
         given(this.trashCanHistoryService.findTrashCanHistoryList(any(), any(), any())).willReturn(trashCanHistoryListResponse);
 
         this.mockMvc.perform(RestDocumentationRequestBuilders.get("/api/v1/trash-can-histories")
+                        .with(csrf().asHeader())
                         .contextPath("/api")
                         .param("date", "2023-10")
                         .param("size", "10")

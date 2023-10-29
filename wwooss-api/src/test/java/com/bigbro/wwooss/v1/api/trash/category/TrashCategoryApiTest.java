@@ -22,6 +22,7 @@ import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.resour
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
@@ -49,6 +50,7 @@ class TrashCategoryApiTest {
         given(this.trashCategoryService.getTrashCategories()).willReturn(trashCategoryResponses);
 
         this.mockMvc.perform(RestDocumentationRequestBuilders.get("/api/v1/trash-categories")
+                        .with(csrf().asHeader())
                         .contextPath("/api")
                         .contentType(MediaType.APPLICATION_JSON)
                 )
@@ -77,6 +79,7 @@ class TrashCategoryApiTest {
 
 
         this.mockMvc.perform(RestDocumentationRequestBuilders.post("/api/v1/trash-categories")
+                        .with(csrf().asHeader())
                         .contextPath("/api")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(trashCategoryRequest))
