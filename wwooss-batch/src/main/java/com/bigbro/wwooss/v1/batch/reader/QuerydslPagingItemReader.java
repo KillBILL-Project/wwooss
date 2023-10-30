@@ -1,4 +1,4 @@
-package com.bigbro.wwooss.v1.batch;
+package com.bigbro.wwooss.v1.batch.reader;
 
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
