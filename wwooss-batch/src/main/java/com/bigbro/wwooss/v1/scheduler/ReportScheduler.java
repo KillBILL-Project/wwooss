@@ -1,4 +1,4 @@
-package com.bigbro.wwooss.v1;
+package com.bigbro.wwooss.v1.scheduler;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
