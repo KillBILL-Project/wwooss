@@ -1,125 +1,50 @@
-buildscript {
-	ext {
-		queryDslVersion = "5.0.0"
-	}
-}
-
 plugins {
 	id 'java'
 	id 'org.springframework.boot' version '2.7.7'
 	id 'io.spring.dependency-management' version '1.1.0'
-	id "org.asciidoctor.jvm.convert" version "3.3.2"
-	id 'com.epages.restdocs-api-spec' version '0.16.2'
-	id 'com.ewerk.gradle.plugins.querydsl' version '1.0.10'
 }
 
-group = 'com.wwooss'
-version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '17'
 
 configurations {
 	compileOnly {
 		extendsFrom annotationProcessor
 	}
-	asciidoctorExt
 }
 
-ext {
-	set('snippetsDir', file("build/generated-snippets"))
+allprojects {
+	repositories {
+		mavenCentral()
+	}
 }
 
-repositories {
-	mavenCentral()
-}
+subprojects {
 
-dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'org.springframework.boot:spring-boot-starter-validation'
-	implementation 'org.springframework.boot:spring-boot-starter-security'
+	group = 'com.wwooss'
+	version = '0.0.1-SNAPSHOT'
+	sourceCompatibility = '17'
 
-	implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
-	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
-	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
+	apply plugin: 'java'
+	apply plugin: 'org.springframework.boot'
+	apply plugin: 'io.spring.dependency-management'
+
+	dependencies {
+		implementation 'org.springframework.boot:spring-boot-starter-web'
+		implementation 'org.springframework.boot:spring-boot-starter-validation'
 
 //	implementation 'org.springframework.boot:spring-boot-starter-data-elasticsearch'
 
-	compileOnly 'org.projectlombok:lombok'
-	annotationProcessor 'org.projectlombok:lombok'
+		compileOnly 'org.projectlombok:lombok'
+		annotationProcessor 'org.projectlombok:lombok'
 
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+		testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
-	// mysql
-	runtimeOnly 'com.mysql:mysql-connector-j'
-	// jpa
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	// jasypt
-	implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.4'
-
-	// rest doc
-	testImplementation 'com.epages:restdocs-api-spec-mockmvc:0.16.2'
-
-	// querydsl
-	implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
-	implementation "com.querydsl:querydsl-apt:${queryDslVersion}"
-	implementation "com.querydsl:querydsl-core:${queryDslVersion}"
-	implementation "com.vladmihalcea:hibernate-types-52:2.16.2"
-
-	asciidoctorExt 'org.springframework.restdocs:spring-restdocs-asciidoctor'
-
-
-}
-
-
-openapi3 {
-	servers = [ { url = "http://localhost:8080" } ]
-	title = 'WWOOSS API restdocs with swagger'
-	description = 'wwooss bill API'
-	version = '0.0.1'
-	format = 'json'
-	outputFileNamePrefix = 'open-api-3-wwooss-service'
-	outputDirectory = 'src/main/resources/static/docs'
+		// jasypt
+		implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.4'
+	}
 }
 
 tasks.named('test') {
 	useJUnitPlatform()
 }
 
-asciidoctor {
-	inputs.dir snippetsDir
-	configurations 'asciidoctorExt'
-	dependsOn test
-}
 
-asciidoctor.doFirst {
-	delete file('src/main/resources/static/docs')
-}
-
-task copyDocument(type: Copy) {
-	dependsOn asciidoctor
-	from file("build/docs/asciidoc")
-	into file("src/main/resources/static/docs")
-}
-
-bootJar {
-	dependsOn asciidoctor
-	copy {
-		from asciidoctor.outputDir
-		into "src/main/resources/static/docs"
-	}
-}
-
-// script for querydsl
-def querydslDir = "$buildDir/generated/querydsl"
-querydsl {
-	jpa = true
-	querydslSourcesDir = querydslDir
-}
-sourceSets {
-	main.java.srcDir querydslDir
-}
-configurations {
-	querydsl.extendsFrom compileClasspath
-}
-compileQuerydsl {
-	options.annotationProcessorPath = configurations.querydsl
-}
