@@ -1,4 +1,4 @@
-package com.bigbro.wwooss.v1.config;
+package com.bigbro.wwooss.v1.job;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.context.annotation.Bean;

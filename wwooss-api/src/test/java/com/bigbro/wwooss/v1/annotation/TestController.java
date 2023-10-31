@@ -1,6 +1,6 @@
 package com.bigbro.wwooss.v1.annotation;
 
-import com.bigbro.wwooss.v1.config.TestConfig;
+import com.bigbro.wwooss.v1.job.TestConfig;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;

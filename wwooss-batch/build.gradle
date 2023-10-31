@@ -2,10 +2,11 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-batch'
     implementation project(path: ':wwooss-domain-rds')
     implementation project(path: ':wwooss-domain-rds')
+//    implementation "org.springframework.data:spring-data-common"
     testImplementation "org.springframework.batch:spring-batch-test"
     // jpa
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation "com.querydsl:querydsl-jpa:5.0.0"
+//    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+//    implementation "com.querydsl:querydsl-jpa:5.0.0"
 }
 
 tasks.named('test') {

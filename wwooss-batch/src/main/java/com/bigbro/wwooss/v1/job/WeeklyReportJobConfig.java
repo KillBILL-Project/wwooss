@@ -1,11 +1,11 @@
-package com.bigbro.wwooss.v1.config;
-
-import static com.bigbro.wwooss.v1.entity.user.QUser.user;
+package com.bigbro.wwooss.v1.job;
 
 import com.bigbro.wwooss.v1.batch.reader.QuerydslPagingItemReader;
 import com.bigbro.wwooss.v1.entity.report.WeeklyReport;
 import com.bigbro.wwooss.v1.entity.user.User;
-import javax.persistence.EntityManagerFactory;
+
+import com.bigbro.wwooss.v1.repository.trash.log.TrashLogRepository;
+import com.bigbro.wwooss.v1.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
@@ -18,6 +18,8 @@ import org.springframework.batch.core.configuration.annotation.JobBuilderFactory
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import java.util.List;
 
 @Slf4j
 @Configuration
@@ -33,9 +35,11 @@ public class WeeklyReportJobConfig {
 
     private final StepBuilderFactory stepBuilderFactory;
 
-    private final EntityManagerFactory emf;
-
     private final QuerydslPagingItemReader jobParameter;
+
+    private final TrashLogRepository trashLogRepository;
+
+    private final UserRepository userRepository;
 
     @Bean
     public Job job() throws Exception {
@@ -65,9 +69,9 @@ public class WeeklyReportJobConfig {
     }
 
     @Bean
-    public QuerydslPagingItemReader<User> reader() {
-        return new QuerydslPagingItemReader<>(emf, chunkSize, queryFactory -> queryFactory
-                .selectFrom(user));
+    public QuerydslPagingItemReader<List<User>> reader() {
+
+        return new QuerydslPagingItemReader<>(chunkSize, () -> userRepository.findAllUser());
     }
 
     @Bean

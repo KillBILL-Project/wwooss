@@ -1,4 +1,4 @@
-package com.bigbro.wwooss.v1.config;
+package com.bigbro.wwooss.v1.job;
 
 import lombok.RequiredArgsConstructor;
 import org.jasypt.encryption.StringEncryptor;

@@ -1,55 +1,34 @@
 package com.bigbro.wwooss.v1.batch.reader;
 
-import com.querydsl.jpa.impl.JPAQuery;
-import com.querydsl.jpa.impl.JPAQueryFactory;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Function;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
+
 import org.springframework.batch.item.database.AbstractPagingItemReader;
-import org.springframework.dao.DataAccessResourceFailureException;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.CollectionUtils;
 
 public class QuerydslPagingItemReader<T> extends AbstractPagingItemReader<T> {
-    protected final Map<String, Object> jpaPropertyMap = new HashMap<>();
-    protected EntityManagerFactory entityManagerFactory;
-    protected EntityManager entityManager;
-    protected Function<JPAQueryFactory, JPAQuery<T>> queryFunction;
-    protected boolean transacted = true;//default value
+
+    protected Function<Void, T> repository;
 
     protected QuerydslPagingItemReader() {
         setName(ClassUtils.getShortName(QuerydslPagingItemReader.class));
     }
 
-    public QuerydslPagingItemReader(EntityManagerFactory entityManagerFactory,
-            int pageSize,
-            Function<JPAQueryFactory, JPAQuery<T>> queryFunction) {
+    public QuerydslPagingItemReader(int pageSize, Function<Void, T> repository) {
         this();
-        this.entityManagerFactory = entityManagerFactory;
-        this.queryFunction = queryFunction;
+        this.repository = repository;
         setPageSize(pageSize);
-    }
-
-    public void setTransacted(boolean transacted) {
-        this.transacted = transacted;
     }
 
     @Override
     protected void doOpen() throws Exception {
         super.doOpen();
 
-        entityManager = entityManagerFactory.createEntityManager(jpaPropertyMap);
-        if (entityManager == null) {
-            throw new DataAccessResourceFailureException("Unable to obtain an EntityManager");
-        }
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     protected void doReadPage() {
 
         clearIfTransacted();
@@ -100,7 +79,6 @@ public class QuerydslPagingItemReader<T> extends AbstractPagingItemReader<T> {
 
     @Override
     protected void doClose() throws Exception {
-        entityManager.close();
         super.doClose();
     }
 }
