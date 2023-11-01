@@ -19,7 +19,7 @@ public class QuerydslPagingItemReader<T> extends AbstractPagingItemReader<T> {
     protected EntityManagerFactory entityManagerFactory;
     protected EntityManager entityManager;
     protected Function<JPAQueryFactory, JPAQuery<T>> queryFunction;
-    protected boolean transacted = true;//default value
+    protected boolean transacted = true;
 
     protected QuerydslPagingItemReader() {
         setName(ClassUtils.getShortName(QuerydslPagingItemReader.class));

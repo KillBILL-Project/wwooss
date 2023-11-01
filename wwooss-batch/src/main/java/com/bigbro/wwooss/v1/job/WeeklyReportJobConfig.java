@@ -1,10 +1,12 @@
-package com.bigbro.wwooss.v1.config;
+package com.bigbro.wwooss.v1.job;
 
 import static com.bigbro.wwooss.v1.entity.user.QUser.user;
 
 import com.bigbro.wwooss.v1.batch.reader.QuerydslPagingItemReader;
 import com.bigbro.wwooss.v1.entity.report.WeeklyReport;
 import com.bigbro.wwooss.v1.entity.user.User;
+import com.bigbro.wwooss.v1.repository.trash.log.TrashLogRepository;
+import java.time.LocalDate;
 import javax.persistence.EntityManagerFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -37,6 +39,8 @@ public class WeeklyReportJobConfig {
 
     private final QuerydslPagingItemReader jobParameter;
 
+    private final TrashLogRepository trashLogRepository;
+
     @Bean
     public Job job() throws Exception {
         return jobBuilderFactory.get(JOB_NAME)
@@ -59,6 +63,9 @@ public class WeeklyReportJobConfig {
         return new ItemProcessor<User, WeeklyReport>() {
             @Override
             public WeeklyReport process(User user) throws Exception {
+                LocalDate date = LocalDate.parse("2023-11-01");
+
+                trashLogRepository.findTrashLogByUserAtLastWeek(user, date);
                 return null;
             }
         };
@@ -75,5 +82,9 @@ public class WeeklyReportJobConfig {
         return new JpaItemWriterBuilder<WeeklyReport>()
                 .entityManagerFactory(emf)
                 .build();
+    }
+
+    private WeeklyReport createReport(User user) {
+        return null;
     }
 }
