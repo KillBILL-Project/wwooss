@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 
 @EnableBatchProcessing
-@ComponentScan(basePackages={"com.bigbro.wwooss", "org.springframework.batch.core.configuration.annotation"})
+@ComponentScan(basePackages = {"com.bigbro.wwooss", "org.springframework.batch.core.configuration.annotation"})
 @EnableAutoConfiguration
 public class WwoossBatchApplication {
 
