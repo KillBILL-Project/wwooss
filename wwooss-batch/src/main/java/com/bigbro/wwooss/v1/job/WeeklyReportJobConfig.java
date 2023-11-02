@@ -3,6 +3,7 @@ package com.bigbro.wwooss.v1.job;
 import static com.bigbro.wwooss.v1.entity.user.QUser.user;
 
 import com.bigbro.wwooss.v1.batch.reader.QuerydslPagingItemReader;
+import com.bigbro.wwooss.v1.dto.WeeklyTrashByCategory;
 import com.bigbro.wwooss.v1.entity.report.WeeklyReport;
 import com.bigbro.wwooss.v1.entity.trash.log.TrashLog;
 import com.bigbro.wwooss.v1.entity.user.User;
@@ -10,9 +11,11 @@ import com.bigbro.wwooss.v1.repository.report.WeeklyReportRepository;
 import com.bigbro.wwooss.v1.repository.trash.log.TrashLogRepository;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import javax.persistence.EntityManagerFactory;
 import lombok.RequiredArgsConstructor;
@@ -104,13 +107,27 @@ public class WeeklyReportJobConfig {
             return null;
         }
         Set<Integer> attendanceSet = new HashSet<>();
+        List<WeeklyTrashByCategory> weeklyTrashByCategoryList = new ArrayList<>();
 
-        for(int i = 0; i < trashLogList.size(); i++) {
-            TrashLog trashLog = trashLogList.get(i);
+        for (TrashLog trashLog : trashLogList) {
+            // 출석
             attendanceSet.add(trashLog.getCreatedAt().getDayOfWeek().getValue());
+            // 카테고리별 쓰레기 수
+            Optional<WeeklyTrashByCategory> weeklyTrashByCategory = weeklyTrashByCategoryList.stream().filter((trash) ->
+                            trash.getTrashName().equals(trashLog.getTrashInfo().getName()))
+                    .findFirst();
+
+            weeklyTrashByCategory.ifPresentOrElse(
+                    trashByCategory ->
+                            trashByCategory.updateTrashCount(trashByCategory.getTrashCount() + trashLog.getTrashCount()),
+                    () ->
+                            weeklyTrashByCategoryList.add(
+                                    WeeklyTrashByCategory.of(trashLog.getTrashInfo().getName(), trashLog.getTrashCount())));
+
         }
 
+
         List<Integer> attendanceList = new ArrayList<>(attendanceSet);
-        return WeeklyReport.of(attendanceList, user);
+        return WeeklyReport.of(attendanceList, weeklyTrashByCategoryList, user);
     }
 }
