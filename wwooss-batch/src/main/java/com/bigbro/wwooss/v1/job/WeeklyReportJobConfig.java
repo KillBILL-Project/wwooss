@@ -11,6 +11,9 @@ import com.bigbro.wwooss.v1.entity.user.User;
 import com.bigbro.wwooss.v1.repository.report.WeeklyReportRepository;
 import com.bigbro.wwooss.v1.repository.trash.log.TrashLogRepository;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.Period;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -153,6 +156,12 @@ public class WeeklyReportJobConfig {
                 weeklyCarbonEmission,
                 weeklyRefund,
                 weeklyTrashCount,
-                1L, 1D, 1L, 1L, user);
+                getWeekDay(user.getCreatedAt()), 1D, 1L, 1L, user);
+    }
+
+    private long getWeekDay(LocalDateTime signupDate) {
+        // ((오늘 날짜 - 가입 날짜) / 7) 올림
+        LocalDateTime now = LocalDateTime.now();
+        return (long) Math.ceil(((double)ChronoUnit.DAYS.between(signupDate, now)) / (double) 7) ;
     }
 }
