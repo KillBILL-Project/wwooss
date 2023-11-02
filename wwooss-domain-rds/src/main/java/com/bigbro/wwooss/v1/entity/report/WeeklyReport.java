@@ -45,7 +45,7 @@ public class WeeklyReport extends BaseEntity {
 
     @Comment("주간 환급금")
     @Column(name = "weekly_refund")
-    private Double weeklyRefund;
+    private Long weeklyRefund;
 
     @Comment("금주 버린 쓰레기 수")
     @Column(name = "weekly_trash_count")
@@ -74,7 +74,7 @@ public class WeeklyReport extends BaseEntity {
     public static WeeklyReport of(List<Integer> attendanceRecord,
             List<WeeklyTrashByCategory> weeklyTrashCountByCategoryList,
             Double weeklyCarbonEmission,
-            Double weeklyRefund,
+            Long weeklyRefund,
             Long weeklyTrashCount,
             Long weekNumber,
             Double wowCarbonEmission,

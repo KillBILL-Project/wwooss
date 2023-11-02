@@ -3,6 +3,7 @@ package com.bigbro.wwooss.v1.job;
 import static com.bigbro.wwooss.v1.entity.user.QUser.user;
 
 import com.bigbro.wwooss.v1.batch.reader.QuerydslPagingItemReader;
+import com.bigbro.wwooss.v1.dto.ResultOfDiscardedTrash;
 import com.bigbro.wwooss.v1.dto.WeeklyTrashByCategory;
 import com.bigbro.wwooss.v1.entity.report.WeeklyReport;
 import com.bigbro.wwooss.v1.entity.trash.log.TrashLog;
@@ -11,13 +12,14 @@ import com.bigbro.wwooss.v1.repository.report.WeeklyReportRepository;
 import com.bigbro.wwooss.v1.repository.trash.log.TrashLogRepository;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import javax.persistence.EntityManagerFactory;
+
+import com.bigbro.wwooss.v1.utils.TrashUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
@@ -108,15 +110,21 @@ public class WeeklyReportJobConfig {
         }
         Set<Integer> attendanceSet = new HashSet<>();
         List<WeeklyTrashByCategory> weeklyTrashByCategoryList = new ArrayList<>();
+        double weeklyCarbonEmission = 0;
+        long weeklyRefund = 0;
+        long weeklyTrashCount = 0;
+
 
         for (TrashLog trashLog : trashLogList) {
             // 출석
             attendanceSet.add(trashLog.getCreatedAt().getDayOfWeek().getValue());
+
             // 카테고리별 쓰레기 수
             Optional<WeeklyTrashByCategory> weeklyTrashByCategory = weeklyTrashByCategoryList.stream().filter((trash) ->
                             trash.getTrashName().equals(trashLog.getTrashInfo().getName()))
                     .findFirst();
 
+            // 주간 버린 쓰리기 탄소배출량, 환급금
             weeklyTrashByCategory.ifPresentOrElse(
                     trashByCategory ->
                             trashByCategory.updateTrashCount(trashByCategory.getTrashCount() + trashLog.getTrashCount()),
@@ -124,10 +132,27 @@ public class WeeklyReportJobConfig {
                             weeklyTrashByCategoryList.add(
                                     WeeklyTrashByCategory.of(trashLog.getTrashInfo().getName(), trashLog.getTrashCount())));
 
+            ResultOfDiscardedTrash discardedResult = TrashUtil.discardResult(trashLog.getTrashCount(),
+                    trashLog.getTrashInfo().getWeight(),
+                    trashLog.getSize(),
+                    trashLog.getTrashInfo().getCarbonEmissionPerGram(),
+                    trashLog.getTrashInfo().getRefund()
+            );
+            weeklyCarbonEmission += discardedResult.getCarbonEmission();
+            weeklyRefund += discardedResult.getRefund();
+
+            // 주간 버린 쓰레기 수
+            weeklyTrashCount += trashLog.getTrashCount();
+
         }
 
 
         List<Integer> attendanceList = new ArrayList<>(attendanceSet);
-        return WeeklyReport.of(attendanceList, weeklyTrashByCategoryList, user);
+        return WeeklyReport.of(attendanceList,
+                weeklyTrashByCategoryList,
+                weeklyCarbonEmission,
+                weeklyRefund,
+                weeklyTrashCount,
+                1L, 1D, 1L, 1L, user);
     }
 }
