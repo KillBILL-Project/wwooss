@@ -1,6 +1,7 @@
 package com.bigbro.wwooss.v1.entity.report;
 
 import com.bigbro.wwooss.v1.dto.WeeklyTrashByCategory;
+import com.bigbro.wwooss.v1.dto.WowReport;
 import com.bigbro.wwooss.v1.entity.base.BaseEntity;
 import com.bigbro.wwooss.v1.entity.user.User;
 import lombok.AccessLevel;
@@ -77,9 +78,7 @@ public class WeeklyReport extends BaseEntity {
             Long weeklyRefund,
             Long weeklyTrashCount,
             Long weekNumber,
-            Double wowCarbonEmission,
-            Long wowRefund,
-            Long wowTrashCount,
+            WowReport wowReport,
             User user) {
         return WeeklyReport.builder()
                 .attendanceRecord(attendanceRecord)
@@ -88,9 +87,9 @@ public class WeeklyReport extends BaseEntity {
                 .weeklyRefund(weeklyRefund)
                 .weeklyTrashCount(weeklyTrashCount)
                 .weekNumber(weekNumber)
-                .wowCarbonEmission(wowCarbonEmission)
-                .wowRefund(wowRefund)
-                .wowTrashCount(wowTrashCount)
+                .wowCarbonEmission(wowReport.getWowCarbonEmission())
+                .wowRefund(wowReport.getWowRefund())
+                .wowTrashCount(wowReport.getWowTrashCount())
                 .user(user)
                 .build();
     }

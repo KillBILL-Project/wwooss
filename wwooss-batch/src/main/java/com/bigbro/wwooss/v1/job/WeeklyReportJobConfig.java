@@ -5,6 +5,7 @@ import static com.bigbro.wwooss.v1.entity.user.QUser.user;
 import com.bigbro.wwooss.v1.batch.reader.QuerydslPagingItemReader;
 import com.bigbro.wwooss.v1.dto.ResultOfDiscardedTrash;
 import com.bigbro.wwooss.v1.dto.WeeklyTrashByCategory;
+import com.bigbro.wwooss.v1.dto.WowReport;
 import com.bigbro.wwooss.v1.entity.report.WeeklyReport;
 import com.bigbro.wwooss.v1.entity.trash.log.TrashLog;
 import com.bigbro.wwooss.v1.entity.user.User;
@@ -110,12 +111,13 @@ public class WeeklyReportJobConfig {
         if (trashLogList.isEmpty()) {
             return null;
         }
+
+        // init
         Set<Integer> attendanceSet = new HashSet<>();
         List<WeeklyTrashByCategory> weeklyTrashByCategoryList = new ArrayList<>();
         double weeklyCarbonEmission = 0;
         long weeklyRefund = 0;
         long weeklyTrashCount = 0;
-
 
         for (TrashLog trashLog : trashLogList) {
             // 출석
@@ -150,17 +152,42 @@ public class WeeklyReportJobConfig {
 
 
         List<Integer> attendanceList = new ArrayList<>(attendanceSet);
+        long weekNumber = getWeekDay(user.getCreatedAt());
         return WeeklyReport.of(attendanceList,
                 weeklyTrashByCategoryList,
                 weeklyCarbonEmission,
                 weeklyRefund,
                 weeklyTrashCount,
-                getWeekDay(user.getCreatedAt()), 1D, 1L, 1L, user);
+                weekNumber,
+                getWowResult(weekNumber,
+                        weeklyCarbonEmission,
+                        weeklyRefund,
+                        weeklyTrashCount),
+                user);
     }
 
     private long getWeekDay(LocalDateTime signupDate) {
         // ((오늘 날짜 - 가입 날짜) / 7) 올림
         LocalDateTime now = LocalDateTime.now();
         return (long) Math.ceil(((double)ChronoUnit.DAYS.between(signupDate, now)) / (double) 7) ;
+    }
+
+    private WowReport getWowResult(long weekNumber,
+                                   double weeklyCarbonEmission,
+                                   long weeklyRefund,
+                                   long weeklyTrashCount) {
+        WeeklyReport lastWeekReport = weeklyReportRepository.findWeeklyReportByWeekNumber(weekNumber);
+
+        if (Objects.isNull(lastWeekReport)) {
+            return WowReport.zeroReport();
+        }
+
+        double changedCarbonEmission = weeklyCarbonEmission - lastWeekReport.getWeeklyCarbonEmission();
+        long changedRefund = weeklyRefund - lastWeekReport.getWeeklyRefund();
+
+        long lastTrashCount = lastWeekReport.getWeeklyTrashCount();
+        long changedTrashCountPercent =((weeklyTrashCount - lastTrashCount) / lastTrashCount) * 100;
+
+        return WowReport.of(changedCarbonEmission, changedRefund, changedTrashCountPercent);
     }
 }

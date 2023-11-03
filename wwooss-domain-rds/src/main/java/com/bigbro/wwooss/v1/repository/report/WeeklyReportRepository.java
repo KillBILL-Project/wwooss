@@ -4,5 +4,5 @@ import com.bigbro.wwooss.v1.entity.report.WeeklyReport;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface WeeklyReportRepository extends JpaRepository<WeeklyReport, Long> {
-
+    WeeklyReport findWeeklyReportByWeekNumber(Long weekNumber);
 }
