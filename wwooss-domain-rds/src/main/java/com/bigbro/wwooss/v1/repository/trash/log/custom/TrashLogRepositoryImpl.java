@@ -1,7 +1,6 @@
 package com.bigbro.wwooss.v1.repository.trash.log.custom;
 
 import com.bigbro.wwooss.v1.entity.trash.log.TrashLog;
-import com.bigbro.wwooss.v1.entity.user.QUser;
 import com.bigbro.wwooss.v1.entity.user.User;
 import com.bigbro.wwooss.v1.utils.PagingUtil;
 import com.querydsl.core.types.dsl.BooleanExpression;

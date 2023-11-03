@@ -12,7 +12,6 @@ import com.bigbro.wwooss.v1.repository.report.WeeklyReportRepository;
 import com.bigbro.wwooss.v1.repository.trash.log.TrashLogRepository;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.Period;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.HashSet;
