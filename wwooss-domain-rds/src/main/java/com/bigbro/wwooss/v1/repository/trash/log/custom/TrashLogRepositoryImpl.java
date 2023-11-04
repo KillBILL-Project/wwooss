@@ -38,7 +38,8 @@ public class TrashLogRepositoryImpl implements TrashLogRepositoryCustom {
     @Override
     public List<TrashLog> findTrashLogByUserAtLastWeek(User paramUser, LocalDate date) {
         JPAQuery<TrashLog> trashLogJPAQuery = queryFactory.selectFrom(trashLog)
-                .where(searchLastWeekDateFilter(date).and(user.userId.eq(paramUser.getUserId())))
+                .where(searchLastWeekDateFilter(date))
+                .join(trashLog.user, user)
                 .orderBy(trashLog.createdAt.desc());
 
         return trashLogJPAQuery.fetch();
@@ -48,7 +49,7 @@ public class TrashLogRepositoryImpl implements TrashLogRepositoryCustom {
         LocalDate toDate = date.minusDays(1);
         LocalDate fromDate = date.minusDays(7);
 
-        return trashLog.createdAt.between(toDate.atStartOfDay(), fromDate.atTime(LocalTime.MAX));
+        return trashLog.createdAt.between(fromDate.atStartOfDay(), toDate.atTime(LocalTime.MAX));
     }
 
     private BooleanExpression searchDateFilter(String date) {
