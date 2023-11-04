@@ -30,9 +30,6 @@ spring:
       hibernate:
         format_sql: true
         highlight_sql: true
-  batch:
-    job:
-      enabled: false
 #  elasticsearch:
 #    uris: "localhost:9200"
 logging:

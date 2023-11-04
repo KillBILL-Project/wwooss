@@ -2,12 +2,12 @@ package com.bigbro.wwooss;
 
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.context.annotation.ComponentScan;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 @EnableBatchProcessing
-@ComponentScan(basePackages = {"com.bigbro.wwooss", "org.springframework.batch.core.configuration.annotation"})
-@EnableAutoConfiguration
+@EnableScheduling
+@SpringBootApplication
 public class WwoossBatchApplication {
 
     public static void main(String[] args) {

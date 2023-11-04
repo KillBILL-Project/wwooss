@@ -10,5 +10,5 @@ import org.springframework.data.domain.Slice;
 public interface TrashLogRepositoryCustom {
     Slice<TrashLog> findByUserAndDate(User user, String date, Pageable pageable);
 
-    List<TrashLog> findTrashLogByUserAtLastWeek(User user, LocalDate date);
+    List<TrashLog> findTrashLogByUserAtLastWeek(User user, LocalDate toDay);
 }

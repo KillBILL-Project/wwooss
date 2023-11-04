@@ -1,6 +1,9 @@
 package com.bigbro.wwooss.v1.job;
 
 import static com.bigbro.wwooss.v1.entity.user.QUser.user;
+import static java.time.LocalDateTime.parse;
+
+import java.time.format.DateTimeFormatter;
 
 import com.bigbro.wwooss.v1.batch.reader.QuerydslPagingItemReader;
 import com.bigbro.wwooss.v1.dto.ResultOfDiscardedTrash;
@@ -11,7 +14,7 @@ import com.bigbro.wwooss.v1.entity.trash.log.TrashLog;
 import com.bigbro.wwooss.v1.entity.user.User;
 import com.bigbro.wwooss.v1.repository.report.WeeklyReportRepository;
 import com.bigbro.wwooss.v1.repository.trash.log.TrashLogRepository;
-import java.time.LocalDate;
+
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -27,6 +30,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
+import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.database.JpaItemWriter;
 import org.springframework.batch.item.database.builder.JpaItemWriterBuilder;
@@ -52,14 +56,12 @@ public class WeeklyReportJobConfig {
 
     private final EntityManagerFactory emf;
 
-    private final QuerydslPagingItemReader jobParameter;
-
     private final TrashLogRepository trashLogRepository;
 
     private final WeeklyReportRepository weeklyReportRepository;
 
     @Bean
-    public Job job() {
+    public Job weeklyReportJob() {
         return jobBuilderFactory.get(JOB_NAME)
                 .start(step())
                 .build();
@@ -70,7 +72,7 @@ public class WeeklyReportJobConfig {
         return stepBuilderFactory.get(STEP_NAME)
                 .<User, WeeklyReport>chunk(chunkSize)
                 .reader(reader())
-                .processor(processor())
+                .processor(processor(null))
                 .writer(writer())
                 .build();
     }
@@ -80,17 +82,15 @@ public class WeeklyReportJobConfig {
      * proccessor 제거 후 바로 처리
      */
     @Bean
-    public ItemProcessor<User, WeeklyReport> processor() {
-        return new ItemProcessor<User, WeeklyReport>() {
-            @Override
-            public WeeklyReport process(User user) {
-                LocalDate date = LocalDate.parse("2023-11-01");
+    @StepScope
+    public ItemProcessor<User, WeeklyReport> processor(@Value("#{jobParameters[date]}")  String date) {
+        LocalDateTime parseDate = parse(date, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
 
-                List<TrashLog> trashLogByUserAtLastWeek = trashLogRepository.findTrashLogByUserAtLastWeek(user, date);
-                WeeklyReport report = createReport(user, trashLogByUserAtLastWeek);
+        return user -> {
+            List<TrashLog> trashLogByUserAtLastWeek = trashLogRepository.findTrashLogByUserAtLastWeek(user, parseDate.toLocalDate());
+            WeeklyReport report = createReport(user, trashLogByUserAtLastWeek);
 
-                return Objects.isNull(report) ? null : weeklyReportRepository.save(report);
-            }
+            return Objects.isNull(report) ? null : weeklyReportRepository.save(report);
         };
     }
 
@@ -98,6 +98,7 @@ public class WeeklyReportJobConfig {
     public QuerydslPagingItemReader<User> reader() {
         return new QuerydslPagingItemReader<>(emf, chunkSize, queryFactory -> queryFactory
                 .selectFrom(user));
+
     }
 
     @Bean
@@ -153,6 +154,7 @@ public class WeeklyReportJobConfig {
 
         List<Integer> attendanceList = new ArrayList<>(attendanceSet);
         long weekNumber = getWeekDay(user.getCreatedAt());
+
         return WeeklyReport.of(attendanceList,
                 weeklyTrashByCategoryList,
                 weeklyCarbonEmission,

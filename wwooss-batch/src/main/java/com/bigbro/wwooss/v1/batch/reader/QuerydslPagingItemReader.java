@@ -11,9 +11,11 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import org.springframework.batch.item.database.AbstractPagingItemReader;
 import org.springframework.dao.DataAccessResourceFailureException;
+import org.springframework.stereotype.Component;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.CollectionUtils;
 
+@Component
 public class QuerydslPagingItemReader<T> extends AbstractPagingItemReader<T> {
     protected final Map<String, Object> jpaPropertyMap = new HashMap<>();
     protected EntityManagerFactory entityManagerFactory;
