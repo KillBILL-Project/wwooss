@@ -5,7 +5,6 @@ import lombok.Getter;
 
 @Builder
 @Getter
-
 public class WeeklyTrashByCategory {
 
     private String trashName;

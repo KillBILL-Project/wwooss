@@ -28,7 +28,7 @@ public class WeeklyReport extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long weeklyReportId;
 
-    @Comment("출석 요일 [0 ~ 6 / 월 ~ 일]")
+    @Comment("출석 요일 [1 ~ 7 / 월 ~ 일]")
     @Type(type = "json")
     @Column(name = "attendance_record", columnDefinition = "json")
     @Builder.Default
@@ -82,7 +82,7 @@ public class WeeklyReport extends BaseEntity {
             User user) {
         return WeeklyReport.builder()
                 .attendanceRecord(attendanceRecord)
-                .weeklyTrashCountByCategoryList(weeklyTrashCountByCategoryList)
+//                .weeklyTrashCountByCategoryList(weeklyTrashCountByCategoryList)
                 .weeklyCarbonEmission(weeklyCarbonEmission)
                 .weeklyRefund(weeklyRefund)
                 .weeklyTrashCount(weeklyTrashCount)
