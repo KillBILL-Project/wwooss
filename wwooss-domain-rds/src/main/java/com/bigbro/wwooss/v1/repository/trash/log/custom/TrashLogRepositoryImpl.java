@@ -38,8 +38,8 @@ public class TrashLogRepositoryImpl implements TrashLogRepositoryCustom {
     @Override
     public List<TrashLog> findTrashLogByUserAtLastWeek(User paramUser, LocalDate date) {
         JPAQuery<TrashLog> trashLogJPAQuery = queryFactory.selectFrom(trashLog)
-                .where(searchLastWeekDateFilter(date))
                 .join(trashLog.user, user)
+                .where(searchLastWeekDateFilter(date).and(trashLog.user.userId.eq(paramUser.getUserId())))
                 .orderBy(trashLog.createdAt.desc());
 
         return trashLogJPAQuery.fetch();
