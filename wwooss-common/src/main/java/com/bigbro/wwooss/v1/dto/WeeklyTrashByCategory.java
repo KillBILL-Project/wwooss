@@ -1,5 +1,6 @@
 package com.bigbro.wwooss.v1.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -7,8 +8,10 @@ import lombok.Getter;
 @Getter
 public class WeeklyTrashByCategory {
 
+    @JsonProperty("trashName")
     private String trashName;
 
+    @JsonProperty("trashCount")
     private Long trashCount;
 
     public static WeeklyTrashByCategory of(String trashName, Long trashCount) {

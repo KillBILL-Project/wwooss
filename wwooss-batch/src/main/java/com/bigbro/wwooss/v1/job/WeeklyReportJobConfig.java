@@ -3,6 +3,7 @@ package com.bigbro.wwooss.v1.job;
 import static com.bigbro.wwooss.v1.entity.user.QUser.user;
 import static java.time.LocalDateTime.parse;
 
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 import com.bigbro.wwooss.v1.batch.reader.QuerydslPagingItemReader;
@@ -84,10 +85,11 @@ public class WeeklyReportJobConfig {
     @Bean
     @StepScope
     public ItemProcessor<User, WeeklyReport> processor(@Value("#{jobParameters[date]}")  String date) {
-        LocalDateTime parseDate = parse(date, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+//        LocalDateTime parseDate = parse(date, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
 
         return user -> {
-            List<TrashLog> trashLogByUserAtLastWeek = trashLogRepository.findTrashLogByUserAtLastWeek(user, parseDate.toLocalDate());
+            List<TrashLog> trashLogByUserAtLastWeek = trashLogRepository.findTrashLogByUserAtLastWeek(user, LocalDate.of(2023, 10, 23));
+//            List<TrashLog> trashLogByUserAtLastWeek = trashLogRepository.findTrashLogByUserAtLastWeek(user, parseDate.toLocalDate());
             WeeklyReport report = createReport(user, trashLogByUserAtLastWeek);
 
             return Objects.isNull(report) ? null : weeklyReportRepository.save(report);

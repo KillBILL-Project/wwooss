@@ -1,5 +1,7 @@
 package com.bigbro.wwooss.v1.entity.report;
 
+import com.bigbro.wwooss.v1.converter.IntegerListConverter;
+import com.bigbro.wwooss.v1.converter.WeeklyTrashListConverter;
 import com.bigbro.wwooss.v1.dto.WeeklyTrashByCategory;
 import com.bigbro.wwooss.v1.dto.WowReport;
 import com.bigbro.wwooss.v1.entity.base.BaseEntity;
@@ -10,7 +12,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.Comment;
-import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -29,14 +30,14 @@ public class WeeklyReport extends BaseEntity {
     private Long weeklyReportId;
 
     @Comment("출석 요일 [1 ~ 7 / 월 ~ 일]")
-    @Type(type = "json")
-    @Column(name = "attendance_record", columnDefinition = "json")
+    @Column(name = "attendance_record")
+    @Convert(converter = IntegerListConverter.class)
     @Builder.Default
     private List<Integer> attendanceRecord = new ArrayList<>();
 
     @Comment("주간 카테고리별 쓰레기 ")
-    @Column(name = "weekly_trash_count_by_category", columnDefinition = "json")
-    @Type(type = "json")
+    @Column(name = "weekly_trash_count_by_category")
+    @Convert(converter = WeeklyTrashListConverter.class)
     @Builder.Default
     private List<WeeklyTrashByCategory> weeklyTrashCountByCategoryList = new ArrayList<>();
 
@@ -82,7 +83,7 @@ public class WeeklyReport extends BaseEntity {
             User user) {
         return WeeklyReport.builder()
                 .attendanceRecord(attendanceRecord)
-//                .weeklyTrashCountByCategoryList(weeklyTrashCountByCategoryList)
+                .weeklyTrashCountByCategoryList(weeklyTrashCountByCategoryList)
                 .weeklyCarbonEmission(weeklyCarbonEmission)
                 .weeklyRefund(weeklyRefund)
                 .weeklyTrashCount(weeklyTrashCount)

@@ -46,16 +46,16 @@ public class ReportScheduler {
     }
 
     // TODO : TEST 추후 지울 예정
-//    @Scheduled(cron = "*/5 * * * * *")
-//    public void testWeeklyReportSchedule() throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException {
-//
-//        log.info("test 매주 월요일 새벽 3시");
-//
-//        JobParameters jobParameters = new JobParametersBuilder()
-//                .addString("date", LocalDateTime.now().toString())
-//                .toJobParameters();
-//
-//        jobLauncher.run(weeklyReportJobConfig.weeklyReportJob(), jobParameters);
-//
-//    }
+    @Scheduled(cron = "*/5 * * * * *")
+    public void testWeeklyReportSchedule() throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException {
+
+        log.info("test 매주 월요일 새벽 3시");
+
+        JobParameters jobParameters = new JobParametersBuilder()
+                .addString("date", LocalDateTime.now().toString())
+                .toJobParameters();
+
+        jobLauncher.run(weeklyReportJobConfig.weeklyReportJob(), jobParameters);
+
+    }
 }
