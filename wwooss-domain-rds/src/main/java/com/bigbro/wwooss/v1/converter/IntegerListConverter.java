@@ -1,5 +1,7 @@
 package com.bigbro.wwooss.v1.converter;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.persistence.AttributeConverter;
@@ -18,9 +20,11 @@ public class IntegerListConverter implements AttributeConverter<List<Integer>, S
     public List<Integer> convertToEntityAttribute(String dbData) {
         if(StringUtils.isBlank(dbData)) return null;
 
-        String removedDbData = dbData.replaceAll("[\\[\\]]", "");
-
-        String[] split = removedDbData.split(",");
-        return Arrays.stream(split).map((value) -> Integer.parseInt(value.trim())).toList();
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            return Arrays.asList(objectMapper.readValue(dbData, Integer[].class));
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

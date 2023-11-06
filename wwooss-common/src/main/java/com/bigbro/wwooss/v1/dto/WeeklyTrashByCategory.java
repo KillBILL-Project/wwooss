@@ -1,11 +1,12 @@
 package com.bigbro.wwooss.v1.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Builder;
-import lombok.Getter;
+import lombok.*;
 
 @Builder
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PROTECTED)
 public class WeeklyTrashByCategory {
 
     @JsonProperty("trashName")
