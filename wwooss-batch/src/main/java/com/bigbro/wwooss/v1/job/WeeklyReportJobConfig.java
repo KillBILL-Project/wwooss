@@ -170,6 +170,7 @@ public class WeeklyReportJobConfig {
                 user);
     }
 
+    // N주차 구하기
     private long getWeekDay(LocalDateTime signupDate) {
         // ((오늘 날짜 - 가입 날짜) / 7) 올림
         LocalDateTime now = LocalDateTime.now();

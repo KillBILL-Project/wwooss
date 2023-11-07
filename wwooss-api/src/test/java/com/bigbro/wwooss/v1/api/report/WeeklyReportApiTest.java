@@ -14,7 +14,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.bigbro.wwooss.v1.annotation.TestController;
 import com.bigbro.wwooss.v1.dto.response.report.WeeklyReportListResponse;
 import com.bigbro.wwooss.v1.dto.response.report.WeeklyReportResponse;
-import com.bigbro.wwooss.v1.job.DocumentConfig;
+import com.bigbro.wwooss.v1.config.DocumentConfig;
 import com.bigbro.wwooss.v1.service.report.WeeklyReportService;
 import java.time.LocalDateTime;
 import java.util.List;

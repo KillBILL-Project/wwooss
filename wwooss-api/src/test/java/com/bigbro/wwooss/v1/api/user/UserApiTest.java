@@ -1,7 +1,7 @@
 package com.bigbro.wwooss.v1.api.user;
 
 import com.bigbro.wwooss.v1.annotation.TestController;
-import com.bigbro.wwooss.v1.job.DocumentConfig;
+import com.bigbro.wwooss.v1.config.DocumentConfig;
 import com.bigbro.wwooss.v1.dto.request.user.UpdatePushConsentRequest;
 import com.bigbro.wwooss.v1.service.user.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;

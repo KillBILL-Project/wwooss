@@ -1,7 +1,7 @@
 package com.bigbro.wwooss.v1.api.trash.log;
 
 import com.bigbro.wwooss.v1.annotation.TestController;
-import com.bigbro.wwooss.v1.job.DocumentConfig;
+import com.bigbro.wwooss.v1.config.DocumentConfig;
 import com.bigbro.wwooss.v1.dto.response.trash.TrashLogListResponse;
 import com.bigbro.wwooss.v1.dto.response.trash.TrashLogResponse;
 import com.bigbro.wwooss.v1.entity.trash.info.TrashInfo;

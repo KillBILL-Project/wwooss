@@ -36,7 +36,8 @@ public class WeeklyReportServiceImpl implements WeeklyReportService {
         Slice<WeeklyReport> weeklyReport = weeklyReportRepository.findWeeklyReportByUser(user, pageable);
 
         List<WeeklyReportResponse> weeklyReportResponseList = weeklyReport.getContent().stream().map((report) -> {
-            LocalDateTime weekNumberDate = user.getCreatedAt().plusWeeks(report.getWeekNumber());
+            // -1 이유 : 0주차가 아닌 1주차부터 시작
+            LocalDateTime weekNumberDate = user.getCreatedAt().plusWeeks(report.getWeekNumber() - 1);
 
             // N주차 기간 구하기
             DayOfWeek dayOfWeek = weekNumberDate.getDayOfWeek();
