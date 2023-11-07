@@ -1,7 +1,7 @@
 package com.bigbro.wwooss.v1.api.trash.category;
 
 import com.bigbro.wwooss.v1.annotation.TestController;
-import com.bigbro.wwooss.v1.config.DocumentConfig;
+import com.bigbro.wwooss.v1.job.DocumentConfig;
 import com.bigbro.wwooss.v1.dto.request.trash.category.TrashCategoryRequest;
 import com.bigbro.wwooss.v1.dto.response.trash.TrashCategoryResponse;
 import com.bigbro.wwooss.v1.service.trash.impl.TrashCategoryServiceImpl;

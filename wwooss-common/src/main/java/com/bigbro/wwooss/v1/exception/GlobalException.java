@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import javax.servlet.http.HttpServletRequest;
 
-import static com.bigbro.wwooss.v1.response.WwoossResponseCode.DUPLICATION_VALUE;
 import static com.bigbro.wwooss.v1.response.WwoossResponseCode.INTERNAL_SERVER_ERROR;
 
 @ControllerAdvice

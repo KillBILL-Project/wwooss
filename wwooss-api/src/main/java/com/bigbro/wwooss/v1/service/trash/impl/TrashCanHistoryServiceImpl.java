@@ -2,6 +2,7 @@ package com.bigbro.wwooss.v1.service.trash.impl;
 
 import com.bigbro.wwooss.v1.dto.CarbonEmissionByTrashCategory;
 import com.bigbro.wwooss.v1.dto.RefundByTrashCategory;
+import com.bigbro.wwooss.v1.dto.ResultOfDiscardedTrash;
 import com.bigbro.wwooss.v1.dto.response.trash.EmptyTrashResultResponse;
 import com.bigbro.wwooss.v1.dto.response.trash.TrashCanHistoryListResponse;
 import com.bigbro.wwooss.v1.dto.response.trash.TrashCanHistoryResponse;
@@ -15,6 +16,7 @@ import com.bigbro.wwooss.v1.repository.user.UserRepository;
 import com.bigbro.wwooss.v1.response.WwoossResponseCode;
 import com.bigbro.wwooss.v1.service.trash.can.TrashCanHistoryService;
 import com.bigbro.wwooss.v1.service.trash.log.TrashLogService;
+import com.bigbro.wwooss.v1.utils.TrashUtil;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -39,8 +41,6 @@ public class TrashCanHistoryServiceImpl implements TrashCanHistoryService {
     @Override
     @Transactional
     public EmptyTrashResultResponse createTrashCanHistory(List<TrashCanContents> trashCanContentsList, User user) {
-        final long WEIGHT_INTERVAL = 3;
-
         long totalRefund = 0;
         double totalCarbonEmission = 0;
 
@@ -52,20 +52,19 @@ public class TrashCanHistoryServiceImpl implements TrashCanHistoryService {
         for (TrashCanContents trashCanContents : trashCanContentsList) {
             TrashInfo trashInfo = trashCanContents.getTrashInfo();
 
-            // size : 0 ~ 10
-            // 버린 쓰레기 양 * 버린 쓰레기 사이즈의 무게
-            Double amountOfTrash =
-                    trashCanContents.getTrashCount() * ( trashInfo.getWeight() + WEIGHT_INTERVAL * (trashCanContents.getSize()));
-
-            double carbonEmission = amountOfTrash * trashInfo.getCarbonEmissionPerGram();
-            long refund = (long) (amountOfTrash * trashInfo.getRefund());
+            ResultOfDiscardedTrash discardedResult = TrashUtil.discardResult(trashCanContents.getTrashCount(),
+                    trashInfo.getWeight(),
+                    trashCanContents.getSize(),
+                    trashInfo.getCarbonEmissionPerGram(),
+                    trashInfo.getRefund()
+            );
 
             // 카테고리별 탄소배출량, 환급금 합 계산
-            refundByCategory.put(trashInfo.getName(), getTotalRefundByCategory(trashInfo.getName(), refundByCategory, refund));
-            carbonEmissionByCategory.put(trashInfo.getName(), getTotalCarbonEmissionByCategory(trashInfo.getName(), carbonEmissionByCategory, carbonEmission));
+            refundByCategory.put(trashInfo.getName(), getTotalRefundByCategory(trashInfo.getName(), refundByCategory, discardedResult.getRefund()));
+            carbonEmissionByCategory.put(trashInfo.getName(), getTotalCarbonEmissionByCategory(trashInfo.getName(), carbonEmissionByCategory, discardedResult.getCarbonEmission()));
 
-            totalCarbonEmission += carbonEmission;
-            totalRefund += refund;
+            totalCarbonEmission += discardedResult.getCarbonEmission();
+            totalRefund += discardedResult.getRefund();
         }
 
         TrashCanHistory savedTrashCanHistory = trashCanHistoryRepository.save(TrashCanHistory.of(totalCarbonEmission, totalRefund, user));

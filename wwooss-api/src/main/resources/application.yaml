@@ -64,6 +64,9 @@ spring:
       properties:
         hibernate:
           format_sql: true
+  batch:
+    job:
+      enabled: false
 
 ---
 spring:
