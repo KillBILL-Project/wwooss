@@ -1,15 +1,18 @@
 package com.bigbro.wwooss.v1.dto;
 
-import lombok.Builder;
-import lombok.Getter;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.*;
 
 @Builder
 @Getter
-
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PROTECTED)
 public class WeeklyTrashByCategory {
 
+    @JsonProperty("trashName")
     private String trashName;
 
+    @JsonProperty("trashCount")
     private Long trashCount;
 
     public static WeeklyTrashByCategory of(String trashName, Long trashCount) {

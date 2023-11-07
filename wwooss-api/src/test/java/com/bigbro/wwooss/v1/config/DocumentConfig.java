@@ -1,4 +1,4 @@
-package com.bigbro.wwooss.v1.job;
+package com.bigbro.wwooss.v1.config;
 
 import org.springframework.restdocs.operation.preprocess.OperationRequestPreprocessor;
 import org.springframework.restdocs.operation.preprocess.OperationResponsePreprocessor;

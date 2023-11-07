@@ -17,7 +17,8 @@ public class GlobalException {
 
     @ExceptionHandler(Exception.class)
     public <T> ResponseEntity<WwoossResponse<T>> serverExceptionHandler(final Exception e, final HttpServletRequest request) {
-        log.error("serverExceptionHandler: {}\n url: {} \n {}", e.getMessage(), request.getRequestURL(), e.getStackTrace());
+        log.error("serverExceptionHandler: {}\n url: {}", e.getMessage(), request.getRequestURL());
+        log.error(e.getMessage(), e);
 
         return WwoossResponseUtil.wwoossNoDataResponseEntity(INTERNAL_SERVER_ERROR);
     }
