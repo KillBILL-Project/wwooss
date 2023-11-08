@@ -1,6 +1,6 @@
 package com.bigbro.wwooss.v1.entity.alarm;
 
-import com.bigbro.wwooss.v1.converter.DayOfWeekConverter;
+import com.bigbro.wwooss.v1.converter.IntegerListConverter;
 import com.bigbro.wwooss.v1.entity.base.BaseEntity;
 import com.bigbro.wwooss.v1.entity.user.User;
 import com.bigbro.wwooss.v1.enumType.DayOfWeek;
@@ -35,9 +35,9 @@ public class Alarm extends BaseEntity {
     private Long alarmId;
 
     @Comment("알람 발송 요일 리스트")
-    @Convert(converter = DayOfWeekConverter.class)
+    @Convert(converter = IntegerListConverter.class)
     @Column(name = "day_of_week")
-    private List<DayOfWeek> dayOfWeekList;
+    private List<Integer> dayOfWeekList;
 
     @Comment("알람 발송 시간")
     @Column(name = "send_time")
@@ -56,7 +56,7 @@ public class Alarm extends BaseEntity {
     @JoinColumn(name = "user_id")
     private User user;
 
-    public static Alarm of(List<DayOfWeek> dayOfWeekList, int sendHour, int sendMinute, User user) {
+    public static Alarm of(List<Integer> dayOfWeekList, int sendHour, int sendMinute, User user) {
         return Alarm.builder()
                 .dayOfWeekList(dayOfWeekList)
                 .sendHour(sendHour)
@@ -65,7 +65,7 @@ public class Alarm extends BaseEntity {
                 .build();
     }
 
-    public void updateAlarm(List<DayOfWeek> dayOfWeekList, int sendHour, int sendMinute) {
+    public void updateAlarm(List<Integer> dayOfWeekList, int sendHour, int sendMinute) {
         this.dayOfWeekList = dayOfWeekList;
         this.sendHour = sendHour;
         this.sendMinute = sendMinute;

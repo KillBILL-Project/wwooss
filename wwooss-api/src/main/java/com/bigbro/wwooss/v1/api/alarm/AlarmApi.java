@@ -28,7 +28,7 @@ public class AlarmApi {
     @PostMapping
     public ResponseEntity<WwoossResponse<AlarmResponse>> createAlarm(@RequestBody @Valid AlarmRequest alarmRequest) {
         // TODO: userId 넣기
-        return WwoossResponseUtil.responseOkAddData(alarmService.createAlarm(1L, alarmRequest));
+        return WwoossResponseUtil.responseCreatedAddData(alarmService.createAlarm(1L, alarmRequest));
     }
 
     @GetMapping

@@ -10,20 +10,23 @@ import lombok.Getter;
 @Getter
 public class AlarmResponse {
 
-    private List<DayOfWeek> dayOfWeekList;
+    private Long alarmId;
+
+    private List<Integer> dayOfWeekList;
 
     private int sendHour;
 
     private int sendMinute;
 
-    private boolean isOn;
+    private boolean on;
 
     public static AlarmResponse from(Alarm alarm) {
         return AlarmResponse.builder()
+                .alarmId(alarm.getAlarmId())
                 .dayOfWeekList(alarm.getDayOfWeekList())
                 .sendHour(alarm.getSendHour())
                 .sendMinute(alarm.getSendMinute())
-                .isOn(alarm.getIsOn())
+                .on(alarm.getIsOn())
                 .build();
     }
 }

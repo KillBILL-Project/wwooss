@@ -32,8 +32,9 @@ public class AlarmServiceImpl implements AlarmService {
                 alarmRequest.getSendHour(),
                 alarmRequest.getSendMinute(),
                 user);
+        Alarm savedAlarm = alarmRepository.save(alarm);
 
-        return AlarmResponse.from(alarmRepository.save(alarm));
+        return AlarmResponse.from(savedAlarm);
     }
 
     @Transactional(readOnly = true)
@@ -45,6 +46,7 @@ public class AlarmServiceImpl implements AlarmService {
         return alarmList.stream().map(AlarmResponse::from).toList();
     }
 
+    @Transactional
     @Override
     public AlarmResponse updateAlarm(Long alarmId, AlarmRequest alarmRequest) {
         Alarm alarm = alarmRepository.findById(alarmId)
@@ -54,6 +56,7 @@ public class AlarmServiceImpl implements AlarmService {
         return AlarmResponse.from(alarm);
     }
 
+    @Transactional
     @Override
     public void switchAlarm(Long alarmId, AlarmOnOffRequest alarmOnOffRequest) {
         Alarm alarm = alarmRepository.findById(alarmId)
