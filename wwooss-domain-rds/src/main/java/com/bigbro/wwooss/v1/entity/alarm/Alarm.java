@@ -70,4 +70,8 @@ public class Alarm extends BaseEntity {
         this.sendHour = sendHour;
         this.sendMinute = sendMinute;
     }
+
+    public void switchAlarm(boolean isOn) {
+        this.isOn = isOn;
+    }
 }

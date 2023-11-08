@@ -1,5 +1,6 @@
 package com.bigbro.wwooss.v1.api.alarm;
 
+import com.bigbro.wwooss.v1.dto.request.alarm.AlarmOnOffRequest;
 import com.bigbro.wwooss.v1.dto.request.alarm.AlarmRequest;
 import com.bigbro.wwooss.v1.dto.response.alarm.AlarmResponse;
 import com.bigbro.wwooss.v1.response.WwoossResponse;
@@ -40,5 +41,13 @@ public class AlarmApi {
     public ResponseEntity<WwoossResponse<AlarmResponse>> updateAlarm(@RequestBody @Valid AlarmRequest alarmRequest,
             @PathVariable("alarm-id") Long aramId) {
         return WwoossResponseUtil.responseOkAddData(alarmService.updateAlarm(aramId, alarmRequest));
+    }
+
+    @PatchMapping("/{alarm-id}/on-off")
+    public ResponseEntity<WwoossResponse<Void>> switchAlarm(@RequestBody @Valid AlarmOnOffRequest alarmOnOffRequest,
+            @PathVariable("alarm-id") Long aramId) {
+        alarmService.switchAlarm(aramId, alarmOnOffRequest);
+
+        return WwoossResponseUtil.responseOkNoData();
     }
 }

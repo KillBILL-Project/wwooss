@@ -1,5 +1,6 @@
 package com.bigbro.wwooss.v1.service.alarm.impl;
 
+import com.bigbro.wwooss.v1.dto.request.alarm.AlarmOnOffRequest;
 import com.bigbro.wwooss.v1.dto.request.alarm.AlarmRequest;
 import com.bigbro.wwooss.v1.dto.response.alarm.AlarmResponse;
 import com.bigbro.wwooss.v1.entity.alarm.Alarm;
@@ -51,5 +52,13 @@ public class AlarmServiceImpl implements AlarmService {
 
         alarm.updateAlarm(alarmRequest.getDayOfWeekList(), alarmRequest.getSendHour(), alarmRequest.getSendMinute());
         return AlarmResponse.from(alarm);
+    }
+
+    @Override
+    public void switchAlarm(Long alarmId, AlarmOnOffRequest alarmOnOffRequest) {
+        Alarm alarm = alarmRepository.findById(alarmId)
+                .orElseThrow(() -> new DataNotFoundException(WwoossResponseCode.NOT_FOUND_DATA, "존재하지 않는 알람입니다."));
+
+        alarm.switchAlarm(alarmOnOffRequest.isOn());
     }
 }

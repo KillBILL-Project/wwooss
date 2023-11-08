@@ -1,5 +1,6 @@
 package com.bigbro.wwooss.v1.service.alarm;
 
+import com.bigbro.wwooss.v1.dto.request.alarm.AlarmOnOffRequest;
 import com.bigbro.wwooss.v1.dto.request.alarm.AlarmRequest;
 import com.bigbro.wwooss.v1.dto.response.alarm.AlarmResponse;
 import java.util.List;
@@ -31,4 +32,12 @@ public interface AlarmService {
      * @return alarmResponse 알람 정보 응답 (요일, 시간, 분, on/off)
      */
     AlarmResponse updateAlarm(Long alarmId, AlarmRequest alarmRequest);
+
+    /**
+     * 알람 on/off
+     * @parma alarmId 알람 ID
+     * @param alarmOnOffRequest 알람 정보 요청 (요일, 시간, 분)
+     *
+     */
+    void switchAlarm(Long alarmId, AlarmOnOffRequest alarmOnOffRequest);
 }
