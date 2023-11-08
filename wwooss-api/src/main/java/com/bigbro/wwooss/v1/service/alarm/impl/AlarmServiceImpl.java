@@ -9,6 +9,7 @@ import com.bigbro.wwooss.v1.repository.alarm.AlarmRepository;
 import com.bigbro.wwooss.v1.repository.user.UserRepository;
 import com.bigbro.wwooss.v1.response.WwoossResponseCode;
 import com.bigbro.wwooss.v1.service.alarm.AlarmService;
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -32,5 +33,14 @@ public class AlarmServiceImpl implements AlarmService {
                 user);
 
         return AlarmResponse.from(alarmRepository.save(alarm));
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<AlarmResponse> getAlarmList(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new DataNotFoundException(WwoossResponseCode.NOT_FOUND_DATA, "존재하지 않는 유저입니다."));
+        List<Alarm> alarmList = alarmRepository.findAlarmByUser(user);
+
+        return alarmList.stream().map(AlarmResponse::from).toList();
     }
 }

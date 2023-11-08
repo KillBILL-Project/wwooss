@@ -2,6 +2,7 @@ package com.bigbro.wwooss.v1.service.alarm;
 
 import com.bigbro.wwooss.v1.dto.request.alarm.AlarmRequest;
 import com.bigbro.wwooss.v1.dto.response.alarm.AlarmResponse;
+import java.util.List;
 
 public interface AlarmService {
 
@@ -13,4 +14,12 @@ public interface AlarmService {
      * @return alarmResponse 알람 정보 응답 (요일, 시간, 분, on/off)
      */
     AlarmResponse createAlarm(Long userId, AlarmRequest alarmRequest);
+
+    /**
+     * 알림 목록
+     * @param userId 유저 ID
+     *
+     * @return alarmResponseList 알람 정보 응답 (요일, 시간, 분, on/off)
+     */
+    List<AlarmResponse> getAlarmList(Long userId);
 }
