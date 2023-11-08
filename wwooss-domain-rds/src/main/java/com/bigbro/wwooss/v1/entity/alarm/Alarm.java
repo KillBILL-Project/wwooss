@@ -64,4 +64,10 @@ public class Alarm extends BaseEntity {
                 .user(user)
                 .build();
     }
+
+    public void updateAlarm(List<DayOfWeek> dayOfWeekList, int sendHour, int sendMinute) {
+        this.dayOfWeekList = dayOfWeekList;
+        this.sendHour = sendHour;
+        this.sendMinute = sendMinute;
+    }
 }

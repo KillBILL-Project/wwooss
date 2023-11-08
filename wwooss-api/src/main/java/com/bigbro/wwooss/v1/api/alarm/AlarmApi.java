@@ -10,6 +10,8 @@ import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,4 +36,9 @@ public class AlarmApi {
         return WwoossResponseUtil.responseOkAddData(alarmService.getAlarmList(1L));
     }
 
+    @PatchMapping("/{alarm-id}")
+    public ResponseEntity<WwoossResponse<AlarmResponse>> updateAlarm(@RequestBody @Valid AlarmRequest alarmRequest,
+            @PathVariable("alarm-id") Long aramId) {
+        return WwoossResponseUtil.responseOkAddData(alarmService.updateAlarm(aramId, alarmRequest));
+    }
 }

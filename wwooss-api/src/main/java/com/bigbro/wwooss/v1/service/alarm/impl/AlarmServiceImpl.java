@@ -43,4 +43,13 @@ public class AlarmServiceImpl implements AlarmService {
 
         return alarmList.stream().map(AlarmResponse::from).toList();
     }
+
+    @Override
+    public AlarmResponse updateAlarm(Long alarmId, AlarmRequest alarmRequest) {
+        Alarm alarm = alarmRepository.findById(alarmId)
+                .orElseThrow(() -> new DataNotFoundException(WwoossResponseCode.NOT_FOUND_DATA, "존재하지 않는 알람입니다."));
+
+        alarm.updateAlarm(alarmRequest.getDayOfWeekList(), alarmRequest.getSendHour(), alarmRequest.getSendMinute());
+        return AlarmResponse.from(alarm);
+    }
 }

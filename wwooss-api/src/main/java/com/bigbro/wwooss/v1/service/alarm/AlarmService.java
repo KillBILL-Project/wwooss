@@ -22,4 +22,13 @@ public interface AlarmService {
      * @return alarmResponseList 알람 정보 응답 (요일, 시간, 분, on/off)
      */
     List<AlarmResponse> getAlarmList(Long userId);
+
+    /**
+     * 알람 생성
+     * @parma alarmId 알람 ID
+     * @param alarmRequest 알람 정보 요청 (요일, 시간, 분)
+     *
+     * @return alarmResponse 알람 정보 응답 (요일, 시간, 분, on/off)
+     */
+    AlarmResponse updateAlarm(Long alarmId, AlarmRequest alarmRequest);
 }
