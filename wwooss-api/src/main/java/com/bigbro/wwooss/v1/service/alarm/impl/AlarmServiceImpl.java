@@ -1,0 +1,34 @@
+package com.bigbro.wwooss.v1.service.alarm.impl;
+
+import com.bigbro.wwooss.v1.dto.request.alarm.AlarmRequest;
+import com.bigbro.wwooss.v1.dto.response.alarm.AlarmResponse;
+import com.bigbro.wwooss.v1.entity.alarm.Alarm;
+import com.bigbro.wwooss.v1.entity.user.User;
+import com.bigbro.wwooss.v1.exception.DataNotFoundException;
+import com.bigbro.wwooss.v1.repository.alarm.AlarmRepository;
+import com.bigbro.wwooss.v1.repository.user.UserRepository;
+import com.bigbro.wwooss.v1.response.WwoossResponseCode;
+import com.bigbro.wwooss.v1.service.alarm.AlarmService;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+@Service
+@RequiredArgsConstructor(access = AccessLevel.PROTECTED)
+public class AlarmServiceImpl implements AlarmService {
+
+    private final AlarmRepository alarmRepository;
+
+    private final UserRepository userRepository;
+
+    @Override
+    public AlarmResponse createAlarm(Long userId, AlarmRequest alarmRequest) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new DataNotFoundException(WwoossResponseCode.NOT_FOUND_DATA, "존재하지 않는 유저입니다."));
+        Alarm alarm = Alarm.of(alarmRequest.getDayOfWeekList(),
+                alarmRequest.getSendHour(),
+                alarmRequest.getSendMinute(),
+                user);
+
+        return AlarmResponse.from(alarmRepository.save(alarm));
+    }
+}
