@@ -12,6 +12,7 @@ import com.bigbro.wwooss.v1.service.alarm.AlarmService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
@@ -21,6 +22,7 @@ public class AlarmServiceImpl implements AlarmService {
 
     private final UserRepository userRepository;
 
+    @Transactional
     @Override
     public AlarmResponse createAlarm(Long userId, AlarmRequest alarmRequest) {
         User user = userRepository.findById(userId).orElseThrow(() -> new DataNotFoundException(WwoossResponseCode.NOT_FOUND_DATA, "존재하지 않는 유저입니다."));
