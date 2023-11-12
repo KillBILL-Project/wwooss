@@ -46,7 +46,8 @@ public class AlarmApi {
     }
 
     @DeleteMapping("/{alarm-id}")
-    public ResponseEntity<WwoossResponse<Void>> deleteAlarm(@PathVariable("alarm-id") Long aramId) {
+    public ResponseEntity<WwoossResponse<Void>> deleteAlarm(@PathVariable("alarm-id") Long alarmId) {
+        alarmService.deleteAlarm(alarmId);
         return WwoossResponseUtil.responseOkNoData();
     }
 }
