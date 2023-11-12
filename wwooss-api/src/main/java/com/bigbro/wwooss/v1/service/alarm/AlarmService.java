@@ -40,4 +40,11 @@ public interface AlarmService {
      *
      */
     void switchAlarm(Long alarmId, AlarmOnOffRequest alarmOnOffRequest);
+
+    /**
+     * 알람 삭제
+     * @parma alarmId 알람 ID
+     *
+     */
+    void deleteAlarm(Long alarmId);
 }

@@ -11,10 +11,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.bigbro.wwooss.v1.annotation.TestController;
 import com.bigbro.wwooss.v1.config.DocumentConfig;
+import com.bigbro.wwooss.v1.dto.CarbonEmissionByTrashCategory;
+import com.bigbro.wwooss.v1.dto.RefundByTrashCategory;
 import com.bigbro.wwooss.v1.dto.request.alarm.AlarmOnOffRequest;
 import com.bigbro.wwooss.v1.dto.request.alarm.AlarmRequest;
 import com.bigbro.wwooss.v1.dto.request.user.UpdatePushConsentRequest;
 import com.bigbro.wwooss.v1.dto.response.alarm.AlarmResponse;
+import com.bigbro.wwooss.v1.dto.response.trash.EmptyTrashResultResponse;
 import com.bigbro.wwooss.v1.enumType.DayOfWeek;
 import com.bigbro.wwooss.v1.service.alarm.AlarmService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -189,6 +192,30 @@ public class AlarmApiTest {
                                         fieldWithPath("data.sendHour").description("발송 시간(시)"),
                                         fieldWithPath("data.sendMinute").description("발송 시간(분)"),
                                         fieldWithPath("data.on").description("on/off")
+                                )
+                        )
+                );
+    }
+
+    @Test
+    @DisplayName("알람 삭제")
+    void deleteAlarm() throws Exception {
+
+        this.mockMvc.perform(RestDocumentationRequestBuilders.delete("/api/v1/alarm/{alarm-id}", 1L)
+                        .with(csrf().asHeader())
+                        .contextPath("/api")
+                        .contentType(MediaType.APPLICATION_JSON)
+                )
+                .andExpect(status().isOk())
+                .andDo(document("delete-alarm",
+                                resourceDetails().tags("알람 삭제"),
+                                DocumentConfig.getDocumentRequest(),
+                                DocumentConfig.getDocumentResponse(),
+                                responseFields(
+                                        fieldWithPath("code").description("응답 코드"),
+                                        fieldWithPath("title").description("응답 코드 별 클라이언트 노출 제목"),
+                                        fieldWithPath("message").description("응답 코드 별 클라이언트 노출 메세지"),
+                                        fieldWithPath("data").description("데이터 없음 ")
                                 )
                         )
                 );

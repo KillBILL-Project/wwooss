@@ -64,4 +64,13 @@ public class AlarmServiceImpl implements AlarmService {
 
         alarm.switchAlarm(alarmOnOffRequest.isOn());
     }
+
+    @Transactional
+    @Override
+    public void deleteAlarm(Long alarmId) {
+        Alarm alarm = alarmRepository.findById(alarmId)
+                .orElseThrow(() -> new DataNotFoundException(WwoossResponseCode.NOT_FOUND_DATA, "존재하지 않는 알람입니다."));
+
+        alarmRepository.delete(alarm);
+    }
 }
