@@ -31,7 +31,7 @@ public class GlobalException {
 //    }
 
     @ExceptionHandler(value = {DataNotFoundException.class, IncorrectDataException.class})
-    public ResponseEntity<WwoossResponse<Object>> DataNotFoundExceptionHandler(final DataNotFoundException e, final HttpServletRequest request) {
+    public ResponseEntity<WwoossResponse<Object>> wwoossExceptionHandler(final DataNotFoundException e, final HttpServletRequest request) {
         log.error("DataNotFoundException: {} / url: {}", e.getMessage(), request.getRequestURL());
 
         return WwoossResponseUtil.wwoossNoDataResponseEntity(e.getCode(), e.getTitle(), e.getMessage());
