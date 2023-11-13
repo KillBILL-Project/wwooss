@@ -30,16 +30,8 @@ public class GlobalException {
 //        return WwoossResponseUtil.wwoossNoDataResponseEntity(DUPLICATION_VALUE);
 //    }
 
-    @ExceptionHandler(value = DataNotFoundException.class)
+    @ExceptionHandler(value = {DataNotFoundException.class, IncorrectDataException.class})
     public ResponseEntity<WwoossResponse<Object>> DataNotFoundExceptionHandler(final DataNotFoundException e, final HttpServletRequest request) {
-        log.error("DataNotFoundException: {} / url: {}", e.getMessage(), request.getRequestURL());
-
-        return WwoossResponseUtil.wwoossNoDataResponseEntity(e.getCode(), e.getTitle(), e.getMessage());
-    }
-
-    @ExceptionHandler(value = IncorrectDataException.class)
-    public ResponseEntity<WwoossResponse<Object>> NoSuchElementExceptionHandler(final IncorrectDataException e,
-            final HttpServletRequest request) {
         log.error("DataNotFoundException: {} / url: {}", e.getMessage(), request.getRequestURL());
 
         return WwoossResponseUtil.wwoossNoDataResponseEntity(e.getCode(), e.getTitle(), e.getMessage());
