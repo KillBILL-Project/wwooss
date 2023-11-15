@@ -23,6 +23,6 @@ public class TrashCanHistoryApi {
     @GetMapping
     public ResponseEntity<WwoossResponse<TrashCanHistoryListResponse>> findTrashCanHistoryList(@RequestParam @Nullable String date, Pageable pageable) {
         // TODO : userId 추가
-        return WwoossResponseUtil.responseOkAddData(trashCanHistoryService.findTrashCanHistoryList(1L, date, pageable));
+        return WwoossResponseUtil.responseOkAddData(trashCanHistoryService.findTrashCanHistoryList(4L, date, pageable));
     }
 }

@@ -23,16 +23,9 @@ public class GlobalException {
         return WwoossResponseUtil.wwoossNoDataResponseEntity(INTERNAL_SERVER_ERROR);
     }
 
-//    @ExceptionHandler(value = DataIntegrityViolationException.class)
-//    public <T> ResponseEntity<WwoossResponse<T>> sqlIntegrityConstraintExceptionHandler(final DataIntegrityViolationException e, final HttpServletRequest request) {
-//        log.error("DataIntegrityViolationException: {} / url: {}", e.getMessage(), request.getRequestURL());
-//
-//        return WwoossResponseUtil.wwoossNoDataResponseEntity(DUPLICATION_VALUE);
-//    }
-
-    @ExceptionHandler(value = DataNotFoundException.class)
-    public ResponseEntity<WwoossResponse<Object>> DataNotFoundExceptionHandler(final DataNotFoundException e, final HttpServletRequest request) {
-        log.error("DataNotFoundException: {} / url: {}", e.getMessage(), request.getRequestURL());
+    @ExceptionHandler(value = CustomGlobalException.class)
+    public ResponseEntity<WwoossResponse<Object>> customExceptionHandler(final CustomGlobalException e, final HttpServletRequest request) {
+        log.error("CustomGlobalException: {} / url: {}", e.getMessage(), request.getRequestURL());
 
         return WwoossResponseUtil.wwoossNoDataResponseEntity(e.getCode(), e.getTitle(), e.getMessage());
     }

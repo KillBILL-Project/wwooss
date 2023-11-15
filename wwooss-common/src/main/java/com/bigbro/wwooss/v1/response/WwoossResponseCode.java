@@ -20,7 +20,8 @@ public enum WwoossResponseCode {
 
     // server error
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "안내", "서버 내부 오류입니다."),
-    DUPLICATION_VALUE(HttpStatus.INTERNAL_SERVER_ERROR, "안내", "중복된 값 입니다.");
+    DUPLICATION_VALUE(HttpStatus.INTERNAL_SERVER_ERROR, "안내", "중복된 값 입니다."),
+    INCORRECT_DATA(HttpStatus.INTERNAL_SERVER_ERROR, "안내", "잘못된 유형의 데이터입니다.");
 
     private final HttpStatus code;
     private final String title;

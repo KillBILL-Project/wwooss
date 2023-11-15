@@ -1,5 +1,9 @@
 package com.bigbro.wwooss.v1.enumType;
 
+import static com.bigbro.wwooss.v1.response.WwoossResponseCode.INCORRECT_DATA;
+
+import com.bigbro.wwooss.v1.exception.IncorrectDataException;
+import java.util.Arrays;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -16,4 +20,11 @@ public enum DayOfWeek {
     SUN(7);
 
     private final int value;
+
+    public static DayOfWeek from(int value) {
+        return Arrays.stream(DayOfWeek.values())
+                .filter((day) -> day.getValue() == value)
+                .findFirst()
+                .orElseThrow(() -> new IncorrectDataException(INCORRECT_DATA, "해당되는 요일은 존재하지 않습니다."));
+    }
 }
