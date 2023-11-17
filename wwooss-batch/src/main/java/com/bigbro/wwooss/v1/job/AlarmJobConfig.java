@@ -1,14 +1,6 @@
 package com.bigbro.wwooss.v1.job;
 
-import static com.bigbro.wwooss.v1.entity.alarm.QAlarm.alarm;
-import static java.time.LocalDateTime.parse;
-
-import com.bigbro.wwooss.v1.batch.reader.QuerydslPagingItemReader;
-import com.bigbro.wwooss.v1.entity.alarm.Alarm;
 import com.bigbro.wwooss.v1.repository.alarm.AlarmRepository;
-import java.time.DayOfWeek;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import javax.persistence.EntityManagerFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,8 +8,7 @@ import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
-import org.springframework.batch.core.configuration.annotation.StepScope;
-import org.springframework.batch.item.database.JpaItemWriter;
+import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -48,34 +39,16 @@ public class AlarmJobConfig {
     }
 
     @Bean
+    public Tasklet alarmTasklet() {
+        return new AlarmTasklet(alarmRepository);
+    }
+
+    @Bean
     public Step alarmStep() {
         return stepBuilderFactory.get(STEP_NAME)
-                .<Alarm, Void>chunk(chunkSize)
-                .reader(alarmReader(null))
-                .writer(alarmWriter())
+                .tasklet(alarmTasklet())
                 .build();
     }
 
-    @Bean
-    @StepScope
-    public QuerydslPagingItemReader<Alarm> alarmReader(@Value("#{jobParameters[date]}")  String date) {
-        LocalDateTime parseDate = parse(date, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
-        int hour = parseDate.getHour();
-        int minute = parseDate.getMinute();
-        DayOfWeek dayOfWeek = parseDate.getDayOfWeek();
-
-        return new QuerydslPagingItemReader<>(emf, chunkSize, queryFactory -> queryFactory
-                .selectFrom(alarm)
-                .where(alarm.sendHour.eq(hour).and(
-                        alarm.sendMinute.eq(minute)).and(
-                                alarm.dayOfWeekList.contains(dayOfWeek.getValue())
-                )));
-
-    }
-
-    @Bean
-    public JpaItemWriter<Void> alarmWriter() {
-        return null;
-    }
 
 }
