@@ -1,21 +1,46 @@
 package com.bigbro.wwooss.v1.service.notification.impl;
 
+import com.bigbro.wwooss.v1.dto.request.notification.NotificationSendRequest;
+import com.bigbro.wwooss.v1.entity.notification.NotificationTemplate;
+import com.bigbro.wwooss.v1.repository.notification.NotificationRepository;
+import com.bigbro.wwooss.v1.repository.notification.NotificationTemplateRepository;
 import com.bigbro.wwooss.v1.service.notification.NotificationService;
+import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
+@Slf4j
 public class NotificationServiceImpl implements NotificationService {
 
-    @Override
-    public void sendOne() {
 
+    private final NotificationRepository notificationRepository;
+
+    private final NotificationTemplateRepository notificationTemplateRepository;
+
+    @Override
+    @Transactional
+    public void sendOne(NotificationSendRequest notificationSendRequest) {
+        if (notificationSendRequest.isEmptyTargets()) {
+            log.info("notification no target");
+            return;
+        }
+        Optional<NotificationTemplate> notificationTemplate = notificationTemplateRepository.findByTemplateCode(
+                notificationSendRequest.getTemplateCode());
     }
 
     @Override
-    public void sendMany() {
-
+    @Transactional
+    public void sendMany(NotificationSendRequest notificationSendRequest) {
+        if (notificationSendRequest.isEmptyTargets()) {
+            log.info("notification no target");
+            return;
+        }
+        Optional<NotificationTemplate> notificationTemplate = notificationTemplateRepository.findByTemplateCode(
+                notificationSendRequest.getTemplateCode());
     }
 }
