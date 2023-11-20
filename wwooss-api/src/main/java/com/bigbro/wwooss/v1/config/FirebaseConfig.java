@@ -16,7 +16,7 @@ import org.springframework.core.io.Resource;
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 public class FirebaseConfig {
 
-    @Value("{gcp.firebase}")
+    @Value("${gcp.firebase.service-account}")
     private Resource serviceAccount;
 
     @Bean

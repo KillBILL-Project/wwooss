@@ -37,12 +37,12 @@ public class NotificationTemplate extends BaseEntity {
     private String message;
 
     @Comment("배치성 알림 여부. 예) 공지")
-    @Column(name = "batch")
-    private boolean batch;
+    @Column(name = "is_batch")
+    private boolean isBatch;
 
     @Comment("알림함에 노출 여부")
-    @Column(name = "show")
-    private boolean show;
+    @Column(name = "is_show")
+    private boolean isShow;
 
     @Comment("템플릿 코드")
     @Column(name = "template_code")

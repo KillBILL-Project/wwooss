@@ -46,12 +46,12 @@ public class Notification extends BaseEntity {
     private String message;
 
     @Comment("배치성 알림 여부. 예) 공지")
-    @Column(name = "batch")
-    private boolean batch;
+    @Column(name = "is_batch")
+    private boolean isBatch;
 
     @Comment("알림함에 노출 여부")
-    @Column(name = "show")
-    private boolean show;
+    @Column(name = "is_show")
+    private boolean isShow;
 
     @Comment("딥링크")
     @Column(name = "deep_link")
@@ -83,8 +83,8 @@ public class Notification extends BaseEntity {
                 .templateCode(notificationTemplate.getTemplateCode())
                 .title(notificationTemplate.getTitle())
                 .message(notificationTemplate.getMessage())
-                .batch(notificationTemplate.isBatch())
-                .show(notificationTemplate.isShow())
+                .isBatch(notificationTemplate.isBatch())
+                .isShow(notificationTemplate.isShow())
                 .deepLink(notificationTemplate.getDeepLink())
                 .status(status)
                 .build();
