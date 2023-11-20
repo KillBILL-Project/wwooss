@@ -9,7 +9,6 @@ import com.bigbro.wwooss.v1.service.notification.FirebaseService;
 import com.bigbro.wwooss.v1.service.notification.NotificationService;
 import com.google.firebase.messaging.FirebaseMessagingException;
 import java.util.Objects;
-import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -5,7 +5,9 @@ import com.bigbro.wwooss.v1.service.notification.FirebaseService;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingException;
 import com.google.firebase.messaging.Message;
+import com.google.firebase.messaging.MulticastMessage;
 import com.google.firebase.messaging.Notification;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -31,8 +33,11 @@ public class FirebaseServiceImpl implements FirebaseService {
     }
 
     @Override
-    public void sendMany() {
+    public void sendMany(final NotificationTemplate notificationTemplate, final Map<String, String> variableMap,
+            final List<String> fcmTokenList) throws FirebaseMessagingException {
 
+        Notification notification = buildNotification(notificationTemplate, variableMap);
+        sendMulticast(notification, fcmTokenList);
     }
 
     private Message messageBuild(Notification notification, String fcmToken) {
@@ -40,6 +45,32 @@ public class FirebaseServiceImpl implements FirebaseService {
                 .setToken(fcmToken)
                 .setNotification(notification)
                 .build();
+    }
+
+    private MulticastMessage multicastMessageBuild(Notification notification, final List<String> fcmTokenList,
+            int fromIndex, int toIndex) {
+        return MulticastMessage.builder()
+                .addAllTokens(fcmTokenList.subList(fromIndex, toIndex))
+                .setNotification(notification)
+                .build();
+    }
+
+    /**
+     * 푸쉬 알림 최대 보낼 수 있는 건수 : 500건
+     * 500건씩 나눠서 발송
+     */
+    private void sendMulticast(Notification notification, List<String> fcmTokens) throws FirebaseMessagingException {
+        int maxSend = 500;
+        int loopCount = (int) Math.ceil((double) fcmTokens.size() / maxSend);
+
+        for (int i = 0; i < loopCount; i++) {
+            int fromIndex = maxSend * i;
+            int toIndex = Math.min(maxSend * (i + 1) - 1, fcmTokens.size());
+
+            firebaseMessaging.sendEachForMulticast(
+                    multicastMessageBuild(notification, fcmTokens, fromIndex, toIndex));
+
+        }
     }
 
     /**
