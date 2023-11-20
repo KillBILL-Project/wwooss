@@ -77,7 +77,7 @@ public class Notification extends BaseEntity {
                 .build();
     }
 
-    public static Notification Of(User user, NotificationTemplate notificationTemplate, boolean status) {
+    public static Notification of(User user, NotificationTemplate notificationTemplate, boolean status) {
         return Notification.builder()
                 .user(user)
                 .templateCode(notificationTemplate.getTemplateCode())

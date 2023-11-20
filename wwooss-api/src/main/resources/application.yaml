@@ -19,6 +19,10 @@ jwt:
   access-token-validity-in-milliseconds: 86400000
   refresh-token-validity-in-milliseconds: 86400000000
 
+gcp:
+  firebase:
+    service-account: classpath:firebase/wwooss-c5a90-firebase-adminsdk-zh2zk-078e059ab4.json
+
 ---
 spring:
   config:
