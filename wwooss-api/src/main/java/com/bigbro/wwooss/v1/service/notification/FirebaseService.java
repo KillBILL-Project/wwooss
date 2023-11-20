@@ -11,11 +11,17 @@ public interface FirebaseService {
      *
      * @param notificationTemplate 알림 템플릿
      * @param variableMap 변수값 nullable
-     * @param fcmToken fcmToken
+     * @param fcmToken 유저의 fcmToken
      */
     void sendOne(NotificationTemplate notificationTemplate, Map<String, String> variableMap,
             String fcmToken) throws FirebaseMessagingException;
 
+    /**
+     *
+     * @param notificationTemplate 알림 템플릿
+     * @param variableMap 변수값 nullable
+     * @param fcmTokenList 발송하고자 하는 유저의 fcmToken 리스트
+     */
     void sendMany(NotificationTemplate notificationTemplate, Map<String, String> variableMap, List<String> fcmTokenList)
             throws FirebaseMessagingException;
 }
