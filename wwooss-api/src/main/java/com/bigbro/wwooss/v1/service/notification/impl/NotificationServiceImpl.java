@@ -3,11 +3,13 @@ package com.bigbro.wwooss.v1.service.notification.impl;
 import com.bigbro.wwooss.v1.dto.request.notification.NotificationSendRequest;
 import com.bigbro.wwooss.v1.entity.notification.Notification;
 import com.bigbro.wwooss.v1.entity.notification.NotificationTemplate;
+import com.bigbro.wwooss.v1.entity.user.User;
 import com.bigbro.wwooss.v1.repository.notification.NotificationRepository;
 import com.bigbro.wwooss.v1.repository.notification.NotificationTemplateRepository;
 import com.bigbro.wwooss.v1.service.notification.FirebaseService;
 import com.bigbro.wwooss.v1.service.notification.NotificationService;
 import com.google.firebase.messaging.FirebaseMessagingException;
+import java.util.List;
 import java.util.Objects;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -62,10 +64,32 @@ public class NotificationServiceImpl implements NotificationService {
     @Transactional
     public void sendMany(NotificationSendRequest notificationSendRequest) {
         if (notificationSendRequest.isEmptyTargets()) {
-            log.info("notification no target");
+            log.error("notification no target");
             return;
         }
+
         NotificationTemplate notificationTemplate = notificationTemplateRepository.findByTemplateCode(
                 notificationSendRequest.getTemplateCode());
+        if(Objects.isNull(notificationTemplate)) {
+            log.error("notification no template");
+            return;
+        }
+
+        try {
+            firebaseService.sendMany(notificationTemplate, notificationSendRequest.getVariableMap(),
+                    notificationSendRequest.getTargets().stream().map(User::getFcmToken).toList());
+
+            List<Notification> sendList = notificationSendRequest.getTargets().stream()
+                    .map((user) -> Notification.of(user, notificationTemplate, true)).toList();
+
+            notificationRepository.saveAll(sendList);
+        } catch (FirebaseMessagingException fe) {
+            log.error(fe.getMessage(), fe);
+
+            List<Notification> failList = notificationSendRequest.getTargets().stream()
+                    .map((user) -> Notification.failOf(user, fe.getMessage(),
+                            notificationTemplate.getTemplateCode())).toList();
+            notificationRepository.saveAll(failList);
+        }
     }
 }
