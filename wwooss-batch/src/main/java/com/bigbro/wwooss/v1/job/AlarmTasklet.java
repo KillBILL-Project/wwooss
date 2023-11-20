@@ -1,9 +1,13 @@
 package com.bigbro.wwooss.v1.job;
 
+import static com.bigbro.wwooss.v1.enumType.NotificationTemplateCode.WWOOSS_ALARM;
 import static java.time.LocalDateTime.parse;
 
+import com.bigbro.wwooss.v1.dto.request.notification.NotificationSendRequest;
 import com.bigbro.wwooss.v1.entity.alarm.Alarm;
+import com.bigbro.wwooss.v1.entity.user.User;
 import com.bigbro.wwooss.v1.repository.alarm.AlarmRepository;
+import com.bigbro.wwooss.v1.service.notification.NotificationService;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -25,6 +29,8 @@ public class AlarmTasklet implements Tasklet, StepExecutionListener {
 
     private final AlarmRepository alarmRepository;
 
+    private final NotificationService notificationService;
+
     @Override
     public void beforeStep(StepExecution stepExecution) {
         String date = stepExecution.getJobParameters().getParameters().get("date").toString();
@@ -37,14 +43,16 @@ public class AlarmTasklet implements Tasklet, StepExecutionListener {
 
     @Override
     public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
-        alarmList.stream()
-                .filter((alarm) -> alarm.getDayOfWeekList().contains(dayOfWeek))
-                .forEach((this::sendPushNotification));
+        List<Alarm> sendAlarmList = alarmList.stream()
+                .filter((alarm) -> alarm.getDayOfWeekList().contains(dayOfWeek)).toList();
+
+        notificationService.sendMany(buildRequestNotification(sendAlarmList));
         return RepeatStatus.FINISHED;
     }
 
-    private void sendPushNotification(Alarm alarm) {
-
+    private NotificationSendRequest buildRequestNotification(List<Alarm> alarmList) {
+        List<User> targets = alarmList.stream().map(Alarm::getUser).toList();
+        return NotificationSendRequest.of(targets, WWOOSS_ALARM);
     }
 
     @Override

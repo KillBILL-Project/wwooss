@@ -32,4 +32,11 @@ public class NotificationSendRequest {
         }
         return this.targets.size() > 1;
     }
+
+    public static NotificationSendRequest of(List<User> targets, NotificationTemplateCode template) {
+        return NotificationSendRequest.builder()
+                .targets(targets)
+                .templateCode(template)
+                .build();
+    }
 }
