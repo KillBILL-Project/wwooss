@@ -11,7 +11,7 @@ spring:
     url: "jdbc:mysql://localhost:3306/wwooss?autoReconnect=true&useUnicode=true&characterEncoding=UTF-8&serverTimezone
     =Asia/Seoul&tinyInt1isBit=false"
     username: root
-    password: pickit2022!
+    password: ENC(+p6g1owB0AzWumMOvy2V6gxkTjfJXzOX)
     hikari:
       auto-commit: false
       maximum-pool-size: 10
