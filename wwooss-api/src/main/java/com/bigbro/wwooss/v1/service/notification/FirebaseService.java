@@ -1,6 +1,7 @@
 package com.bigbro.wwooss.v1.service.notification;
 
 import com.bigbro.wwooss.v1.entity.notification.NotificationTemplate;
+import com.google.firebase.messaging.FirebaseMessagingException;
 import java.util.Map;
 
 public interface FirebaseService {
@@ -13,7 +14,7 @@ public interface FirebaseService {
      */
     void sendOne(NotificationTemplate notificationTemplate,
             Map<String, String> variableMap,
-            String fcmToken);
+            String fcmToken) throws FirebaseMessagingException;
 
     void sendMany();
 }

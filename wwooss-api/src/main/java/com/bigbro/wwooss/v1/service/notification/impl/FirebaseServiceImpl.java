@@ -24,13 +24,10 @@ public class FirebaseServiceImpl implements FirebaseService {
 
     @Override
     public void sendOne(final NotificationTemplate notificationTemplate, final Map<String, String> variableMap,
-            String fcmToken) {
-        try {
-            Notification notification = buildNotification(notificationTemplate, variableMap);
-            firebaseMessaging.send(messageBuild(notification, fcmToken));
-        } catch (FirebaseMessagingException fe) {
-            log.error(fe.getMessage(), fe);
-        }
+            String fcmToken) throws FirebaseMessagingException {
+
+        Notification notification = buildNotification(notificationTemplate, variableMap);
+        firebaseMessaging.send(messageBuild(notification, fcmToken));
     }
 
     @Override

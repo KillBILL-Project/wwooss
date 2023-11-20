@@ -1,11 +1,13 @@
 package com.bigbro.wwooss.v1.service.notification.impl;
 
 import com.bigbro.wwooss.v1.dto.request.notification.NotificationSendRequest;
+import com.bigbro.wwooss.v1.entity.notification.Notification;
 import com.bigbro.wwooss.v1.entity.notification.NotificationTemplate;
 import com.bigbro.wwooss.v1.repository.notification.NotificationRepository;
 import com.bigbro.wwooss.v1.repository.notification.NotificationTemplateRepository;
 import com.bigbro.wwooss.v1.service.notification.FirebaseService;
 import com.bigbro.wwooss.v1.service.notification.NotificationService;
+import com.google.firebase.messaging.FirebaseMessagingException;
 import java.util.Objects;
 import java.util.Optional;
 import lombok.AccessLevel;
@@ -41,9 +43,20 @@ public class NotificationServiceImpl implements NotificationService {
             return;
         }
 
-        // 단일 발송 이기 때문에 무조건 첫번째만
-        firebaseService.sendOne(notificationTemplate, notificationSendRequest.getVariableMap(),
-                notificationSendRequest.getTargets().get(0).getFcmToken());
+
+        try {
+            // 단일 발송 이기 때문에 무조건 첫번째만
+            firebaseService.sendOne(notificationTemplate, notificationSendRequest.getVariableMap(),
+                    notificationSendRequest.getTargets().get(0).getFcmToken());
+
+            notificationRepository.save(Notification.of(notificationSendRequest.getTargets().get(0)
+            ,notificationTemplate, true));
+        } catch (FirebaseMessagingException fe) {
+            log.error(fe.getMessage(), fe);
+            notificationRepository.save(Notification.failOf(notificationSendRequest.getTargets().get(0),
+                    fe.getMessage(), notificationTemplate.getTemplateCode()));
+        }
+
     }
 
     @Override
