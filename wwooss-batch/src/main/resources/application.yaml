@@ -25,3 +25,11 @@ spring:
       hibernate:
         format_sql: true
         highlight_sql: true
+gcp:
+  firebase:
+    service-account: classpath:firebase/wwooss-c5a90-firebase-adminsdk-zh2zk-078e059ab4.json
+jwt:
+  header: Authorization
+  secret: c2lsdmVybmluZS10ZWNoLXNwcmluZy1ib290LWp3dC10dXRvcmlhbC1zZWNyZXQtc2lsdmVybmluZS10ZWNoLXNwcmluZy1ib290LWp3dC10dXRvcmlhbC1zZWNyZXQK
+  access-token-validity-in-milliseconds: 86400000
+  refresh-token-validity-in-milliseconds: 86400000000

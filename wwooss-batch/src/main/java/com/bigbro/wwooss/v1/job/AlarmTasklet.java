@@ -19,8 +19,10 @@ import org.springframework.batch.core.StepExecutionListener;
 import org.springframework.batch.core.scope.context.ChunkContext;
 import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.repeat.RepeatStatus;
+import org.springframework.stereotype.Component;
 
 @RequiredArgsConstructor
+@Component
 public class AlarmTasklet implements Tasklet, StepExecutionListener {
 
     private List<Alarm> alarmList;
@@ -46,7 +48,9 @@ public class AlarmTasklet implements Tasklet, StepExecutionListener {
         List<Alarm> sendAlarmList = alarmList.stream()
                 .filter((alarm) -> alarm.getDayOfWeekList().contains(dayOfWeek)).toList();
 
-        notificationService.sendMany(buildRequestNotification(sendAlarmList));
+        if (!sendAlarmList.isEmpty()) {
+            notificationService.sendMany(buildRequestNotification(sendAlarmList));
+        }
         return RepeatStatus.FINISHED;
     }
 
