@@ -1,6 +1,7 @@
 package com.bigbro.wwooss.v1.job;
 
 import com.bigbro.wwooss.v1.repository.alarm.AlarmRepository;
+import com.bigbro.wwooss.v1.service.notification.NotificationService;
 import javax.persistence.EntityManagerFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,6 +30,8 @@ public class AlarmJobConfig {
 
     private final AlarmRepository alarmRepository;
 
+    private final NotificationService notificationService;
+
     @Bean
     public Job alarmJob() {
         return jobBuilderFactory.get(JOB_NAME)
@@ -38,7 +41,7 @@ public class AlarmJobConfig {
 
     @Bean
     public Tasklet alarmTasklet() {
-        return new AlarmTasklet(alarmRepository);
+        return new AlarmTasklet(alarmRepository, notificationService);
     }
 
     @Bean
