@@ -18,8 +18,6 @@ import org.springframework.context.annotation.Configuration;
 @RequiredArgsConstructor
 public class AlarmJobConfig {
 
-    @Value("${job.step.chunk.size}")
-    private int chunkSize;
     public static final String JOB_NAME = "alarmJob";
     public static final String STEP_NAME = "alarmStep";
 
