@@ -25,26 +25,23 @@ import org.springframework.stereotype.Component;
 @Component
 public class AlarmTasklet implements Tasklet, StepExecutionListener {
 
-    private List<Alarm> alarmList;
-
-    private int dayOfWeek;
-
     private final AlarmRepository alarmRepository;
 
     private final NotificationService notificationService;
 
     @Override
     public void beforeStep(StepExecution stepExecution) {
-        String date = stepExecution.getJobParameters().getParameters().get("date").toString();
-        LocalDateTime parseDate = parse(date, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
-        dayOfWeek = parseDate.getDayOfWeek().getValue();
-
-        alarmList = alarmRepository.findAlarmAtTime(parseDate.getHour(), parseDate.getMinute(),
-                parseDate.getDayOfWeek().getValue());
     }
 
     @Override
     public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
+        String date = contribution.getStepExecution().getJobParameters().getParameters().get("date").toString();
+        LocalDateTime parseDate = parse(date, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+        int dayOfWeek = parseDate.getDayOfWeek().getValue();
+
+        List<Alarm> alarmList = alarmRepository.findAlarmAtTime(parseDate.getHour(), parseDate.getMinute(),
+                parseDate.getDayOfWeek().getValue());
+
         List<Alarm> sendAlarmList = alarmList.stream()
                 .filter((alarm) -> alarm.getDayOfWeekList().contains(dayOfWeek)).toList();
 
