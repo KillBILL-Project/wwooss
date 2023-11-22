@@ -34,7 +34,7 @@ public class Alarm extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long alarmId;
 
-    @Comment("알람 발송 요일 리스트")
+    @Comment("알람 발송 요일 리스트 / 월[1] ... 일[7]")
     @Convert(converter = IntegerListConverter.class)
     @Column(name = "day_of_week")
     private List<Integer> dayOfWeekList;

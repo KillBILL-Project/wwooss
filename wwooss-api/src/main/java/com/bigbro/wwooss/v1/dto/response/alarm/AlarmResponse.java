@@ -12,7 +12,7 @@ public class AlarmResponse {
 
     private Long alarmId;
 
-    private List<Integer> dayOfWeekList;
+    private List<Integer> dayOfWeekList; // 월[1] ... 일[7]
 
     private int sendHour;
 
