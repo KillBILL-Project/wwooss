@@ -40,14 +40,14 @@ public class FirebaseServiceImpl implements FirebaseService {
         sendMulticast(notification, fcmTokenList);
     }
 
-    private Message messageBuild(Notification notification, String fcmToken) {
+    private Message messageBuild(final Notification notification, final String fcmToken) {
         return Message.builder()
                 .setToken(fcmToken)
                 .setNotification(notification)
                 .build();
     }
 
-    private MulticastMessage multicastMessageBuild(Notification notification, final List<String> fcmTokenList,
+    private MulticastMessage multicastMessageBuild(final Notification notification, final List<String> fcmTokenList,
             int fromIndex, int toIndex) {
         return MulticastMessage.builder()
                 .addAllTokens(fcmTokenList.subList(fromIndex, toIndex))
@@ -59,7 +59,7 @@ public class FirebaseServiceImpl implements FirebaseService {
      * 푸쉬 알림 최대 보낼 수 있는 건수 : 500건
      * 500건씩 나눠서 발송
      */
-    private void sendMulticast(Notification notification, List<String> fcmTokens) throws FirebaseMessagingException {
+    private void sendMulticast(final Notification notification, final List<String> fcmTokens) throws FirebaseMessagingException {
         int maxSend = 500;
         int loopCount = (int) Math.ceil((double) fcmTokens.size() / maxSend);
 
