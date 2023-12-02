@@ -12,37 +12,16 @@ spring:
   config:
     activate:
       on-profile: local
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: "jdbc:mysql://localhost:3306/killbill?autoReconnect=true&useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Seoul&tinyInt1isBit=false"
-    username: root
-    password: ENC(+p6g1owB0AzWumMOvy2V6gxkTjfJXzOX)
-    hikari:
-      auto-commit: false
-      maximum-pool-size: 10
-      max-lifetime: 580000
-  jpa:
-    database-platform: org.hibernate.dialect.MySQL8Dialect
-    show-sql: true
-    hibernate:
-      ddl-auto: update
-    properties:
-      hibernate:
-        format_sql: true
-        highlight_sql: true
-#  elasticsearch:
-#    uris: "localhost:9200"
-logging:
-  level:
-    org:
-      hibernate:
-        sql: debug
-        type.descriptor.sql: trace
+    import: application-rds.yaml
 jwt:
   header: Authorization
   secret: c2lsdmVybmluZS10ZWNoLXNwcmluZy1ib290LWp3dC10dXRvcmlhbC1zZWNyZXQtc2lsdmVybmluZS10ZWNoLXNwcmluZy1ib290LWp3dC10dXRvcmlhbC1zZWNyZXQK
   access-token-validity-in-milliseconds: 86400000
   refresh-token-validity-in-milliseconds: 86400000000
+
+gcp:
+  firebase:
+    service-account: classpath:firebase/wwooss-c5a90-firebase-adminsdk-zh2zk-078e059ab4.json
 
 ---
 spring:
