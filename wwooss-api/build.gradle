@@ -39,7 +39,7 @@ tasks.named('test') {
 openapi3 {
     servers = [ { url = "http://localhost:8080" } ]
     title = 'WWOOSS API restdocs with swagger'
-    description = 'wwooss bill API'
+    description = 'wwooss API'
     version = '0.0.1'
     format = 'json'
     outputFileNamePrefix = 'open-api-3-wwooss-service'
