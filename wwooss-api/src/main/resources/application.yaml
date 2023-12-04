@@ -38,7 +38,7 @@ jwt:
 
 gcp:
   firebase:
-    service-account: classpath:firebase/wwooss-c5a90-firebase-adminsdk-zh2zk-078e059ab4.json
+    service-account: classpath:firebase/wwooss-c5a90-firebase-adminsdk-zh2zk-8a0d0bc64f.json
 
 ---
 spring:
