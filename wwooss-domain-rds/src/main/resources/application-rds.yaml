@@ -62,7 +62,7 @@ spring:
       url: "jdbc:mysql://ec2-3-38-185-186.ap-northeast-2.compute.amazonaws.com:3306/wwooss?autoReconnect=true&useUnicode=true&characterEncoding=UTF-8&serverTimezone
       =Asia/Seoul&tinyInt1isBit=false"
       username: root
-      password: ENC(+p6g1owB0AzWumMOvy2V6gxkTjfJXzOX)
+      password: ENC(1ORG6o3cVyQ55fdGD88bBEcxSDLEHci1)
       hikari:
         auto-commit: false
         maximum-pool-size: 10
