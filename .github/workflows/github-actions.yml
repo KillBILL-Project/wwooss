@@ -34,11 +34,10 @@ jobs:
       - name: Write Google notification json file
         run: |
           cd wwooss-api/src/main/resources
-          mkdir firebase
-          chmod +x firebase
-          cd firebase
-          touch ${{ secrets.FIREBASE_JSON_FILE_NAME_DEV }}
-          echo ${{ secrets.FIREBASE_JSON_DEV }} > ${{ secrets.FIREBASE_JSON_FILE_NAME_DEV }}
+#          mkdir firebase
+#          cd firebase
+#          touch ${{ secrets.FIREBASE_JSON_FILE_NAME_DEV }}
+#          echo ${{ secrets.FIREBASE_JSON_DEV }} > ${{ secrets.FIREBASE_JSON_FILE_NAME_DEV }}
 
       - name: Build with Gradle
         run: ./gradlew clean build -x test
