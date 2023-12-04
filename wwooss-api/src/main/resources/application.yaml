@@ -49,7 +49,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: "jdbc:mysql://localhost:3306/killbill?autoReconnect=true&useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Seoul&tinyInt1isBit=false"
     username: root
-    password: ENC(+p6g1owB0AzWumMOvy2V6gxkTjfJXzOX)
+    password: ENC(1ORG6o3cVyQ55fdGD88bBEcxSDLEHci1)
     hikari:
       auto-commit: false
       maximum-pool-size: 10
