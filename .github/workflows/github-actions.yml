@@ -32,8 +32,7 @@ jobs:
         run: chmod +x gradlew
 
       - name: Build with Gradle
-        working-directory: ./wwooss-api
-        run: pwd
+        run: ./gradlew clean build -x test
 
       - name: Login To DockerHub
         if: contains(github.ref, 'develop')
