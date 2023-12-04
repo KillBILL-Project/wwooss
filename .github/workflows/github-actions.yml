@@ -38,8 +38,11 @@ jobs:
           cd firebase
           touch ${{ secrets.FIREBASE_JSON_FILE_NAME_DEV }}
           echo '${{ secrets.FIREBASE_JSON_DEV }}' >> ${{ secrets.FIREBASE_JSON_FILE_NAME_DEV }}
+
+      - name: ls
+        run: |
           ls
-          cat  ${{ secrets.FIREBASE_JSON_FILE_NAME_DEV }}
+          pwd
 
       - name: Build with Gradle
         run: ./gradlew clean build -x test
