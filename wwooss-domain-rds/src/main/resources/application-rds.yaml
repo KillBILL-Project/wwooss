@@ -57,3 +57,30 @@ spring:
   config:
     activate:
       on-profile: develop
+  datasource:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: "jdbc:mysql://ec2-3-38-185-186.ap-northeast-2.compute.amazonaws.com:3306/wwooss?autoReconnect=true&useUnicode=true&characterEncoding=UTF-8&serverTimezone
+      =Asia/Seoul&tinyInt1isBit=false"
+      username: root
+      password: ENC(+p6g1owB0AzWumMOvy2V6gxkTjfJXzOX)
+      hikari:
+        auto-commit: false
+        maximum-pool-size: 10
+        max-lifetime: 580000
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+        highlight_sql: true
+  #  elasticsearch:
+  #    uris: "localhost:9200"
+  logging:
+    level:
+      org:
+        hibernate:
+          sql: debug
+          type.descriptor.sql: trace
