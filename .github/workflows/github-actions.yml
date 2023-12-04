@@ -33,7 +33,7 @@ jobs:
 
       - name: Build with Gradle
         working-directory: ./wwooss-api
-        run: ./gradlew clean build -x test
+        run: pwd ./gradlew clean build -x test
 
       - name: Login To DockerHub
         if: contains(github.ref, 'develop')
