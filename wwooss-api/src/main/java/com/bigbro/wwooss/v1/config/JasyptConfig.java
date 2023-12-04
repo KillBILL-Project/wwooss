@@ -1,6 +1,7 @@
 package com.bigbro.wwooss.v1.config;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.jasypt.encryption.StringEncryptor;
 import org.jasypt.encryption.pbe.PooledPBEStringEncryptor;
 import org.jasypt.encryption.pbe.config.SimpleStringPBEConfig;
@@ -10,6 +11,7 @@ import org.springframework.core.env.Environment;
 
 @Configuration
 @RequiredArgsConstructor
+@Slf4j
 public class JasyptConfig {
 
     private final Environment environment;
@@ -19,6 +21,7 @@ public class JasyptConfig {
         PooledPBEStringEncryptor encryptor = new PooledPBEStringEncryptor();
         SimpleStringPBEConfig config = new SimpleStringPBEConfig();
 
+        log.info("this.getEncryptPassword() : {}", this.getEncryptPassword());
         config.setPassword(this.getEncryptPassword()); // 암호화할 때 사용하는 키
         config.setAlgorithm("PBEWithMD5AndDES"); // 암호화 알고리즘
         config.setKeyObtentionIterations("1000"); // 반복할 해싱 회수
