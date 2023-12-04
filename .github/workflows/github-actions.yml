@@ -47,7 +47,7 @@ jobs:
           context: .
           file: ./wwooss-api/DockerFile
           push: true
-          tags: wwooss-api:latest
+          tags: wwooss/wwooss-api:latest
           build-args: |
             SPRING_PROFILES_ACTIVE=develop
 
