@@ -6,6 +6,9 @@ RUN echo $SPRING_PROFILES_ACTIVE
 
 ENV SPRING_PROFILES_ACTIVE=$SPRING_PROFILES_ACTIVE
 
+ARG JASYPT_SECRET
+ENV JAVA_ENCRYPTOR_PASSWORD=$JASYPT_SECRET
+
 COPY ${JAR_FILE} wwooss-api-app.jar
 
 ENTRYPOINT ["java", "-jar", "-Djava.security.egd=file:/dev/./urandom", "/wwooss-api-app.jar"]
