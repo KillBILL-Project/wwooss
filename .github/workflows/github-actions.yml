@@ -61,7 +61,6 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           timeout: 60s
           script: |
-            cd wwooss/
             sudo docker rm - f $(docker ps -qa)
             sudo docker pull ${{ secrets.DOCKER_REPO }}:latest
             sudo docker-compose down
