@@ -52,11 +52,6 @@ jobs:
           build-args: |
             SPRING_PROFILES_ACTIVE=develop
 
-  deploy:
-    name: deploy-to-ec2
-    runs-on: ubuntu-latest
-
-    steps:
       - name: Deploy
         uses: appleboy/ssh-action@master
         with:
