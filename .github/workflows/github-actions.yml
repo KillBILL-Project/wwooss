@@ -41,8 +41,8 @@ jobs:
 
       - name: ls
         run: |
+          cd wwooss-api/src/main/resources/firebase
           ls
-          pwd
 
       - name: Build with Gradle
         run: ./gradlew clean build -x test
