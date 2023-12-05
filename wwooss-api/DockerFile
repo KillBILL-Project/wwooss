@@ -8,6 +8,6 @@ RUN echo $SPRING_PROFILES_ACTIVE
 ENV SPRING_PROFILES_ACTIVE=$SPRING_PROFILES_ACTIVE
 
 COPY ${JAR_FILE} wwooss-api-app.jar
-COPY ${SWAGGER_FILE} /var/lib/swagger/swaager.json
+COPY ${SWAGGER_FILE} /var/lib/swagger/swagger.json
 
 ENTRYPOINT ["java", "-jar", "-Djava.security.egd=file:/dev/./urandom", "/wwooss-api-app.jar"]
