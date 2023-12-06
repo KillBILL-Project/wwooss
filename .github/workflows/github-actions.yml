@@ -36,7 +36,7 @@ jobs:
         run: |
           cd wwooss-api/src/main/resources/static/docs
           export json=$(cat open-api-3-wwooss-service.json)
-          echo json
+          echo "${json}"
           json="${json//'%'/'%25'}"
           json="${json//$'\n'/'%0A'}"
           json="${json//$'\r'/'%0D'}"
