@@ -35,11 +35,10 @@ jobs:
         id: swagger-file
         run: |
           cd wwooss-api/src/main/resources/static/docs
-          export json=$(cat open-api-3-wwooss-service.json)
-          echo $json
-          echo 'JSON_RESPONSE<<EOF' >> $GITHUB_OUTPUT
-          echo "swaggerFile=$json" >> $GITHUB_OUTPUT
-          echo 'EOF' >> $GITHUB_OUTPUT
+          SWAGGER_FILE=$(cat open-api-3-wwooss-service.json)
+          echo 'SWAGGER_FILE_ENV<<EOF' >> $GITHUB_ENV
+          echo $SWAGGER_FILE >> $GITHUB_ENV
+          echo 'EOF' >> $GITHUB_ENV
 
       - name: Build with Gradle
         run: ./gradlew clean build -x test
@@ -74,8 +73,8 @@ jobs:
             sudo yum install jq -y
             cd /home/ec2-user/volume/wwooss-swagger
             touch open-api-3-wwooss-service.json
-            echo "${{ steps.swagger-file.outputs.swaggerFile }}"
-            echo "$(cat ${{ steps.swagger-file.outputs.swaggerFile }})" | jq '.' > open-api-3-wwooss-service.json
+            echo "${{ env.SWAGGER_FILE_ENV }}"
+            echo "$(cat ${{ env.SWAGGER_FILE_ENV }})" | jq '.' > open-api-3-wwooss-service.json
             cd /home/ec2-user/docker-compose
             sudo docker rm -f $(docker ps -qa)
             sudo docker pull ${{ secrets.DOCKER_REPO }}
