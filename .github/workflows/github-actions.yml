@@ -36,6 +36,9 @@ jobs:
         run: |
           cd wwooss-api/src/main/resources/static/docs
           export json=$(cat open-api-3-wwooss-service.json)
+          json="${json//'%'/'%25'}"
+          json="${json//$'\n'/'%0A'}"
+          json="${json//$'\r'/'%0D'}"
           echo "swaggerFile=$json" >> $GITHUB_OUTPUT
 
       - name: Build with Gradle
