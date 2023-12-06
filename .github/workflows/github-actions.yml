@@ -36,13 +36,10 @@ jobs:
         run: |
           cd wwooss-api/src/main/resources/static/docs
           export json=$(cat open-api-3-wwooss-service.json)
-#          json="${json//'%'/'%25'}"
-#          json="${json//$'\n'/'%0A'}"
-#          json="${json//$'\r'/'%0D'}"
-           echo "config<<EOF" >> $GITHUB_OUTPUT
-           cat $json >> $GITHUB_OUTPUT
-           echo "EOF" >> $GITHUB_OUTPUT
-#          echo "swaggerFile=$($(jq -c . < $json))" >> $GITHUB_OUTPUT
+          json="${json//'%'/'%25'}"
+          json="${json//$'\n'/'%0A'}"
+          json="${json//$'\r'/'%0D'}"
+          echo "::set-output name=swaggerFile::$json"
 
       - name: Build with Gradle
         run: ./gradlew clean build -x test
@@ -76,7 +73,7 @@ jobs:
           script: |
             cd /home/ec2-user/volume/wwooss-swagger
             touch open-api-3-wwooss-service.json
-            echo ${{ fromJSON(steps.swagger-file.outputs.config) }} >> open-api-3-wwooss-service.json
+            echo ${{ steps.swagger-file.outputs.swaggerFile }} >> open-api-3-wwooss-service.json
             cd /home/ec2-user/docker-compose
             sudo docker rm -f $(docker ps -qa)
             sudo docker pull ${{ secrets.DOCKER_REPO }}
