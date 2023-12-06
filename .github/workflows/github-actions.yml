@@ -16,6 +16,7 @@ jobs:
     runs-on: ubuntu-latest # ubuntu 가상 머신에서 실행
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
+    needs: configure
     strategy:
           matrix: ${{ fromJson(needs.configure.outputs.matrix) }}
     steps:
@@ -44,7 +45,7 @@ jobs:
 #          json="${json//$'\n'/'%0A'}"
 #          json="${json//$'\r'/'%0D'}"
 #          echo "::set-output name=swaggerFile::$json"
-          echo "swaggerFile=$(jq -c . < open-api-3-wwooss-service.json)" >> $GITHUB_OUTPUT
+          echo "matrix=$(jq -c . < open-api-3-wwooss-service.json)" >> $GITHUB_OUTPUT
 
       - name: Build with Gradle
         run: ./gradlew clean build -x test
@@ -78,7 +79,7 @@ jobs:
           script: |
             cd /home/ec2-user/volume/wwooss-swagger
             touch open-api-3-wwooss-service.json
-            echo ${{ swaggerFile }} >> open-api-3-wwooss-service.json
+            echo ${{ matrix }} >> open-api-3-wwooss-service.json
             cd /home/ec2-user/docker-compose
             sudo docker rm -f $(docker ps -qa)
             sudo docker pull ${{ secrets.DOCKER_REPO }}
