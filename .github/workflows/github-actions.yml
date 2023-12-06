@@ -16,9 +16,7 @@ jobs:
     runs-on: ubuntu-latest # ubuntu 가상 머신에서 실행
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
-    needs: configure
-    strategy:
-          matrix: ${{ fromJson(needs.configure.outputs.matrix) }}
+
     steps:
       # git , branch code init
       - name: Git checkout
@@ -47,6 +45,13 @@ jobs:
 #          echo "::set-output name=swaggerFile::$json"
           echo "matrix=$(jq -c . < open-api-3-wwooss-service.json)" >> $GITHUB_OUTPUT
 
+  build:
+    name: build
+    runs-on: ubuntu-latest # ubuntu 가상 머신에서 실행
+    needs: configure
+    strategy:
+      matrix: ${{ fromJson(needs.configure.outputs.matrix) }}
+    steps:
       - name: Build with Gradle
         run: ./gradlew clean build -x test
 
@@ -85,4 +90,3 @@ jobs:
             sudo docker pull ${{ secrets.DOCKER_REPO }}
             sudo docker-compose down
             sudo docker-compose up -d
-
