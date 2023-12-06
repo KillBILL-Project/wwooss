@@ -41,7 +41,7 @@ jobs:
 #          json="${json//'%'/'%25'}"
 #          json="${json//$'\n'/'%0A'}"
 #          json="${json//$'\r'/'%0D'}"
-          echo "swaggerFile=$json" >> "$GITHUB_OUTPUT"
+          echo "swaggerFile=$json" >> $GITHUB_OUTPUT
 
       - name: Build with Gradle
         run: ./gradlew clean build -x test
