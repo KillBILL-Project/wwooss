@@ -35,7 +35,7 @@ jobs:
         id: swagger-file
         run: |
           cd wwooss-api/src/main/resources/static/docs
-#          echo "swagger-file=$(cat open-api-3-wwooss-service.json)" >> "$GITHUB_OUTPUT"
+          echo "swagger-file=$(cat open-api-3-wwooss-service.json)" >> "$GITHUB_OUTPUT"
 
       - name: Build with Gradle
         run: ./gradlew clean build -x test
@@ -59,7 +59,6 @@ jobs:
 
       - name: Deploy
         uses: appleboy/ssh-action@master
-        run: echo ${{ steps.swagger-file.outputs.swagger-file }}
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USERNAME }}
