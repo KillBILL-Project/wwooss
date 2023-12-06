@@ -37,7 +37,7 @@ jobs:
           ls
           cat $SWAGGER_JSON
         env:
-          SWAGGER_JSON: $(cat open-api-3-wwooss-service.json)
+          SWAGGER_JSON: $(cat wwooss-api/src/main/resources/static/docs/open-api-3-wwooss-service.json)
 
       - name: Build with Gradle
         run: ./gradlew clean build -x test
