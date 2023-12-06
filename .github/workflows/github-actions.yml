@@ -35,8 +35,7 @@ jobs:
         id: swagger-file
         run: |
           cd wwooss-api/src/main/resources/static/docs
-          VERSIONS = ""
-#          content = $(cat open-api-3-wwooss-service.json)
+          export json=$(cat open-api-3-wwooss-service.json)
 #          echo $content
 #          content="${content//'%'/'%25'}"
 #          content="${content//$'\n'/'%0A'}"
