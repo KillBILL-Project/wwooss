@@ -34,6 +34,7 @@ jobs:
       - name: Write swagger file
         run: |
           cd wwooss-api/src/main/resources/static/docs
+          ls
           cat $SWAGGER_JSON
         env:
           SWAGGER_JSON: $(cat open-api-3-wwooss-service.json)
