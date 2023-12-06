@@ -35,13 +35,14 @@ jobs:
         id: swagger-file
         run: |
           cd wwooss-api/src/main/resources/static/docs
-          content = ""
+          VERSIONS = ""
 #          content = $(cat open-api-3-wwooss-service.json)
 #          echo $content
 #          content="${content//'%'/'%25'}"
 #          content="${content//$'\n'/'%0A'}"
 #          content="${content//$'\r'/'%0D'}"
 #          echo "swaggerFile=${content}" >> "$GITHUB_OUTPUT"
+
 
       - name: Build with Gradle
         run: ./gradlew clean build -x test
