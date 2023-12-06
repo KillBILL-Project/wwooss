@@ -36,10 +36,10 @@ jobs:
         run: |
           cd wwooss-api/src/main/resources/static/docs
           export json=$(cat open-api-3-wwooss-service.json)
-#          echo $content
-#          content="${content//'%'/'%25'}"
-#          content="${content//$'\n'/'%0A'}"
-#          content="${content//$'\r'/'%0D'}"
+          echo json
+          json="${json//'%'/'%25'}"
+          json="${json//$'\n'/'%0A'}"
+          json="${json//$'\r'/'%0D'}"
 #          echo "swaggerFile=${content}" >> "$GITHUB_OUTPUT"
 
 
