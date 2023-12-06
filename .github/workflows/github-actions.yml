@@ -36,6 +36,7 @@ jobs:
         run: |
           cd wwooss-api/src/main/resources/static/docs
           SWAGGER_FILE=cat open-api-3-wwooss-service.json | jq
+          echo $SWAGGER_FILE
           echo 'SWAGGER_FILE_ENV<<EOF' >> $GITHUB_ENV
           echo $SWAGGER_FILE >> $GITHUB_ENV
           echo 'EOF' >> $GITHUB_ENV
@@ -73,8 +74,8 @@ jobs:
             sudo yum install jq -y
             cd /home/ec2-user/volume/wwooss-swagger
             touch open-api-3-wwooss-service.json
-            echo ${{ env.SWAGGER_FILE_ENV }} | jq '. | fromjson'
-            echo echo ${{ env.SWAGGER_FILE_ENV }} | jq '. | fromjson' >> open-api-3-wwooss-service.json
+            echo ${{ env.SWAGGER_FILE_ENV }} | jq
+            echo echo ${{ env.SWAGGER_FILE_ENV }} | jq >> open-api-3-wwooss-service.json
             cd /home/ec2-user/docker-compose
             sudo docker rm -f $(docker ps -qa)
             sudo docker pull ${{ secrets.DOCKER_REPO }}
