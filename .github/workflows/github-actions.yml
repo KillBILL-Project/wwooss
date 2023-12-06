@@ -74,7 +74,8 @@ jobs:
             sudo yum install jq -y
             cd /home/ec2-user/volume/wwooss-swagger
             touch open-api-3-wwooss-service.json
-            echo "$(cat open-api-3-wwooss-service.json)" | jq '.' >> open-api-3-wwooss-service.json
+            echo "${{ steps.swagger-file.outputs.swaggerFile }}"
+            echo "$(cat ${{ steps.swagger-file.outputs.swaggerFile }})" | jq '.' > open-api-3-wwooss-service.json
             cd /home/ec2-user/docker-compose
             sudo docker rm -f $(docker ps -qa)
             sudo docker pull ${{ secrets.DOCKER_REPO }}
