@@ -40,7 +40,7 @@ jobs:
           cat wwooss-key.pem
           chmod 400 wwooss-key.pem
           echo "DELETE PREV JSON"
-          ssh -i wwooss-key.pem -o StrictHostKeyChecking=no ${EC2_USERNAME}@${EC2_HOST}'
+          ssh -i "wwooss-key.pem" ec2-user@ec2-3-38-185-186.ap-northeast-2.compute.amazonaws.com
           ls
         env:
           EC2_HOST: ${{secrets.EC2_HOST}}
