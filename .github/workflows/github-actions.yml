@@ -40,8 +40,8 @@ jobs:
           cat wwooss-key.pem
           chmod 400 wwooss-key.pem
           echo "DELETE PREV JSON"
-          ssh -i "wwooss-key.pem" -o StrictHostKeyChecking=no ${EC2_USERNAME}@${EC2_HOST}
-          ls
+          ssh -i "wwooss-key.pem" -o StrictHostKeyChecking=no ${EC2_USERNAME}@${EC2_HOST} rm -f 
+          /home/ec2-user/volume/wwooss-swagger/open-api-3-wwooss-service.json
         env:
           EC2_HOST: ${{secrets.EC2_HOST}}
           EC2_USERNAME: ${{secrets.EC2_USERNAME}}
