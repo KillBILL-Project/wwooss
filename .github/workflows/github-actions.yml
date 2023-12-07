@@ -38,8 +38,8 @@ jobs:
         run: |
           echo ${{ secrets.EC2_SSH_PRIVATE_KEY }} > ./wwoos-key.pem
           chmod 400 ./wwoos-key.pem
-          ssh -i ./wwoos-key.pem  ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }} rm -rf 
-          /home/ec2-user/volume/wwooss-swagger/open-api-3-wwooss-service.json
+          echo "DELETE PREV JSON"
+
 
       - name: Build with Gradle
         run: ./gradlew clean build -x test
