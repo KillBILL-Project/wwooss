@@ -35,7 +35,7 @@ jobs:
         id: swagger-file
         run: |
           cd wwooss-api/src/main/resources/static/docs
-          SWAGGER_FILE= $(cat open-api-3-wwooss-service.json)
+          export SWAGGER_FILE=$(cat open-api-3-wwooss-service.json)
           echo $SWAGGER_FILE
           echo 'SWAGGER_FILE_ENV<<EOF' >> $GITHUB_ENV
           echo $SWAGGER_FILE >> $GITHUB_ENV
