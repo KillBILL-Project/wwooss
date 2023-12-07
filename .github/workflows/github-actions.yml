@@ -41,7 +41,7 @@ jobs:
           host: ${{ secrets.EC2_HOST }}
           key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
           source: "./wwooss-api/src/main/resources/static/docs/open-api-3-wwooss-service.json"
-          target: "/home/ec2-user/volume/wwooss-swagger"
+          target: "/home/ec2-user/swagger"
 
       - name: Build with Gradle
         run: ./gradlew clean build -x test
