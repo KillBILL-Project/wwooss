@@ -2,7 +2,7 @@
   "openapi" : "3.0.1",
   "info" : {
     "title" : "WWOOSS API restdocs with swagger",
-    "description" : "wwooss bill API",
+    "description" : "wwooss API",
     "version" : "0.0.1"
   },
   "servers" : [ {
@@ -165,7 +165,7 @@
                 },
                 "examples" : {
                   "get-trash-can-histories" : {
-                    "value" : "{\n  \"code\" : 200,\n  \"title\" : \"안내\",\n  \"message\" : \"정상 처리 되었습니다.\",\n  \"data\" : {\n    \"hasNext\" : false,\n    \"trashCanHistoryResponseList\" : [ {\n      \"trashCanHistoryId\" : 1,\n      \"createdAt\" : \"2023-12-02T14:15:15.752447\"\n    } ]\n  }\n}"
+                    "value" : "{\n  \"code\" : 200,\n  \"title\" : \"안내\",\n  \"message\" : \"정상 처리 되었습니다.\",\n  \"data\" : {\n    \"hasNext\" : false,\n    \"trashCanHistoryResponseList\" : [ {\n      \"trashCanHistoryId\" : 1,\n      \"createdAt\" : \"2023-12-07T16:53:02.821941\"\n    } ]\n  }\n}"
                   }
                 }
               }
@@ -378,7 +378,7 @@
                 },
                 "examples" : {
                   "get-weekly-reports" : {
-                    "value" : "{\n  \"code\" : 200,\n  \"title\" : \"안내\",\n  \"message\" : \"정상 처리 되었습니다.\",\n  \"data\" : {\n    \"hasNext\" : false,\n    \"weeklyReportResponseList\" : [ {\n      \"weeklyReportId\" : 1,\n      \"weekNumber\" : 1,\n      \"fromDate\" : \"2023-12-02T14:15:15.091997\",\n      \"toDate\" : \"2023-12-02T14:15:15.092012\"\n    } ]\n  }\n}"
+                    "value" : "{\n  \"code\" : 200,\n  \"title\" : \"안내\",\n  \"message\" : \"정상 처리 되었습니다.\",\n  \"data\" : {\n    \"hasNext\" : false,\n    \"weeklyReportResponseList\" : [ {\n      \"weeklyReportId\" : 1,\n      \"weekNumber\" : 1,\n      \"fromDate\" : \"2023-12-07T16:53:02.387064\",\n      \"toDate\" : \"2023-12-07T16:53:02.387078\"\n    } ]\n  }\n}"
                   }
                 }
               }
