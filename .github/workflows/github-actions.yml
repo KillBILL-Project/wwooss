@@ -37,9 +37,14 @@ jobs:
       - name: swagger json to ec2
         run: |
           echo "$SSH_PEM_KEY" > wwooss-key.pem
+          cat wwooss-key.pem
           chmod 400 wwooss-key.pem
           echo "DELETE PREV JSON"
+          ssh -i wwooss-key.pem -o StrictHostKeyChecking=no ${EC2_USERNAME}@${EC2_HOST}'
+          ls
         env:
+          EC2_HOST: ${{secrets.EC2_HOST}}
+          EC2_USERNAME: ${{secrets.EC2_USERNAME}}
           SSH_PEM_KEY: ${{secrets.EC2_SSH_PRIVATE_KEY}}
 
 
