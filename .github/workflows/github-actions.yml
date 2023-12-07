@@ -40,7 +40,7 @@ jobs:
           username: ${{secrets.EC2_USERNAME}}
           host: ${{ secrets.EC2_HOST }}
           key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
-          source: "/wwooss-api/src/main/resources/static/docs/open-api-3-wwooss-service.json"
+          source: "./wwooss-api/src/main/resources/static/docs/open-api-3-wwooss-service.json"
           target: "/home/ec2-user/volume/wwooss-swagger"
 
       - name: Build with Gradle
