@@ -42,5 +42,5 @@ out/
 /libs
 
 ### static ###
-#src/main/resources/firebase/
-#*.json
+src/main/resources/firebase/
+*.json
