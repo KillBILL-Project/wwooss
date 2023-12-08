@@ -42,5 +42,4 @@ out/
 /libs
 
 ### static ###
-src/main/resources/firebase/
-*.json
+/wwooss-api/src/main/resources/firebase/*.json
