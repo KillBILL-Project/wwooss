@@ -39,7 +39,7 @@ jobs:
           cd wwooss-api/src/main/resources
           mkdir firebase
           cd firebase
-          echo "${{ secrets.FIREBASE_JSON_DEV }}" | jq '.' > wwooss-c5a90-firebase-adminsdk-zh2zk-8a0d0bc64f.json
+          echo "${{ secrets.FIREBASE_JSON_DEV }}" | jq '.'
 
       - name: Swagger json to ec2 Use SCP
         uses: appleboy/scp-action@master
