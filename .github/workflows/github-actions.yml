@@ -43,6 +43,12 @@ jobs:
           source: "./wwooss-api/src/main/resources/static/docs/open-api-3-wwooss-service.json"
           target: "/home/ec2-user/swagger"
 
+      - name: Write Firebase json
+        id: swagger-file
+        run: |
+          cd wwooss-api/src/main/resources/firebase
+          echo ${{ secrets.FIREBASE_JSON_DEV }} | jq > wwooss-c5a90-firebase-adminsdk-zh2zk-8a0d0bc64f.json
+
       - name: Build with Gradle
         run: ./gradlew clean build -x test
 
