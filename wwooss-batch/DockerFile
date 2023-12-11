@@ -1,0 +1,11 @@
+FROM amazoncorretto:17
+ARG JAR_FILE=wwooss-batch/build/libs/wwooss-batch-0.0.1-SNAPSHOT.jar
+
+ARG SPRING_PROFILES_ACTIVE
+RUN echo $SPRING_PROFILES_ACTIVE
+
+ENV SPRING_PROFILES_ACTIVE=$SPRING_PROFILES_ACTIVE
+
+COPY ${JAR_FILE} wwooss-batch.jar
+
+ENTRYPOINT ["java", "-jar", "-Djava.security.egd=file:/dev/./urandom", "/wwooss-batch.jar"]

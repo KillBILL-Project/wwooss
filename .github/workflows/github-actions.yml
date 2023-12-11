@@ -45,7 +45,7 @@ jobs:
         uses: appleboy/scp-action@master
         with:
           username: ${{secrets.EC2_USERNAME}}
-          host: ${{ secrets.EC2_HOST }}
+          host: ${{ secrets.EC2_HOST_DEV }}
           key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
           source: "./wwooss-api/src/main/resources/static/docs/open-api-3-wwooss-service.json"
           target: "/home/ec2-user/swagger"
@@ -60,7 +60,7 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
-      - name: Build and push image
+      - name: Build and push API image
         uses: docker/build-push-action@v5
         with:
           context: .
@@ -70,10 +70,20 @@ jobs:
           build-args: |
             SPRING_PROFILES_ACTIVE=develop
 
+      - name: Build and push BATCH image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./wwooss-batch/DockerFile
+          push: true
+          tags: wwooss/wwooss-batch:latest
+          build-args: |
+            SPRING_PROFILES_ACTIVE=develop
+
       - name: Deploy
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.EC2_HOST }}
+          host: ${{ secrets.EC2_HOST_DEV }}
           username: ${{ secrets.EC2_USERNAME }}
           password: ${{ secrets.EC2_PASSWORD }}
           key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
@@ -83,6 +93,7 @@ jobs:
             cd /home/ec2-user/docker-compose
             sudo docker rm -f $(docker ps -qa)
             sudo docker pull ${{ secrets.DOCKER_REPO }}
+            sudo docker pull ${{ secrets.DOCKER_REPO_BATCH }}
             sudo docker-compose down
             sudo docker-compose up -d
 
