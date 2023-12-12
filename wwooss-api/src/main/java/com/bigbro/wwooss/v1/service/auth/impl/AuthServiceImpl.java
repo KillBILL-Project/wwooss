@@ -6,6 +6,7 @@ import com.bigbro.wwooss.v1.dto.request.auth.UserRegistrationRequest;
 import com.bigbro.wwooss.v1.dto.response.auth.TokenResponse;
 import com.bigbro.wwooss.v1.entity.user.User;
 import com.bigbro.wwooss.v1.enumType.LoginType;
+import com.bigbro.wwooss.v1.exception.CustomGlobalException;
 import com.bigbro.wwooss.v1.exception.DataNotFoundException;
 import com.bigbro.wwooss.v1.repository.user.UserRepository;
 import com.bigbro.wwooss.v1.response.WwoossResponseCode;
@@ -32,6 +33,11 @@ import javax.transaction.Transactional;
 @Service
 public class AuthServiceImpl implements AuthService {
 
+    private static final String TOKEN_URL = "https://oauth2.googleapis.com/token";
+    private static final String CLIENT_ID = "1361813122-mn0eqsjcn0aar3cvr8on3grfo7agfi0h.apps.googleusercontent.com";
+    private static final String CLIENT_SECRET = "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";
+    private static final String REDIRECT_URI = "http://localhost:8080/callback";
+
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final TokenProvider tokenProvider;
@@ -42,15 +48,20 @@ public class AuthServiceImpl implements AuthService {
 
         String userEmail = userLoginRequest.getEmail();
         LoginType userLoginType = userLoginRequest.getLoginType();
-        User user = userRepository.findUserByEmailAndLoginType(userEmail, userLoginType).orElseThrow(() -> new DataNotFoundException(WwoossResponseCode.NOT_FOUND_DATA, "존재하지 않는 유저입니다."));
+        User user = userRepository.findUserByEmailAndLoginType(userEmail, userLoginType).orElseThrow(() -> new DataNotFoundException(WwoossResponseCode.NOT_FOUND_DATA, "일치하는 유저정보가 없습니다."));
 
         if (userLoginType == LoginType.EMAIL
                 && (!passwordEncoder.matches(userLoginRequest.getPassword(), user.getPassword()))) {
             throw new DataNotFoundException(WwoossResponseCode.NOT_FOUND_DATA, "일치하는 유저정보가 없습니다.");
-        } else if ( userLoginType == LoginType.GOOGLE) {
-            String serverAuthCode = userLoginRequest.getGoogleAuthCode();
-            boolean isValidGoogleLogin = validateGoogleSignIn(serverAuthCode);
-
+        } else if (userLoginType == LoginType.GOOGLE) {
+            String authCode = userLoginRequest.getAuthCode();
+            boolean isValidGoogleLogin = validateGoogleSignIn(authCode);
+            if (!isValidGoogleLogin)
+                throw new CustomGlobalException(WwoossResponseCode.FORBIDDEN, "구글 인증을 실패하였습니다. 다시 시도해주세요.");
+        } else if (userLoginType == LoginType.APPLE) {
+            throw new CustomGlobalException(WwoossResponseCode.FORBIDDEN, "애플 인증을 실패하였습니다. 다시 시도해주세요.");
+        } else {
+            throw new CustomGlobalException(WwoossResponseCode.FORBIDDEN, "올바른 로그인 방식이 아닙니다.");
         }
 
         String accessToken = tokenProvider.generateToken(user, "access");
@@ -81,13 +92,15 @@ public class AuthServiceImpl implements AuthService {
 
     @Transactional
     public TokenResponse register(UserRegistrationRequest userRegistrationRequest) {
-        User user = User.of(userRegistrationRequest.getEmail(),
+        User user = User.of(
                 userRegistrationRequest.getEmail(),
+                "",
                 userRegistrationRequest.getLoginType(),
                 userRegistrationRequest.getAge(),
                 userRegistrationRequest.getGender(),
                 userRegistrationRequest.getCountry(),
-                userRegistrationRequest.getRegion());
+                userRegistrationRequest.getRegion()
+        );
 
         String accessToken = tokenProvider.generateToken(user, "access");
         String refreshToken = tokenProvider.generateToken(user, "refresh");
@@ -114,18 +127,12 @@ public class AuthServiceImpl implements AuthService {
         User user = userRepository.findById(tokenInfo.getUserId()).orElseThrow();
 
         if (!refreshToken.equals(user.getRefreshToken())) {
-            throw new IllegalStateException();
+            throw new CustomGlobalException(WwoossResponseCode.UNAUTHORIZED, "올바른 인증 토큰이 아닙니다.");
         }
 
         String accessToken = tokenProvider.generateToken(user, "access");
-
         return TokenResponse.builder().accessToken(accessToken).build();
     }
-
-    private static final String TOKEN_URL = "https://oauth2.googleapis.com/token";
-    private static final String CLIENT_ID = "1361813122-mn0eqsjcn0aar3cvr8on3grfo7agfi0h.apps.googleusercontent.com";
-    private static final String CLIENT_SECRET = "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";
-    private static final String REDIRECT_URI = "http://localhost:8080/callback";
 
     public Boolean validateGoogleSignIn(String serverAuthCode) {
         try {
@@ -144,6 +151,7 @@ public class AuthServiceImpl implements AuthService {
 
             return responseEntity.getStatusCode() == HttpStatus.OK;
         } catch (HttpClientErrorException | HttpServerErrorException | ResourceAccessException e) {
+            log.error("error in validateGoogleSignIn", e);
             return false;
         }
     }

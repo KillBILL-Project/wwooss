@@ -8,5 +8,5 @@ public class UserLoginRequest {
     private LoginType loginType;
     private String email;
     private String password;
-    private String googleAuthCode;
+    private String authCode;
 }

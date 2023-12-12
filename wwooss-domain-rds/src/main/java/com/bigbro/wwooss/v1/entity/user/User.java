@@ -88,6 +88,7 @@ public class User extends BaseEntity {
                 .country(user.getCountry())
                 .region(user.getRegion())
                 .refreshToken(refreshToken)
+                .createdAt(user.getCreatedAt())
                 .build();
     }
 
@@ -102,6 +103,7 @@ public class User extends BaseEntity {
                 .country(user.getCountry())
                 .region(user.getRegion())
                 .refreshToken(refreshToken)
+                .createdAt(user.getCreatedAt())
                 .build();
     }
 
@@ -121,7 +123,7 @@ public class User extends BaseEntity {
                 .region(region)
                 .build();
     }
-  
+
     public void updatePushConsent(boolean pushConsent) {
         this.pushConsent = pushConsent;
     }

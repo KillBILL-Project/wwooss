@@ -2,6 +2,7 @@ package com.bigbro.wwooss.v1.security;
 
 import com.bigbro.wwooss.v1.enumType.UserRole;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -22,6 +23,7 @@ import java.util.List;
 @Slf4j
 public class CustomAuthenticationProcessingFilter extends AbstractAuthenticationProcessingFilter {
 
+    private static final List<String> UNFILTERED_URIS = List.of("/api/v1/auth/login");
     private final TokenProvider tokenProvider;
 
     public CustomAuthenticationProcessingFilter(TokenProvider tokenProvider) {
@@ -30,20 +32,17 @@ public class CustomAuthenticationProcessingFilter extends AbstractAuthentication
     }
 
     @Override
-    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException, IOException {
-        String requestTokenHeader = request.getHeader("Authorization");
-        if (!StringUtils.hasText(requestTokenHeader)) return new UsernamePasswordAuthenticationToken(null, null);
+    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
+        String path = request.getRequestURI();
+        if (UNFILTERED_URIS.contains(path)) return new UsernamePasswordAuthenticationToken(null, null);
 
-        if (!requestTokenHeader.startsWith("Bearer ")) {
-            return setUnauthorizedUser(response);
+        String requestTokenHeader = request.getHeader("Authorization");
+        if (!StringUtils.hasText(requestTokenHeader) || !requestTokenHeader.startsWith("Bearer ")) {
+            throw new BadCredentialsException("인증 토큰이 발견되지 않았거나 형식이 잘못되었습니다");
         }
 
         String token = parseBearerToken(requestTokenHeader);
         TokenInfo tokenInfo = tokenProvider.getTokenInfo(token);
-
-        if (tokenProvider.isTokenExpired(token)) {
-            return setUnauthorizedUser(response);
-        }
 
         String userEmail = tokenInfo.getUserEmail();
         Collection<? extends GrantedAuthority> authorities = getAuthorities(tokenInfo.getUserRole());
@@ -63,11 +62,6 @@ public class CustomAuthenticationProcessingFilter extends AbstractAuthentication
 
     private Collection<? extends GrantedAuthority> getAuthorities(UserRole userRole) {
         return List.of(new SimpleGrantedAuthority(userRole.toString()));
-    }
-
-    private Authentication setUnauthorizedUser(HttpServletResponse response) throws IOException {
-        response.sendError(401);
-        return new UsernamePasswordAuthenticationToken(null, null);
     }
 
 }
