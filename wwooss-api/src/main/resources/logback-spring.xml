@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration debug="false">
+    <include resource="org/springframework/boot/logging/logback/base.xml"/>
+
+    <property name="LOG_FILE_NAME" value="wwooss-api" />
+    <property name="LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36}.%M:%line - %msg%n" />
+
+    <springProfile name="develop">
+        <property name="LOG_PATH" value="/logs/wwooss-api-logs" />
+    </springProfile>
+
+    <springProfile name="prod">
+        <property name="LOG_PATH" value="/logs/wwooss-api-logs" />
+    </springProfile>
+
+    <springProfile name="local">
+        <!-- Console Appender -->
+        <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+            <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+                <pattern>${LOG_PATTERN}</pattern>
+            </encoder>
+        </appender>
+    </springProfile>
+
+    <springProfile name="develop">
+        <!-- file log -->
+        <appender name="ROLLING_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <file>${LOG_PATH}/${LOG_FILE_NAME}.log</file>
+            <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                <fileNamePattern>${LOG_PATH}/${LOG_FILE_NAME}-%d{yyyyMMdd}-%i.log</fileNamePattern>
+                <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                    <maxFileSize>10MB</maxFileSize>
+                </timeBasedFileNamingAndTriggeringPolicy>
+            </rollingPolicy>
+            <encoder>
+                <charset>utf8</charset>
+                <Pattern>
+                    ${LOG_PATTERN}
+                </Pattern>
+            </encoder>
+        </appender>
+    </springProfile>
+
+    <springProfile name="prod">
+        <!-- file log -->
+        <appender name="ROLLING_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <file>${LOG_PATH}/${LOG_FILE_NAME}.log</file>
+            <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                <fileNamePattern>${LOG_PATH}/${LOG_FILE_NAME}-%d{yyyyMMdd}-%i.log</fileNamePattern>
+                <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                    <maxFileSize>10MB</maxFileSize>
+                </timeBasedFileNamingAndTriggeringPolicy>
+                <maxHistory>365</maxHistory>
+            </rollingPolicy>
+            <encoder>
+                <charset>utf8</charset>
+                <Pattern>
+                    ${LOG_PATTERN}
+                </Pattern>
+            </encoder>
+        </appender>
+    </springProfile>
+
+    <!-- logger setting multi profile -->
+    <springProfile name="local">
+        <root level="INFO">
+            <appender-ref ref="CONSOLE" />
+        </root>
+        <logger name="com.bigbro.wwooss" level="DEBUG"/>
+        <logger name="org.springframework" level="INFO" />
+        <logger name="org.springframework.web" level="INFO" />
+        <logger name="org.hibernate.SQL" level="DEBUG" />
+        <logger name="org.hibernate.type" level="TRACE" />
+    </springProfile>
+
+    <springProfile name="develop">
+        <root level="INFO">
+            <appender-ref ref="ROLLING_FILE" />
+        </root>
+        <logger name="com.bigbro.wwooss" level="DEBUG" />
+        <logger name="org.springframework" level="INFO" />
+        <logger name="org.hibernate.SQL" level="INFO" />
+        <logger name="org.hibernate.type.descriptor.sql" level="INFO" />
+    </springProfile>
+
+    <springProfile name="prod">
+        <root level="INFO">
+            <appender-ref ref="ROLLING_FILE" />
+        </root>
+        <logger name="com.bigbro.wwooss" level="INFO" />
+        <logger name="org.springframework" level="INFO" />
+        <logger name="org.hibernate.SQL" level="INFO" />
+    </springProfile>
+
+</configuration>
