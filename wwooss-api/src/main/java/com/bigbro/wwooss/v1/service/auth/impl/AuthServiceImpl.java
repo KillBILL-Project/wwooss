@@ -15,6 +15,7 @@ import com.bigbro.wwooss.v1.security.TokenProvider;
 import com.bigbro.wwooss.v1.service.auth.AuthService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -33,9 +34,12 @@ import javax.transaction.Transactional;
 @Service
 public class AuthServiceImpl implements AuthService {
 
+    @Value("${gcp.web-client-id}")
+    private String clientId;
+    @Value("${gcp.client-secret}")
+    private String clientSecret;
+
     private static final String TOKEN_URL = "https://oauth2.googleapis.com/token";
-    private static final String CLIENT_ID = "1361813122-mn0eqsjcn0aar3cvr8on3grfo7agfi0h.apps.googleusercontent.com";
-    private static final String CLIENT_SECRET = "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";
     private static final String REDIRECT_URI = "http://localhost:8080/callback";
 
     private final UserRepository userRepository;
@@ -50,9 +54,10 @@ public class AuthServiceImpl implements AuthService {
         LoginType userLoginType = userLoginRequest.getLoginType();
         User user = userRepository.findUserByEmailAndLoginType(userEmail, userLoginType).orElseThrow(() -> new DataNotFoundException(WwoossResponseCode.NOT_FOUND_DATA, "일치하는 유저정보가 없습니다."));
 
-        if (userLoginType == LoginType.EMAIL
-                && (!passwordEncoder.matches(userLoginRequest.getPassword(), user.getPassword()))) {
-            throw new DataNotFoundException(WwoossResponseCode.NOT_FOUND_DATA, "일치하는 유저정보가 없습니다.");
+        if (userLoginType == LoginType.EMAIL) {
+            if ((!passwordEncoder.matches(userLoginRequest.getPassword(), user.getPassword()))) {
+                throw new DataNotFoundException(WwoossResponseCode.NOT_FOUND_DATA, "비밀번호가 일치하지 않습니다.");
+            }
         } else if (userLoginType == LoginType.GOOGLE) {
             String authCode = userLoginRequest.getAuthCode();
             boolean isValidGoogleLogin = validateGoogleSignIn(authCode);
@@ -94,7 +99,7 @@ public class AuthServiceImpl implements AuthService {
     public TokenResponse register(UserRegistrationRequest userRegistrationRequest) {
         User user = User.of(
                 userRegistrationRequest.getEmail(),
-                "",
+                userRegistrationRequest.getPassword(),
                 userRegistrationRequest.getLoginType(),
                 userRegistrationRequest.getAge(),
                 userRegistrationRequest.getGender(),
@@ -141,8 +146,8 @@ public class AuthServiceImpl implements AuthService {
 
             MultiValueMap<String, String> requestBody = new LinkedMultiValueMap<>();
             requestBody.add("code", serverAuthCode);
-            requestBody.add("client_id", CLIENT_ID);
-            requestBody.add("client_secret", CLIENT_SECRET);
+            requestBody.add("client_id", clientId);
+            requestBody.add("client_secret", clientSecret);
             requestBody.add("redirect_uri", REDIRECT_URI);
             requestBody.add("grant_type", "authorization_code");
 

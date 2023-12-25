@@ -14,8 +14,7 @@ spring:
       on-profile: local
     import: application-rds.yaml
 jwt:
-  header: Authorization
-  secret: c2lsdmVybmluZS10ZWNoLXNwcmluZy1ib290LWp3dC10dXRvcmlhbC1zZWNyZXQtc2lsdmVybmluZS10ZWNoLXNwcmluZy1ib290LWp3dC10dXRvcmlhbC1zZWNyZXQK
+  secret: ENC(pEvs1KBkGuc0I/Gtmh/3xn71ALKQGLRK6ghhWAqWl9tlHzpLD1gTDlv1nd/SuuoecG84nSyF1krULwuygcTclMb5azDX14CpxzqBrzUuKKd/QUs6/Gqt8zADB/XDtE6rmuPKYfYgv2CvaXSpkaRjBEdbvc2OjWB4)
   access-token-validity-in-milliseconds: 86400000
   refresh-token-validity-in-milliseconds: 86400000000
 
@@ -31,14 +30,15 @@ spring:
       on-profile: develop
     import: application-rds.yaml
 jwt:
-  header: Authorization
-  secret: c2lsdmVybmluZS10ZWNoLXNwcmluZy1ib290LWp3dC10dXRvcmlhbC1zZWNyZXQtc2lsdmVybmluZS10ZWNoLXNwcmluZy1ib290LWp3dC10dXRvcmlhbC1zZWNyZXQK
+  secret: ENC(pEvs1KBkGuc0I/Gtmh/3xn71ALKQGLRK6ghhWAqWl9tlHzpLD1gTDlv1nd/SuuoecG84nSyF1krULwuygcTclMb5azDX14CpxzqBrzUuKKd/QUs6/Gqt8zADB/XDtE6rmuPKYfYgv2CvaXSpkaRjBEdbvc2OjWB4)
   access-token-validity-in-milliseconds: 86400000
   refresh-token-validity-in-milliseconds: 86400000000
 
 gcp:
   firebase:
     service-account: classpath:firebase/wwooss-c5a90-firebase-adminsdk-zh2zk-8a0d0bc64f.json
+  web-client-id: ENC(gItC4oTf34ZS6uQInbQo0JQb2iWlNUMy8HPztWw5q5uhlht/EQu2qVdToB/sadCiZVBC9jAamhxarU6bTw57MtzY78x2gIbAwJBOzb1mVxOmX4fPzUOh7g==)
+  client-secret: ENC(cDlEz74wcfRtlzuoQ1zkSN8bCMxN8CNt0hA2ey2pq40JjdHBjLjbcOeVazc11ciA)
 
 ---
 spring:
