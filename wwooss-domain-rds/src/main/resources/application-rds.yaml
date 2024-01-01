@@ -59,8 +59,7 @@ spring:
       on-profile: develop
   datasource:
       driver-class-name: com.mysql.cj.jdbc.Driver
-      url: "jdbc:mysql://wwooss-dev-rdb.cebnfiprwctq.ap-northeast-2.rds.amazonaws.com/wwooss?autoReconnect=true&useUnicode=true&characterEncoding=UTF-8&serverTimezone
-      =Asia/Seoul&tinyInt1isBit=false"
+      url: "jdbc:mysql://wwooss-dev-rdb.cebnfiprwctq.ap-northeast-2.rds.amazonaws.com:3306"
       username: root
       password: ENC(1ORG6o3cVyQ55fdGD88bBEcxSDLEHci1)
       hikari:

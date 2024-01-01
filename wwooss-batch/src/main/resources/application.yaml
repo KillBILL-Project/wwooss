@@ -12,6 +12,10 @@ spring:
     activate:
       on-profile: local
     import: application-rds.yaml
+job:
+  step:
+    chunk:
+      size: 10
 
 ---
 
@@ -23,6 +27,10 @@ spring:
     activate:
       on-profile: develop
     import: application-rds.yaml
+job:
+  step:
+    chunk:
+      size: 10
 
 ---
 
