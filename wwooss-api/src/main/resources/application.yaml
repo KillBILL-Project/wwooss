@@ -14,13 +14,15 @@ spring:
       on-profile: local
     import: application-rds.yaml
 jwt:
-  secret: ENC(pEvs1KBkGuc0I/Gtmh/3xn71ALKQGLRK6ghhWAqWl9tlHzpLD1gTDlv1nd/SuuoecG84nSyF1krULwuygcTclMb5azDX14CpxzqBrzUuKKd/QUs6/Gqt8zADB/XDtE6rmuPKYfYgv2CvaXSpkaRjBEdbvc2OjWB4)
+  secret: ENC(7VtELZyUJVHc6bI0fglafnxG26a+pWEuhI3CZbmdrC6VqdwH7DN8t0mKyRuix+1oob/tKU0BqcFdOaYaFRZQ89X8XkfXpJa8P7qkmmzc84MliYA24609Ca0kl0yonZbcMepEbVkYoNOwilyUXUIkEUBB8lh3HEfd)
   access-token-validity-in-milliseconds: 86400000
   refresh-token-validity-in-milliseconds: 86400000000
 
 gcp:
   firebase:
     service-account: classpath:firebase/wwooss-c5a90-firebase-adminsdk-zh2zk-8a0d0bc64f.json
+  web-client-id: ENC(GhTzyx5FREQJ7vNmejAFBwhX9+0JnXNrDGT1z95ktAPyLDTEoAJl96ATccWyUFiXhA/cOrj8WmWCNCKXwuK9Vf3FTmECmbECTGMUKpjtFbbmf+YAvHmwrg==)
+  client-secret: ENC(P1GLHuv7PVp3SaKQhxT2im0LF2Z+ZRg5/LvHHJctuAryOyfc01eTosP7FDpeRQ2E)
 
 ---
 
@@ -30,15 +32,15 @@ spring:
       on-profile: develop
     import: application-rds.yaml
 jwt:
-  secret: ENC(pEvs1KBkGuc0I/Gtmh/3xn71ALKQGLRK6ghhWAqWl9tlHzpLD1gTDlv1nd/SuuoecG84nSyF1krULwuygcTclMb5azDX14CpxzqBrzUuKKd/QUs6/Gqt8zADB/XDtE6rmuPKYfYgv2CvaXSpkaRjBEdbvc2OjWB4)
+  secret: ENC(eIH5HLuOv+l9LQXV41b6kw6bgg9t/ZYgBlijNir0OcYKVfnGzMn/F4HHm+zH54mdbG9Pm7KYmcdkL4wBjY6l3eweQgKY0lJT2quZLFJTZrYSUCGZGXjPlFXospPwlXqdJGJdXJPc72dcVxMo4NW/xjHEhAZIjTf6)
   access-token-validity-in-milliseconds: 86400000
   refresh-token-validity-in-milliseconds: 86400000000
 
 gcp:
   firebase:
     service-account: classpath:firebase/wwooss-c5a90-firebase-adminsdk-zh2zk-8a0d0bc64f.json
-  web-client-id: ENC(gItC4oTf34ZS6uQInbQo0JQb2iWlNUMy8HPztWw5q5uhlht/EQu2qVdToB/sadCiZVBC9jAamhxarU6bTw57MtzY78x2gIbAwJBOzb1mVxOmX4fPzUOh7g==)
-  client-secret: ENC(cDlEz74wcfRtlzuoQ1zkSN8bCMxN8CNt0hA2ey2pq40JjdHBjLjbcOeVazc11ciA)
+  web-client-id: ENC(KgkwzYmB5l+IozVjBB9CeK2EPE9OwbvTGSCrm/s6jnsriM6zFUZ3vP4GpH9RPxmrWYBm1c2+j4ueo5mjd5VFMW0OocjDGskiiP2YUYtziTVr21kUlCEoLg==)
+  client-secret: ENC(EdQGBarpWTlGeAPk2nGdjdIidyIKzv5FD/+mwcLP9lBw0JnbbW1vXyCpCfAIgVoj)
 
 ---
 spring:
@@ -48,7 +50,7 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: "jdbc:mysql://localhost:3306/killbill?autoReconnect=true&useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Seoul&tinyInt1isBit=false"
-    username: root
+    username: user
     password: ENC(+p6g1owB0AzWumMOvy2V6gxkTjfJXzOX)
     hikari:
       auto-commit: false
