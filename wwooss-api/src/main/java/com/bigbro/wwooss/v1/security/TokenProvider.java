@@ -2,6 +2,7 @@ package com.bigbro.wwooss.v1.security;
 
 import com.bigbro.wwooss.v1.entity.user.User;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
@@ -9,6 +10,7 @@ import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
@@ -48,27 +50,20 @@ public class TokenProvider implements InitializingBean {
                 .compact();
     }
 
-    public TokenInfo getTokenInfo(String token) {
-        Claims claims = getClaims(token);
-        return TokenInfo.from(claims);
+    public TokenInfo getTokenInfo(String token) throws BadCredentialsException {
+        try {
+            Claims claims = getClaims(token);
+            return TokenInfo.from(claims);
+        } catch (ExpiredJwtException exception) {
+            throw new BadCredentialsException("인증 토큰이 만료되었습니다.");
+        }
     }
 
-    public boolean isTokenExpired(String token) {
-        Claims claims = getClaims(token);
-        Date expiration = claims.getExpiration();
-        return expiration.before(new Date());
-    }
-
-    private Claims getClaims(String token) {
+    private Claims getClaims(String token) throws ExpiredJwtException {
         return Jwts.parserBuilder()
                 .setSigningKey(key)
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
     }
-
-    public static String setBearerToken(String token) {
-        return "Bearer " + token;
-    }
-
 }

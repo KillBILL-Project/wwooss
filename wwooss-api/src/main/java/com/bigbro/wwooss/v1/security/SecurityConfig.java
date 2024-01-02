@@ -42,8 +42,7 @@ public class SecurityConfig {
                 .sessionManagement(sessionManagement -> sessionManagement
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
-//                        .antMatchers("/v1/auth/**").permitAll()
-                        .antMatchers("/v1/**").permitAll()
+                        .antMatchers("/v1/auth/**").permitAll()
                         .antMatchers("/v1/**").hasRole("USER")
                         .anyRequest().hasRole("ADMIN"))
                 .addFilterBefore(new CustomAuthenticationProcessingFilter(tokenProvider), UsernamePasswordAuthenticationFilter.class);
