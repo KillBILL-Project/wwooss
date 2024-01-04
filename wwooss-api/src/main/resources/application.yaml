@@ -43,26 +43,28 @@ gcp:
   client-secret: ENC(EdQGBarpWTlGeAPk2nGdjdIidyIKzv5FD/+mwcLP9lBw0JnbbW1vXyCpCfAIgVoj)
 
 ---
+
+spring:
+  config:
+    activate:
+      on-profile: prod
+    import: application-rds.yaml
+jwt:
+  secret: ENC(eIH5HLuOv+l9LQXV41b6kw6bgg9t/ZYgBlijNir0OcYKVfnGzMn/F4HHm+zH54mdbG9Pm7KYmcdkL4wBjY6l3eweQgKY0lJT2quZLFJTZrYSUCGZGXjPlFXospPwlXqdJGJdXJPc72dcVxMo4NW/xjHEhAZIjTf6)
+  access-token-validity-in-milliseconds: 86400000
+  refresh-token-validity-in-milliseconds: 86400000000
+
+gcp:
+  firebase:
+    service-account: classpath:firebase/wwooss-c5a90-firebase-adminsdk-zh2zk-8a0d0bc64f.json
+  web-client-id: ENC(KgkwzYmB5l+IozVjBB9CeK2EPE9OwbvTGSCrm/s6jnsriM6zFUZ3vP4GpH9RPxmrWYBm1c2+j4ueo5mjd5VFMW0OocjDGskiiP2YUYtziTVr21kUlCEoLg==)
+  client-secret: ENC(EdQGBarpWTlGeAPk2nGdjdIidyIKzv5FD/+mwcLP9lBw0JnbbW1vXyCpCfAIgVoj)
+
+---
+
 spring:
   config:
     activate:
       on-profile: test
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: "jdbc:mysql://localhost:3306/killbill?autoReconnect=true&useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Seoul&tinyInt1isBit=false"
-    username: user
-    password: ENC(+p6g1owB0AzWumMOvy2V6gxkTjfJXzOX)
-    hikari:
-      auto-commit: false
-      maximum-pool-size: 10
-      max-lifetime: 580000
-    jpa:
-      database-platform: org.hibernate.dialect.MySQL8Dialect
-      show-sql: true
-      properties:
-        hibernate:
-          format_sql: true
-  batch:
-    job:
-      enabled: false
+    import: application-rds.yaml
 
