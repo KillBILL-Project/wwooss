@@ -7,42 +7,42 @@ spring:
     name: WWOOSS-SERVICE
 
 ---
-#
-#spring:
-#  config:
-#    activate:
-#      on-profile: local
-#    import: application-rds.yaml
-#jwt:
-#  secret: ENC(7VtELZyUJVHc6bI0fglafnxG26a+pWEuhI3CZbmdrC6VqdwH7DN8t0mKyRuix+1oob/tKU0BqcFdOaYaFRZQ89X8XkfXpJa8P7qkmmzc84MliYA24609Ca0kl0yonZbcMepEbVkYoNOwilyUXUIkEUBB8lh3HEfd)
-#  access-token-validity-in-milliseconds: 86400000
-#  refresh-token-validity-in-milliseconds: 86400000000
-#
-#gcp:
-#  firebase:
-#    service-account: classpath:firebase/wwooss-c5a90-firebase-adminsdk-zh2zk-8a0d0bc64f.json
-#  web-client-id: ENC(GhTzyx5FREQJ7vNmejAFBwhX9+0JnXNrDGT1z95ktAPyLDTEoAJl96ATccWyUFiXhA/cOrj8WmWCNCKXwuK9Vf3FTmECmbECTGMUKpjtFbbmf+YAvHmwrg==)
-#  client-secret: ENC(P1GLHuv7PVp3SaKQhxT2im0LF2Z+ZRg5/LvHHJctuAryOyfc01eTosP7FDpeRQ2E)
-#
-#---
-#
-#spring:
-#  config:
-#    activate:
-#      on-profile: develop
-#    import: application-rds.yaml
-#jwt:
-#  secret: ENC(eIH5HLuOv+l9LQXV41b6kw6bgg9t/ZYgBlijNir0OcYKVfnGzMn/F4HHm+zH54mdbG9Pm7KYmcdkL4wBjY6l3eweQgKY0lJT2quZLFJTZrYSUCGZGXjPlFXospPwlXqdJGJdXJPc72dcVxMo4NW/xjHEhAZIjTf6)
-#  access-token-validity-in-milliseconds: 86400000
-#  refresh-token-validity-in-milliseconds: 86400000000
-#
-#gcp:
-#  firebase:
-#    service-account: classpath:firebase/wwooss-c5a90-firebase-adminsdk-zh2zk-8a0d0bc64f.json
-#  web-client-id: ENC(KgkwzYmB5l+IozVjBB9CeK2EPE9OwbvTGSCrm/s6jnsriM6zFUZ3vP4GpH9RPxmrWYBm1c2+j4ueo5mjd5VFMW0OocjDGskiiP2YUYtziTVr21kUlCEoLg==)
-#  client-secret: ENC(EdQGBarpWTlGeAPk2nGdjdIidyIKzv5FD/+mwcLP9lBw0JnbbW1vXyCpCfAIgVoj)
-#
-#---
+
+spring:
+  config:
+    activate:
+      on-profile: local
+    import: application-rds.yaml
+jwt:
+  secret: ENC(7VtELZyUJVHc6bI0fglafnxG26a+pWEuhI3CZbmdrC6VqdwH7DN8t0mKyRuix+1oob/tKU0BqcFdOaYaFRZQ89X8XkfXpJa8P7qkmmzc84MliYA24609Ca0kl0yonZbcMepEbVkYoNOwilyUXUIkEUBB8lh3HEfd)
+  access-token-validity-in-milliseconds: 86400000
+  refresh-token-validity-in-milliseconds: 86400000000
+
+gcp:
+  firebase:
+    service-account: classpath:firebase/wwooss-c5a90-firebase-adminsdk-zh2zk-8a0d0bc64f.json
+  web-client-id: ENC(GhTzyx5FREQJ7vNmejAFBwhX9+0JnXNrDGT1z95ktAPyLDTEoAJl96ATccWyUFiXhA/cOrj8WmWCNCKXwuK9Vf3FTmECmbECTGMUKpjtFbbmf+YAvHmwrg==)
+  client-secret: ENC(P1GLHuv7PVp3SaKQhxT2im0LF2Z+ZRg5/LvHHJctuAryOyfc01eTosP7FDpeRQ2E)
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: develop
+    import: application-rds.yaml
+jwt:
+  secret: ENC(eIH5HLuOv+l9LQXV41b6kw6bgg9t/ZYgBlijNir0OcYKVfnGzMn/F4HHm+zH54mdbG9Pm7KYmcdkL4wBjY6l3eweQgKY0lJT2quZLFJTZrYSUCGZGXjPlFXospPwlXqdJGJdXJPc72dcVxMo4NW/xjHEhAZIjTf6)
+  access-token-validity-in-milliseconds: 86400000
+  refresh-token-validity-in-milliseconds: 86400000000
+
+gcp:
+  firebase:
+    service-account: classpath:firebase/wwooss-c5a90-firebase-adminsdk-zh2zk-8a0d0bc64f.json
+  web-client-id: ENC(KgkwzYmB5l+IozVjBB9CeK2EPE9OwbvTGSCrm/s6jnsriM6zFUZ3vP4GpH9RPxmrWYBm1c2+j4ueo5mjd5VFMW0OocjDGskiiP2YUYtziTVr21kUlCEoLg==)
+  client-secret: ENC(EdQGBarpWTlGeAPk2nGdjdIidyIKzv5FD/+mwcLP9lBw0JnbbW1vXyCpCfAIgVoj)
+
+---
 
 spring:
   config:
@@ -59,12 +59,12 @@ gcp:
     service-account: classpath:firebase/wwooss-c5a90-firebase-adminsdk-zh2zk-8a0d0bc64f.json
   web-client-id: ENC(q0Z06nPe2NXkd8jknbfVKOdyP3V99jPOXUX/pcrXvCFS664eJOmIFJ0AzxyWXTP1kwDT/T2e3X4QYgwQLXHEnTMFDLG2T4x1vF/BKQ+kuYKtSyCHshqgpQ==)
   client-secret: ENC(lK86/1GiMww5LiRd44eo4PrUisgXs52ioAGj9trXjTaN7NHCftnNvSpaX+S7XuVs)
-#
-#---
-#
-#spring:
-#  config:
-#    activate:
-#      on-profile: test
-#    import: application-rds.yaml
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: test
+    import: application-rds.yaml
 
