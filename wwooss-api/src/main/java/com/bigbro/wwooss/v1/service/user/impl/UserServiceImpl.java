@@ -30,7 +30,6 @@ public class UserServiceImpl implements UserService {
         TokenInfo tokenInfo = tokenProvider.getTokenInfo(token);
 
         User user = userRepository.findById(tokenInfo.getUserId()).orElseThrow();
-
         return UserResponse.from(user);
     }
   
