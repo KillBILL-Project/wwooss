@@ -35,7 +35,14 @@ job:
 ---
 
 spring:
+  batch:
+    job:
+      enabled: false
   config:
     activate:
-      on-profile: test
-
+      on-profile: prod
+    import: application-rds.yaml
+job:
+  step:
+    chunk:
+      size: 10
