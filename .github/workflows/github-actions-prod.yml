@@ -79,8 +79,8 @@ jobs:
           script: |
             cd /home/ec2-user/docker-compose
             sudo docker rm -f $(docker ps -qa)
-            sudo docker pull wwooss/wwooss-api-prod
-            sudo docker pull wwooss/wwooss-batch-prod
+            sudo docker pull ${{ secrets.DOCKER_REPO_PROD }}
+            sudo docker pull ${{ secrets.DOCKER_REPO_BATCH_PROD }}
             sudo docker-compose down
             sudo docker-compose up -d
 
