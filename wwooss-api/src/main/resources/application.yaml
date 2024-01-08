@@ -60,6 +60,14 @@ gcp:
   web-client-id: ENC(q0Z06nPe2NXkd8jknbfVKOdyP3V99jPOXUX/pcrXvCFS664eJOmIFJ0AzxyWXTP1kwDT/T2e3X4QYgwQLXHEnTMFDLG2T4x1vF/BKQ+kuYKtSyCHshqgpQ==)
   client-secret: ENC(lK86/1GiMww5LiRd44eo4PrUisgXs52ioAGj9trXjTaN7NHCftnNvSpaX+S7XuVs)
 
+server:
+  port: 443
+  ssl:
+    key-store: /etc/letsencrypt/live/api.wwooss.at/keystore.p12
+    key-store-type: PKCS12
+    key-store-password: ENC(21X0foPfi0FpliPne6KRi0x0ETw5fyFs)
+    key-alias: api.wwooss.at
+
 ---
 
 spring:
