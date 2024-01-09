@@ -63,7 +63,7 @@ gcp:
 server:
   port: 443
   ssl:
-    key-store: classpath:keystore.p12
+    key-store: classpath:wwooss.jks
     key-store-type: PKCS12
     key-store-password: wwooss2023!
     key-alias: api.wwooss.at
