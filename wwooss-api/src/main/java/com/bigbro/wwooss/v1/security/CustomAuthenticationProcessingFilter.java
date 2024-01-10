@@ -23,7 +23,8 @@ import java.util.List;
 @Slf4j
 public class CustomAuthenticationProcessingFilter extends AbstractAuthenticationProcessingFilter {
 
-    private static final List<String> UNFILTERED_URIS = List.of("/api/v1/auth/login", "/api/v1/auth/register");
+    private static final List<String> UNFILTERED_URIS = List.of("/api/v1/auth/login", "/api/v1/auth/register",
+            "/api/v1/health");
     private final TokenProvider tokenProvider;
 
     public CustomAuthenticationProcessingFilter(TokenProvider tokenProvider) {
