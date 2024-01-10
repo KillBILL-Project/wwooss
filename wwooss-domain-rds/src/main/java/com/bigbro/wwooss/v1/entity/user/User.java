@@ -128,4 +128,13 @@ public class User extends BaseEntity {
         this.pushConsent = pushConsent;
     }
 
+    public void updateRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken;
+    }
+
+    public void updateTokenAndPsw(String refreshToken, String password) {
+        this.refreshToken = refreshToken;
+        this.password = password;
+    }
+
 }

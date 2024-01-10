@@ -45,7 +45,8 @@ public class SecurityConfig {
                         .antMatchers("/v1/auth/**").permitAll()
                         .antMatchers("/v1/health").permitAll()
                         .antMatchers("/v1/**").hasRole("USER")
-                        .anyRequest().hasRole("ADMIN"))
+                        .anyRequest().hasRole("ADMIN")
+                )
                 .addFilterBefore(new CustomAuthenticationProcessingFilter(tokenProvider), UsernamePasswordAuthenticationFilter.class);
         return httpSecurity.build();
     }

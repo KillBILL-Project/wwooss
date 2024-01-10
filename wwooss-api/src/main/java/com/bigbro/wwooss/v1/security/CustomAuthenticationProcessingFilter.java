@@ -23,6 +23,8 @@ import java.util.List;
 @Slf4j
 public class CustomAuthenticationProcessingFilter extends AbstractAuthenticationProcessingFilter {
 
+    private final String ROLE_PREFIX = "ROLE_";
+
     private static final List<String> UNFILTERED_URIS = List.of("/api/v1/auth/login", "/api/v1/auth/register",
             "/api/v1/health");
     private final TokenProvider tokenProvider;
@@ -45,10 +47,9 @@ public class CustomAuthenticationProcessingFilter extends AbstractAuthentication
         String token = parseBearerToken(requestTokenHeader);
         TokenInfo tokenInfo = tokenProvider.getTokenInfo(token);
 
-        String userEmail = tokenInfo.getUserEmail();
         Collection<? extends GrantedAuthority> authorities = getAuthorities(tokenInfo.getUserRole());
 
-        return new UsernamePasswordAuthenticationToken(userEmail, token, authorities);
+        return new UsernamePasswordAuthenticationToken(tokenInfo, token, authorities);
     }
 
     @Override
@@ -62,7 +63,7 @@ public class CustomAuthenticationProcessingFilter extends AbstractAuthentication
     }
 
     private Collection<? extends GrantedAuthority> getAuthorities(UserRole userRole) {
-        return List.of(new SimpleGrantedAuthority(userRole.toString()));
+        return List.of(new SimpleGrantedAuthority(ROLE_PREFIX + userRole.toString()));
     }
 
 }

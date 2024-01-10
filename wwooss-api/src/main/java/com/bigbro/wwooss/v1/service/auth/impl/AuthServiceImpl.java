@@ -106,18 +106,18 @@ public class AuthServiceImpl implements AuthService {
                 userRegistrationRequest.getCountry(),
                 userRegistrationRequest.getRegion()
         );
+        User registeredUser = userRepository.save(user);
 
-        String accessToken = tokenProvider.generateToken(user, "access");
-        String refreshToken = tokenProvider.generateToken(user, "refresh");
+        String accessToken = tokenProvider.generateToken(registeredUser, "access");
+        String refreshToken = tokenProvider.generateToken(registeredUser, "refresh");
 
         if (LoginType.EMAIL == user.getLoginType()) {
             String encodedPassword = passwordEncoder.encode(user.getPassword());
-            user = User.of(user, encodedPassword, refreshToken);
+            registeredUser.updateTokenAndPsw(encodedPassword, refreshToken);
         } else {
-            user = User.of(user, refreshToken);
+            registeredUser.updateRefreshToken(refreshToken);
         }
 
-        userRepository.save(user);
 
         return TokenResponse.builder()
                 .accessToken(accessToken)
