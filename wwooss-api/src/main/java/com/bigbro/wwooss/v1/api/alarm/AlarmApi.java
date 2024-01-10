@@ -28,7 +28,6 @@ public class AlarmApi {
 
     @GetMapping
     public ResponseEntity<WwoossResponse<List<AlarmResponse>>> getAlarmList(UserCredential userCredential) {
-        // TODO: userId 넣기
         return WwoossResponseUtil.responseOkAddData(alarmService.getAlarmList(userCredential.getUserId()));
     }
 

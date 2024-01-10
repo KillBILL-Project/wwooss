@@ -28,12 +28,11 @@ public class UserArgumentResolver implements HandlerMethodArgumentResolver {
             throw new RuntimeException("Servlet Request Not Found");
         }
 
-        Object credentials = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
+        TokenInfo tokenInfo = (TokenInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return UserCredential.builder()
-                .userId(((TokenInfo) credentials).getUserId())
-                .userRole(((TokenInfo) credentials).getUserRole())
-                .userEmail(((TokenInfo) credentials).getUserEmail())
+                .userId(tokenInfo.getUserId())
+                .userRole(tokenInfo.getUserRole())
+                .userEmail(tokenInfo.getUserEmail())
                 .build();
     }
 
