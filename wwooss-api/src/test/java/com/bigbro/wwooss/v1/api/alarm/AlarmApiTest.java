@@ -80,6 +80,7 @@ public class AlarmApiTest {
     }
 
     @Test
+    @WithMockCustomUser
     @DisplayName("알람 생성")
     void createAlarm() throws Exception {
         AlarmRequest alarmRequest = AlarmRequest.builder()

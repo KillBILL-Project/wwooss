@@ -1,6 +1,7 @@
 package com.bigbro.wwooss.v1.api.trash.can;
 
 import com.bigbro.wwooss.v1.annotation.TestController;
+import com.bigbro.wwooss.v1.annotation.WithMockCustomUser;
 import com.bigbro.wwooss.v1.config.DocumentConfig;
 import com.bigbro.wwooss.v1.dto.response.trash.TrashCanHistoryListResponse;
 import com.bigbro.wwooss.v1.dto.response.trash.TrashCanHistoryResponse;
@@ -39,6 +40,7 @@ class TrashCanHistoryApiTest {
     private TrashCanHistoryService trashCanHistoryService;
 
     @Test
+    @WithMockCustomUser
     @DisplayName("쓰레기통 목록 조회")
     void findTrashCanHistories() throws Exception {
         LocalDateTime now = LocalDateTime.now();

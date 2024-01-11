@@ -1,5 +1,6 @@
 package com.bigbro.wwooss.v1.api.trash.can;
 
+import com.bigbro.wwooss.v1.dto.request.user.UserCredential;
 import com.bigbro.wwooss.v1.dto.response.trash.TrashCanHistoryListResponse;
 import com.bigbro.wwooss.v1.response.WwoossResponse;
 import com.bigbro.wwooss.v1.response.WwoossResponseUtil;
@@ -21,8 +22,9 @@ public class TrashCanHistoryApi {
     private final TrashCanHistoryService trashCanHistoryService;
 
     @GetMapping
-    public ResponseEntity<WwoossResponse<TrashCanHistoryListResponse>> findTrashCanHistoryList(@RequestParam @Nullable String date, Pageable pageable) {
-        // TODO : userId 추가
-        return WwoossResponseUtil.responseOkAddData(trashCanHistoryService.findTrashCanHistoryList(4L, date, pageable));
+    public ResponseEntity<WwoossResponse<TrashCanHistoryListResponse>> findTrashCanHistoryList(@RequestParam @Nullable String date,
+            Pageable pageable, UserCredential userCredential) {
+        return WwoossResponseUtil.responseOkAddData(trashCanHistoryService.findTrashCanHistoryList(userCredential.getUserId(), date,
+                pageable));
     }
 }

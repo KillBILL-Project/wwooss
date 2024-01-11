@@ -1,6 +1,7 @@
 package com.bigbro.wwooss.v1.api.trash.can;
 
 import com.bigbro.wwooss.v1.dto.request.trash.can.TrashCanContentsRequest;
+import com.bigbro.wwooss.v1.dto.request.user.UserCredential;
 import com.bigbro.wwooss.v1.dto.response.trash.EmptyTrashResultResponse;
 import com.bigbro.wwooss.v1.response.WwoossResponse;
 import com.bigbro.wwooss.v1.response.WwoossResponseUtil;
@@ -19,16 +20,14 @@ public class TrashCanContentsApi {
     private final TrashCanContentsService trashCanContentsService;
 
     @PostMapping
-    public ResponseEntity<WwoossResponse<Void>> createTrashCanContents(@RequestBody @Valid TrashCanContentsRequest trashCanContentsRequest) {
-        // TODO : UserId 넣기
-        trashCanContentsService.createTrashCanContents(trashCanContentsRequest, 1L);
+    public ResponseEntity<WwoossResponse<Void>> createTrashCanContents(@RequestBody @Valid TrashCanContentsRequest trashCanContentsRequest, UserCredential userCredential) {
+        trashCanContentsService.createTrashCanContents(trashCanContentsRequest, userCredential.getUserId());
 
         return WwoossResponseUtil.responseCreatedNoData();
     }
 
     @DeleteMapping
-    public ResponseEntity<WwoossResponse<EmptyTrashResultResponse>> deleteTrashCanContentsList() {
-        // TODO : userId 넣기
-        return WwoossResponseUtil.responseOkAddData(trashCanContentsService.deleteTrashCanContents(1L));
+    public ResponseEntity<WwoossResponse<EmptyTrashResultResponse>> deleteTrashCanContentsList(UserCredential userCredential) {
+        return WwoossResponseUtil.responseOkAddData(trashCanContentsService.deleteTrashCanContents(userCredential.getUserId()));
     }
 }

@@ -12,6 +12,7 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.bigbro.wwooss.v1.annotation.TestController;
+import com.bigbro.wwooss.v1.annotation.WithMockCustomUser;
 import com.bigbro.wwooss.v1.dto.response.report.WeeklyReportListResponse;
 import com.bigbro.wwooss.v1.dto.response.report.WeeklyReportResponse;
 import com.bigbro.wwooss.v1.config.DocumentConfig;
@@ -38,6 +39,7 @@ class WeeklyReportApiTest {
     private WeeklyReportService weeklyReportService;
 
     @Test
+    @WithMockCustomUser
     @DisplayName("쓰레기 목록 가져오기")
     void getWeeklyReportList() throws Exception {
         List<WeeklyReportResponse> weeklyReportResponseList = List.of(WeeklyReportResponse.of(1L, 1L,

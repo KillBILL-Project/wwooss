@@ -1,6 +1,7 @@
 package com.bigbro.wwooss.v1.api.trash.can;
 
 import com.bigbro.wwooss.v1.annotation.TestController;
+import com.bigbro.wwooss.v1.annotation.WithMockCustomUser;
 import com.bigbro.wwooss.v1.config.DocumentConfig;
 import com.bigbro.wwooss.v1.dto.CarbonEmissionByTrashCategory;
 import com.bigbro.wwooss.v1.dto.RefundByTrashCategory;
@@ -41,6 +42,7 @@ class TrashCanContentsApiTest {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Test
+    @WithMockCustomUser
     @DisplayName("쓰레기통 내용물 적립")
     void createTrashCanContents() throws Exception {
         TrashCanContentsRequest trashCanContentsRequest = TrashCanContentsRequest.builder()
@@ -71,6 +73,7 @@ class TrashCanContentsApiTest {
     }
 
     @Test
+    @WithMockCustomUser
     @DisplayName("쓰레기통 비우기")
     void deleteTrashCanContents() throws Exception {
         List<CarbonEmissionByTrashCategory> carbonEmissionByTrashCategory = List.of(CarbonEmissionByTrashCategory.of("플라스틱", 10.0D));

@@ -1,5 +1,6 @@
 package com.bigbro.wwooss.v1.api.report;
 
+import com.bigbro.wwooss.v1.dto.request.user.UserCredential;
 import com.bigbro.wwooss.v1.dto.response.report.WeeklyReportDetailResponse;
 import com.bigbro.wwooss.v1.dto.response.report.WeeklyReportListResponse;
 import com.bigbro.wwooss.v1.response.WwoossResponse;
@@ -21,14 +22,15 @@ public class WeeklyReportApi {
     private final WeeklyReportService weeklyReportService;
 
     @GetMapping
-    public ResponseEntity<WwoossResponse<WeeklyReportListResponse>> getWeeklyReportList(Pageable pageable) {
-        // TODO : userID 넣기
-        return WwoossResponseUtil.responseOkAddData(weeklyReportService.getWeeklyReport(1L, pageable));
+    public ResponseEntity<WwoossResponse<WeeklyReportListResponse>> getWeeklyReportList(Pageable pageable,
+            UserCredential userCredential) {
+        return WwoossResponseUtil.responseOkAddData(weeklyReportService.getWeeklyReport(userCredential.getUserId(), pageable));
     }
 
     @GetMapping("/{weekly-report-id}")
-    public ResponseEntity<WwoossResponse<WeeklyReportDetailResponse>> getWeeklyReportDetail(@PathVariable("weekly-report-id") Long weeklyReportId) {
-        // TODO : userID 넣기
-        return WwoossResponseUtil.responseOkAddData(weeklyReportService.getWeeklyReportDetail(weeklyReportId, 1L));
+    public ResponseEntity<WwoossResponse<WeeklyReportDetailResponse>> getWeeklyReportDetail(@PathVariable("weekly"
+            + "-report-id") Long weeklyReportId, UserCredential userCredential) {
+        return WwoossResponseUtil.responseOkAddData(weeklyReportService.getWeeklyReportDetail(weeklyReportId,
+                userCredential.getUserId()));
     }
 }

@@ -1,6 +1,7 @@
 package com.bigbro.wwooss.v1.api.user;
 
 import com.bigbro.wwooss.v1.annotation.TestController;
+import com.bigbro.wwooss.v1.annotation.WithMockCustomUser;
 import com.bigbro.wwooss.v1.config.DocumentConfig;
 import com.bigbro.wwooss.v1.dto.request.user.UpdatePushConsentRequest;
 import com.bigbro.wwooss.v1.service.user.UserService;
@@ -34,6 +35,7 @@ class UserApiTest {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Test
+    @WithMockCustomUser
     @DisplayName("푸쉬 동의 여부 변경")
     void updatePushConsent() throws Exception {
         UpdatePushConsentRequest pushConsentRequest = UpdatePushConsentRequest.builder()

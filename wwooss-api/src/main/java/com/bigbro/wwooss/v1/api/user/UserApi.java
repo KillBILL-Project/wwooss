@@ -1,6 +1,7 @@
 package com.bigbro.wwooss.v1.api.user;
 
 import com.bigbro.wwooss.v1.dto.request.user.UpdatePushConsentRequest;
+import com.bigbro.wwooss.v1.dto.request.user.UserCredential;
 import com.bigbro.wwooss.v1.dto.response.auth.UserResponse;
 import com.bigbro.wwooss.v1.response.WwoossResponse;
 import com.bigbro.wwooss.v1.response.WwoossResponseUtil;
@@ -23,10 +24,8 @@ public class UserApi {
     }
   
     @PatchMapping("/push-consent")
-    public ResponseEntity<WwoossResponse<Void>> updatePushConsentStatus(@RequestBody @Valid UpdatePushConsentRequest updatePushConsentRequest) {
-
-        // TODO : 유저 ID 넣기
-        userService.updatePushConsentStatus(updatePushConsentRequest.isPushConsent(), 1L);
+    public ResponseEntity<WwoossResponse<Void>> updatePushConsentStatus(@RequestBody @Valid UpdatePushConsentRequest updatePushConsentRequest, UserCredential userCredential) {
+        userService.updatePushConsentStatus(updatePushConsentRequest.isPushConsent(), userCredential.getUserId());
         return WwoossResponseUtil.responseOkNoData();
     }
 
