@@ -10,14 +10,11 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.bigbro.wwooss.v1.annotation.TestController;
+import com.bigbro.wwooss.v1.annotation.WithMockCustomUser;
 import com.bigbro.wwooss.v1.config.DocumentConfig;
-import com.bigbro.wwooss.v1.dto.CarbonEmissionByTrashCategory;
-import com.bigbro.wwooss.v1.dto.RefundByTrashCategory;
 import com.bigbro.wwooss.v1.dto.request.alarm.AlarmOnOffRequest;
 import com.bigbro.wwooss.v1.dto.request.alarm.AlarmRequest;
-import com.bigbro.wwooss.v1.dto.request.user.UpdatePushConsentRequest;
 import com.bigbro.wwooss.v1.dto.response.alarm.AlarmResponse;
-import com.bigbro.wwooss.v1.dto.response.trash.EmptyTrashResultResponse;
 import com.bigbro.wwooss.v1.enumType.DayOfWeek;
 import com.bigbro.wwooss.v1.service.alarm.AlarmService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -44,6 +41,7 @@ public class AlarmApiTest {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Test
+    @WithMockCustomUser
     @DisplayName("알람 목록 가져오기")
     void getAlarmList() throws Exception {
         List<AlarmResponse> alarmResponses =

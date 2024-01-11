@@ -2,6 +2,7 @@ package com.bigbro.wwooss.v1.api.alarm;
 
 import com.bigbro.wwooss.v1.dto.request.alarm.AlarmOnOffRequest;
 import com.bigbro.wwooss.v1.dto.request.alarm.AlarmRequest;
+import com.bigbro.wwooss.v1.dto.request.user.UserCredential;
 import com.bigbro.wwooss.v1.dto.response.alarm.AlarmResponse;
 import com.bigbro.wwooss.v1.response.WwoossResponse;
 import com.bigbro.wwooss.v1.response.WwoossResponseUtil;
@@ -26,9 +27,8 @@ public class AlarmApi {
     }
 
     @GetMapping
-    public ResponseEntity<WwoossResponse<List<AlarmResponse>>> getAlarmList() {
-        // TODO: userId 넣기
-        return WwoossResponseUtil.responseOkAddData(alarmService.getAlarmList(1L));
+    public ResponseEntity<WwoossResponse<List<AlarmResponse>>> getAlarmList(UserCredential userCredential) {
+        return WwoossResponseUtil.responseOkAddData(alarmService.getAlarmList(userCredential.getUserId()));
     }
 
     @PatchMapping("/{alarm-id}")
