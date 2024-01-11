@@ -15,14 +15,14 @@ spring:
     import: application-rds.yaml
 jwt:
   secret: ENC(7VtELZyUJVHc6bI0fglafnxG26a+pWEuhI3CZbmdrC6VqdwH7DN8t0mKyRuix+1oob/tKU0BqcFdOaYaFRZQ89X8XkfXpJa8P7qkmmzc84MliYA24609Ca0kl0yonZbcMepEbVkYoNOwilyUXUIkEUBB8lh3HEfd)
-  access-token-validity-in-milliseconds: 86400000
-  refresh-token-validity-in-milliseconds: 86400000000
+  access-token-validity-in-milliseconds: 600000
+  refresh-token-validity-in-milliseconds: 12960000000
 
 gcp:
   firebase:
     service-account: classpath:firebase/wwooss-c5a90-firebase-adminsdk-zh2zk-8a0d0bc64f.json
   web-client-id: ENC(GhTzyx5FREQJ7vNmejAFBwhX9+0JnXNrDGT1z95ktAPyLDTEoAJl96ATccWyUFiXhA/cOrj8WmWCNCKXwuK9Vf3FTmECmbECTGMUKpjtFbbmf+YAvHmwrg==)
-  client-secret: ENC(P1GLHuv7PVp3SaKQhxT2im0LF2Z+ZRg5/LvHHJctuAryOyfc01eTosP7FDpeRQ2E)
+  client-secret: ENC(4MxpaxhAbQngPaS4mlfZw1dPIJWYpVFpkCENOERASAwUrEkSZMhjFISZUDtuZBBq)
 
 ---
 
@@ -33,14 +33,14 @@ spring:
     import: application-rds.yaml
 jwt:
   secret: ENC(eIH5HLuOv+l9LQXV41b6kw6bgg9t/ZYgBlijNir0OcYKVfnGzMn/F4HHm+zH54mdbG9Pm7KYmcdkL4wBjY6l3eweQgKY0lJT2quZLFJTZrYSUCGZGXjPlFXospPwlXqdJGJdXJPc72dcVxMo4NW/xjHEhAZIjTf6)
-  access-token-validity-in-milliseconds: 86400000
-  refresh-token-validity-in-milliseconds: 86400000000
+  access-token-validity-in-milliseconds: 600000
+  refresh-token-validity-in-milliseconds: 12960000000
 
 gcp:
   firebase:
     service-account: classpath:firebase/wwooss-c5a90-firebase-adminsdk-zh2zk-8a0d0bc64f.json
   web-client-id: ENC(KgkwzYmB5l+IozVjBB9CeK2EPE9OwbvTGSCrm/s6jnsriM6zFUZ3vP4GpH9RPxmrWYBm1c2+j4ueo5mjd5VFMW0OocjDGskiiP2YUYtziTVr21kUlCEoLg==)
-  client-secret: ENC(EdQGBarpWTlGeAPk2nGdjdIidyIKzv5FD/+mwcLP9lBw0JnbbW1vXyCpCfAIgVoj)
+  client-secret: ENC(fjlgyCC/ccYYK19VKZNNv2LZ8Wd2+EqzvUNDXfUQYYCLzWQNKH5tcC8+Uz2NgUhT)
 
 ---
 
@@ -50,15 +50,15 @@ spring:
       on-profile: prod
     import: application-rds.yaml
 jwt:
-  secret: ENC(jh3PF6lsGo+m7vUrHnEBELASBISg0mKPj3cFXGiTQsAYuLTI/gBcMKq2INv7s/GrZ7y6RpK9PDWBSLyN1jSBehX8oxsyk7k8W+Kj0DdCOVhKPqZJceMHfW+bBLmHlgiKVeVMAD/FPZrTXzphB1pyqvj4HpNNlelO)
-  access-token-validity-in-milliseconds: 86400000
-  refresh-token-validity-in-milliseconds: 86400000000
+  secret: ENC(bzaIHyRxaZ01mhYXcDBK9MmHo1apGoAXGKI7F9O1GLQ7dZwhSOAUeHs266E9S1dglLd/ERiLfAfStWGUSmgqsT4tQffNleigroJigEOmvLKcMdhyzaSz3YFKWZQ50HHCJsE6TaIijnnnU480f0Gabdld6mOGxfCB)
+  access-token-validity-in-milliseconds: 600000
+  refresh-token-validity-in-milliseconds: 12960000000
 
 gcp:
   firebase:
     service-account: classpath:firebase/wwooss-c5a90-firebase-adminsdk-zh2zk-8a0d0bc64f.json
-  web-client-id: ENC(q0Z06nPe2NXkd8jknbfVKOdyP3V99jPOXUX/pcrXvCFS664eJOmIFJ0AzxyWXTP1kwDT/T2e3X4QYgwQLXHEnTMFDLG2T4x1vF/BKQ+kuYKtSyCHshqgpQ==)
-  client-secret: ENC(lK86/1GiMww5LiRd44eo4PrUisgXs52ioAGj9trXjTaN7NHCftnNvSpaX+S7XuVs)
+  web-client-id: ENC(xQa3qyEb1EsKBi21rieEF1uRQBAfCYRW1c1+Z7Y1gVGkzxX7Oqha7wBJ24dn6Ue40EYe59yU/PwN+7E5cr/LIbvQiFc05hee0LIu7CaiMVik/zvx9ZcoEw==)
+  client-secret: ENC(SaxTxU09VyyUlyP6OmKemn81In88VdrJWJS3OM5K4TRiwuEOoH52fBcNo93jERl+)
 
 ---
 
