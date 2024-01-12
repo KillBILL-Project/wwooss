@@ -44,7 +44,8 @@ class WeeklyReportApiTest {
     void getWeeklyReportList() throws Exception {
         List<WeeklyReportResponse> weeklyReportResponseList = List.of(WeeklyReportResponse.of(1L, 1L,
                 LocalDateTime.now(), LocalDateTime.now()));
-        given(weeklyReportService.getWeeklyReport(any(), any())).willReturn(WeeklyReportListResponse.of(false, weeklyReportResponseList));
+        given(weeklyReportService.getWeeklyReport(any(), any(), any())).willReturn(WeeklyReportListResponse.of(false,
+                weeklyReportResponseList));
 
         this.mockMvc.perform(RestDocumentationRequestBuilders.get("/api/v1/weekly-reports")
                         .with(csrf().asHeader())
@@ -59,6 +60,7 @@ class WeeklyReportApiTest {
                                 DocumentConfig.getDocumentRequest(),
                                 DocumentConfig.getDocumentResponse(),
                                 requestParameters(
+                                        parameterWithName("date").description("조회 날짜 : [null / YYYY-MM / YYYY]").optional(),
                                         parameterWithName("page").description("현재 페이지"),
                                         parameterWithName("size").description("한 페이지 당 결과값").optional()
                                 ),

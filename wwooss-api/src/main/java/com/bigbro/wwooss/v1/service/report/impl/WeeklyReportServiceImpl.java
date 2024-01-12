@@ -31,12 +31,14 @@ public class WeeklyReportServiceImpl implements WeeklyReportService {
 
     @Transactional(readOnly = true)
     @Override
-    public WeeklyReportListResponse getWeeklyReport(Long userId, Pageable pageable) {
+    public WeeklyReportListResponse getWeeklyReport(String date, Long userId, Pageable pageable) {
         User user = userRepository.findById(userId).orElseThrow(() -> new DataNotFoundException(WwoossResponseCode.NOT_FOUND_DATA, "존재하지 않는 유저입니다."));
         Slice<WeeklyReport> weeklyReport = weeklyReportRepository.findWeeklyReportByUser(user, pageable);
 
         List<WeeklyReportResponse> weeklyReportResponseList = weeklyReport.getContent().stream().map((report) -> {
             // -1 이유 : 0주차가 아닌 1주차부터 시작
+            // user 생성날짜 기준 주차 계산
+            // weekNumber : ((오늘 날짜 - 가입 날짜) / 7) 올림
             LocalDateTime weekNumberDate = user.getCreatedAt().plusWeeks(report.getWeekNumber() - 1);
 
             // N주차 기간 구하기

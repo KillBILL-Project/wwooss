@@ -1,5 +1,6 @@
 package com.bigbro.wwooss.v1.api.trash.log;
 
+import com.bigbro.wwooss.v1.dto.request.user.UserCredential;
 import com.bigbro.wwooss.v1.dto.response.trash.TrashLogListResponse;
 import com.bigbro.wwooss.v1.response.WwoossResponse;
 import com.bigbro.wwooss.v1.response.WwoossResponseUtil;
@@ -23,7 +24,8 @@ public class TrashLogApi {
     @GetMapping
     private ResponseEntity<WwoossResponse<TrashLogListResponse>> getTrashLog(
             @RequestParam @Nullable String date,
-            Pageable pageable) {
-        return WwoossResponseUtil.responseOkAddData(trashLogService.getTrashLogList(1L, date, pageable));
+            Pageable pageable, UserCredential userCredential) {
+        return WwoossResponseUtil.responseOkAddData(trashLogService.getTrashLogList(userCredential.getUserId(), date,
+                pageable));
     }
 }
