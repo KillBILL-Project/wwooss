@@ -70,13 +70,13 @@ public class WeeklyReportRepositoryImpl implements WeeklyReportRepositoryCustom 
     // 예) 2023/02/01 (목) => 1월 마지막 주 이지만 2월임.
     private BooleanExpression searchYearAndMonth(int year, int month) {
         Calendar calendar = Calendar.getInstance();
-        calendar.set(year, month + 1, calendar.getActualMaximum(Calendar.DATE));
+        calendar.set(year, month - 1, calendar.getActualMaximum(Calendar.DATE));
         int lastWeek = calendar.get(Calendar.WEEK_OF_MONTH);
 
         Calendar firstMonday = dateUtil.getDayAtWeekOfMonth(year, month, 1, 2);
         Calendar lastSunday = dateUtil.getDayAtWeekOfMonth(year, month, lastWeek == 1 ? 4 : 5, 1);
 
         return weeklyReport.weeklyDate.between(LocalDateTime.of(firstMonday.get(Calendar.YEAR), firstMonday.get(Calendar.MONTH) + 1, firstMonday.get(Calendar.DATE), 0, 0),
-                LocalDateTime.of(lastSunday.get(Calendar.YEAR), lastSunday.get(Calendar.MONTH), lastSunday.get(Calendar.DATE), 23, 59));
+                LocalDateTime.of(lastSunday.get(Calendar.YEAR), lastSunday.get(Calendar.MONTH) + 1, lastSunday.get(Calendar.DATE), 23, 59));
     }
 }
