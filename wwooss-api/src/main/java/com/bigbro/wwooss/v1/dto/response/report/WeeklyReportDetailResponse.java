@@ -14,9 +14,6 @@ public class WeeklyReportDetailResponse {
     // report id
     private Long weeklyReportId;
 
-    // 주차
-    private Long weekNumber;
-
     // 출석 요일 [1 ~ 7 / 월 ~ 일]
     private List<Integer> attendanceRecord;
 
@@ -44,7 +41,6 @@ public class WeeklyReportDetailResponse {
     public static WeeklyReportDetailResponse from(WeeklyReport weeklyReport) {
         return WeeklyReportDetailResponse.builder()
                 .weeklyReportId(weeklyReport.getWeeklyReportId())
-                .weekNumber(weeklyReport.getWeekNumber())
                 .attendanceRecord(weeklyReport.getAttendanceRecord())
                 .weeklyCarbonEmission(weeklyReport.getWeeklyCarbonEmission())
                 .weeklyRefund(weeklyReport.getWeeklyRefund())

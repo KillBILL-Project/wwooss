@@ -1,5 +1,6 @@
 package com.bigbro.wwooss.v1.service.report.impl;
 
+import com.bigbro.wwooss.v1.dto.WeekInfo;
 import com.bigbro.wwooss.v1.dto.response.report.WeeklyReportDetailResponse;
 import com.bigbro.wwooss.v1.dto.response.report.WeeklyReportListResponse;
 import com.bigbro.wwooss.v1.dto.response.report.WeeklyReportResponse;
@@ -10,6 +11,7 @@ import com.bigbro.wwooss.v1.repository.report.WeeklyReportRepository;
 import com.bigbro.wwooss.v1.repository.user.UserRepository;
 import com.bigbro.wwooss.v1.response.WwoossResponseCode;
 import com.bigbro.wwooss.v1.service.report.WeeklyReportService;
+import com.bigbro.wwooss.v1.utils.DateUtil;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -17,6 +19,7 @@ import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Date;
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -29,24 +32,25 @@ public class WeeklyReportServiceImpl implements WeeklyReportService {
 
     private final UserRepository userRepository;
 
+    private final DateUtil dateUtil;
+
     @Transactional(readOnly = true)
     @Override
     public WeeklyReportListResponse getWeeklyReport(String date, Long userId, Pageable pageable) {
         User user = userRepository.findById(userId).orElseThrow(() -> new DataNotFoundException(WwoossResponseCode.NOT_FOUND_DATA, "존재하지 않는 유저입니다."));
-        Slice<WeeklyReport> weeklyReport = weeklyReportRepository.findWeeklyReportByUser(user, pageable);
+        Slice<WeeklyReport> weeklyReport = weeklyReportRepository.findWeeklyReportByUserAtDate(date, user, pageable);
 
         List<WeeklyReportResponse> weeklyReportResponseList = weeklyReport.getContent().stream().map((report) -> {
-            // -1 이유 : 0주차가 아닌 1주차부터 시작
-            // user 생성날짜 기준 주차 계산
-            // weekNumber : ((오늘 날짜 - 가입 날짜) / 7) 올림
-            LocalDateTime weekNumberDate = user.getCreatedAt().plusWeeks(report.getWeekNumber() - 1);
+            WeekInfo weekInfo = dateUtil.getCurrentWeekOfMonth(dateUtil.convertToDate(report.getWeeklyDate()));
 
-            // N주차 기간 구하기
-            DayOfWeek dayOfWeek = weekNumberDate.getDayOfWeek();
-            LocalDateTime fromDate = weekNumberDate.minusDays(dayOfWeek.ordinal());
-            LocalDateTime toDate = weekNumberDate.plusDays(( 6 - dayOfWeek.ordinal()));
+            // 월요일, 일요일 날짜
+            int monday = dateUtil.getDayAtWeekOfMonth(weekInfo.getYear(), weekInfo.getMonth(), weekInfo.getWeekOfMonth(), 2);
+            int sunday = dateUtil.getDayAtWeekOfMonth(weekInfo.getYear(), weekInfo.getMonth(), weekInfo.getWeekOfMonth(), 1);
 
-            return WeeklyReportResponse.of(report.getWeeklyReportId(), report.getWeekNumber(), fromDate, toDate);
+            LocalDateTime fromDate = LocalDateTime.of(weekInfo.getYear(), weekInfo.getMonth(), monday, 0, 0);
+            LocalDateTime toDate = LocalDateTime.of(weekInfo.getYear(), weekInfo.getMonth(), sunday, 0, 0);
+
+            return WeeklyReportResponse.of(report.getWeeklyReportId(), weekInfo, fromDate, toDate);
         }).toList();
 
         return WeeklyReportListResponse.of(weeklyReport.hasNext(), weeklyReportResponseList);

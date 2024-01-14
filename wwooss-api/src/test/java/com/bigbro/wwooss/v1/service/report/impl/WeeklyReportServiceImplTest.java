@@ -1,5 +1,6 @@
 package com.bigbro.wwooss.v1.service.report.impl;
 
+import com.bigbro.wwooss.v1.dto.WeekInfo;
 import com.bigbro.wwooss.v1.dto.WeeklyTrashByCategory;
 import com.bigbro.wwooss.v1.dto.WowReport;
 import com.bigbro.wwooss.v1.dto.response.report.WeeklyReportResponse;
@@ -8,6 +9,7 @@ import com.bigbro.wwooss.v1.entity.user.User;
 import com.bigbro.wwooss.v1.enumType.LoginType;
 import com.bigbro.wwooss.v1.repository.report.WeeklyReportRepository;
 import com.bigbro.wwooss.v1.repository.user.UserRepository;
+import com.bigbro.wwooss.v1.utils.DateUtil;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -36,6 +38,9 @@ public class WeeklyReportServiceImplTest {
     @Mock
     private WeeklyReportRepository weeklyReportRepository;
 
+    @Mock
+    private DateUtil dateUtil;
+
     @InjectMocks
     private WeeklyReportServiceImpl weeklyReportService;
 
@@ -55,8 +60,8 @@ public class WeeklyReportServiceImplTest {
                         .weeklyTrashCountByCategoryList(List.of(WeeklyTrashByCategory.of("플라스틱", 2L)))
                         .weeklyCarbonEmission(3.D)
                         .weeklyRefund(200L)
-                        .weekNumber(1L)
                         .weeklyTrashCount(3L)
+                        .weeklyDate(LocalDateTime.of(2024, 4, 1, 0, 0))
                         .user(user)
                         .build()
         );
@@ -64,25 +69,28 @@ public class WeeklyReportServiceImplTest {
         given(userRepository.findById(1L)).willReturn(Optional.ofNullable(user));
 
         List<WeeklyReportResponse> weeklyReportResponseList = weeklyReportList.stream().map((report) -> {
-            LocalDateTime weekNumberDate = user.getCreatedAt().plusWeeks(report.getWeekNumber() - 1);
+            WeekInfo weekInfo = dateUtil.getCurrentWeekOfMonth(dateUtil.convertToDate(report.getWeeklyDate()));
 
-            // N주차 기간 구하기
-            DayOfWeek dayOfWeek = weekNumberDate.getDayOfWeek();
-            LocalDateTime fromDate = weekNumberDate.minusDays(dayOfWeek.ordinal());
-            LocalDateTime toDate = weekNumberDate.plusDays(( 6 - dayOfWeek.ordinal()));
+            // 월요일, 일요일 날짜
+            int monday = dateUtil.getDayAtWeekOfMonth(weekInfo.getYear(), weekInfo.getMonth(), weekInfo.getWeekOfMonth(), 2);
+            int sunday = dateUtil.getDayAtWeekOfMonth(weekInfo.getYear(), weekInfo.getMonth(), weekInfo.getWeekOfMonth(), 1);
 
-            return WeeklyReportResponse.of(report.getWeeklyReportId(), report.getWeekNumber(), fromDate, toDate);
+            LocalDateTime fromDate = LocalDateTime.of(weekInfo.getYear(), weekInfo.getMonth(), monday, 0, 0);
+            LocalDateTime toDate = LocalDateTime.of(weekInfo.getYear(), weekInfo.getMonth(), sunday, 0, 0);
+
+            return WeeklyReportResponse.of(report.getWeeklyReportId(), weekInfo, fromDate, toDate);
         }).toList();
 
         assertThat(userRepository).isNotNull();
         then(userRepository.findById(1L)).equals(user);
 
+        WeekInfo weekInfo = WeekInfo.of(2024, 4, 1);
         assertThat(weeklyReportResponseList)
-                .extracting("weeklyReportId", "weekNumber", "fromDate", "toDate")
+                .extracting("weeklyReportId", "weekInfo", "fromDate", "toDate")
                 .contains(
-                        tuple(1L, 1L,
-                                LocalDateTime.of(2023, 10, 23, 13, 10),
-                                LocalDateTime.of(2023, 10, 29, 13, 10))
+                        tuple(1L, weekInfo,
+                                LocalDateTime.of(2024, 4, 1, 0, 0),
+                                LocalDateTime.of(2024, 4, 7, 0, 0))
                 );
     }
 

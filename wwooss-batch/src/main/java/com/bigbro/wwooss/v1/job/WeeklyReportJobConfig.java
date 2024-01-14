@@ -155,60 +155,29 @@ public class WeeklyReportJobConfig {
 
         }
 
-
         List<Integer> attendanceList = new ArrayList<>(attendanceSet);
-        long weekNumber = getCurrentWeekOfMonth(new Date());
 
         return WeeklyReport.of(attendanceList,
                 weeklyTrashByCategoryList,
                 weeklyCarbonEmission,
                 weeklyRefund,
                 weeklyTrashCount,
-                weekNumber,
-                getWowResult(weekNumber,
+                getWowResult(
+                        user,
                         weeklyCarbonEmission,
                         weeklyRefund,
                         weeklyTrashCount),
+                // 전 주에 대한 값을 월요일에 생성하기 때문에 전 주날을 기록하여 해당 주차와 주간을 맞춤 + 조회할 떄 편의를 위함
+                LocalDateTime.now().minusDays(7),
                 user);
     }
 
-    // N주차 구하기
-    private long getCurrentWeekOfMonth(Date date) {
-        Calendar calendar = Calendar.getInstance(Locale.KOREA);
-        calendar.setTime(date);
-        int month = calendar.get(Calendar.MONTH) + 1; // calendar에서의 월은 0부터 시작
-        int day = calendar.get(Calendar.DATE);
-
-        // 한 주의 시작은 월요일이고, 첫 주에 4일이 포함되어있어야 첫 주 취급 (목/금/토/일)
-        calendar.setFirstDayOfWeek(Calendar.MONDAY);
-        calendar.setMinimalDaysInFirstWeek(4);
-
-        int weekOfMonth = calendar.get(Calendar.WEEK_OF_MONTH);
-
-        // 첫 주에 해당하지 않는 주의 경우 전 달 마지막 주차로 계산
-        if (weekOfMonth == 0) {
-            calendar.add(Calendar.DATE, -day); // 전 달의 마지막 날 기준
-            return getCurrentWeekOfMonth(calendar.getTime());
-        }
-
-        // 마지막 주차의 경우
-        if (weekOfMonth == calendar.getActualMaximum(Calendar.WEEK_OF_MONTH)) {
-            calendar.set(Calendar.DATE, calendar.getActualMaximum(Calendar.DATE)); // 이번 달의 마지막 날
-            int lastDaysDayOfWeek = calendar.get(Calendar.DAY_OF_WEEK); // 이번 달 마지막 날의 요일
-
-            // 마지막 날이 월~수 사이이면 다음달 1주차로 계산
-            if (lastDaysDayOfWeek >= Calendar.MONDAY && lastDaysDayOfWeek <= Calendar.WEDNESDAY) {
-                calendar.add(Calendar.DATE, 1); // 마지막 날 + 1일 => 다음달 1일
-                return getCurrentWeekOfMonth(calendar.getTime());
-            }
-        }
-    }
-
-    private WowReport getWowResult(long weekNumber,
+    // 전주 대비 증감률
+    private WowReport getWowResult(User user,
                                    double weeklyCarbonEmission,
                                    long weeklyRefund,
                                    long weeklyTrashCount) {
-        WeeklyReport lastWeekReport = weeklyReportRepository.findWeeklyReportByWeekNumber(weekNumber);
+        WeeklyReport lastWeekReport = weeklyReportRepository.findWeeklyReportByUserAtLastWeek(user);
 
         if (Objects.isNull(lastWeekReport)) {
             return WowReport.zeroReport();
