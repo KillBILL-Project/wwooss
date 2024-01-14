@@ -22,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.sql.Date;
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
+import java.util.Calendar;
 import java.util.List;
 
 @Service
@@ -44,11 +45,11 @@ public class WeeklyReportServiceImpl implements WeeklyReportService {
             WeekInfo weekInfo = dateUtil.getCurrentWeekOfMonth(dateUtil.convertToDate(report.getWeeklyDate()));
 
             // 월요일, 일요일 날짜
-            int monday = dateUtil.getDayAtWeekOfMonth(weekInfo.getYear(), weekInfo.getMonth(), weekInfo.getWeekOfMonth(), 2);
-            int sunday = dateUtil.getDayAtWeekOfMonth(weekInfo.getYear(), weekInfo.getMonth(), weekInfo.getWeekOfMonth(), 1);
+            Calendar monday = dateUtil.getDayAtWeekOfMonth(weekInfo.getYear(), weekInfo.getMonth(), weekInfo.getWeekOfMonth(), 2);
+            Calendar sunday = dateUtil.getDayAtWeekOfMonth(weekInfo.getYear(), weekInfo.getMonth(), weekInfo.getWeekOfMonth(), 1);
 
-            LocalDateTime fromDate = LocalDateTime.of(weekInfo.getYear(), weekInfo.getMonth(), monday, 0, 0);
-            LocalDateTime toDate = LocalDateTime.of(weekInfo.getYear(), weekInfo.getMonth(), sunday, 0, 0);
+            LocalDateTime fromDate = LocalDateTime.of(monday.get(Calendar.YEAR), monday.get(Calendar.MONTH) + 1, monday.get(Calendar.DATE), 0, 0);
+            LocalDateTime toDate = LocalDateTime.of(sunday.get(Calendar.YEAR), sunday.get(Calendar.MONTH) + 1, sunday.get(Calendar.DATE), 0, 0);
 
             return WeeklyReportResponse.of(report.getWeeklyReportId(), weekInfo, fromDate, toDate);
         }).toList();

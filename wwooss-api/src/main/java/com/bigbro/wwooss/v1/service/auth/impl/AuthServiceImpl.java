@@ -113,7 +113,7 @@ public class AuthServiceImpl implements AuthService {
 
         if (LoginType.EMAIL == user.getLoginType()) {
             String encodedPassword = passwordEncoder.encode(user.getPassword());
-            registeredUser.updateTokenAndPsw(encodedPassword, refreshToken);
+            registeredUser.updateTokenAndPsw(refreshToken,encodedPassword);
         } else {
             registeredUser.updateRefreshToken(refreshToken);
         }

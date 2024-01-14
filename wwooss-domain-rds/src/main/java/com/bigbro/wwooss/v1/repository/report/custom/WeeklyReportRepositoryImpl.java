@@ -73,10 +73,10 @@ public class WeeklyReportRepositoryImpl implements WeeklyReportRepositoryCustom 
         calendar.set(year, month + 1, calendar.getActualMaximum(Calendar.DATE));
         int lastWeek = calendar.get(Calendar.WEEK_OF_MONTH);
 
-        int firstMonday = dateUtil.getDayAtWeekOfMonth(year, month, 1, 2);
-        int lastSunday = dateUtil.getDayAtWeekOfMonth(year, month, lastWeek == 1 ? 4 : 5, 1);
+        Calendar firstMonday = dateUtil.getDayAtWeekOfMonth(year, month, 1, 2);
+        Calendar lastSunday = dateUtil.getDayAtWeekOfMonth(year, month, lastWeek == 1 ? 4 : 5, 1);
 
-        return weeklyReport.weeklyDate.between(LocalDateTime.of(year, month, firstMonday, 0, 0),
-                LocalDateTime.of(year, month, lastSunday, 23, 59));
+        return weeklyReport.weeklyDate.between(LocalDateTime.of(firstMonday.get(Calendar.YEAR), firstMonday.get(Calendar.MONTH) + 1, firstMonday.get(Calendar.DATE), 0, 0),
+                LocalDateTime.of(lastSunday.get(Calendar.YEAR), lastSunday.get(Calendar.MONTH), lastSunday.get(Calendar.DATE), 23, 59));
     }
 }

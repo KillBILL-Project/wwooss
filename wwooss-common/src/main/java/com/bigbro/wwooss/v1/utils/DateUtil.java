@@ -34,18 +34,18 @@ public class DateUtil {
      * @param dayOfWeek : 일 ~ 토 [ 1 ~ 7 ]
      * @return N주차 N요일의 며칠
      */
-    public int getDayAtWeekOfMonth(int year, int month, int weekOfMonth, int dayOfWeek) {
+    public Calendar getDayAtWeekOfMonth(int year, int month, int weekOfMonth, int dayOfWeek) {
         Calendar calendar = Calendar.getInstance(Locale.KOREA);
         // 한 주의 시작은 월요일이고, 첫 주에 4일이 포함되어있어야 첫 주 취급 (목/금/토/일)
         calendar.setFirstDayOfWeek(Calendar.MONDAY);
         calendar.setMinimalDaysInFirstWeek(4);
 
         calendar.set(Calendar.YEAR, year);
-        calendar.set(Calendar.MONTH, month + 1); // month 0 부터 시작
+        calendar.set(Calendar.MONTH, month - 1); // month 0 부터 시작
         calendar.set(Calendar.WEEK_OF_MONTH, weekOfMonth);
         calendar.set(Calendar.DAY_OF_WEEK, dayOfWeek);
 
-        return calendar.get(Calendar.DATE);
+        return calendar;
     }
 
     /**
