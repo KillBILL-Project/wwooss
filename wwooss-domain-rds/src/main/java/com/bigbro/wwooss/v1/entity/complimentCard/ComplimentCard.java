@@ -39,9 +39,9 @@ public class ComplimentCard extends BaseEntity {
     private ComplimentCardMeta complimentCardMeta;
 
     @Comment("칭찬 카드 노출 여부")
-    @Column(name = "show")
+    @Column(name = "expire")
     @Builder.Default
-    private Boolean show = true;
+    private Boolean expire = false;
 
     public static ComplimentCard of(User user, ComplimentCardMeta complimentCardMeta) {
         return ComplimentCard.builder()
@@ -50,7 +50,7 @@ public class ComplimentCard extends BaseEntity {
                 .build();
     }
 
-    public void updateShow(boolean show) {
-        this.show = show;
+    public void updateExpire(boolean expire) {
+        this.expire = expire;
     }
 }

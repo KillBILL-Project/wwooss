@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -36,9 +37,9 @@ public class ComplimentCardApi {
         return WwoossResponseUtil.responseCreatedNoData();
     }
 
-    @GetMapping("/{card-type}")
+    @GetMapping
     public ResponseEntity<WwoossResponse<ComplimentCardListResponse>> getComplimentCard(
-            @PathVariable("card-type") CardType cardType,
+            @RequestParam("card-type") CardType cardType,
             Pageable pageable, UserCredential userCredential) {
         return WwoossResponseUtil.responseOkAddData(complimentCardService.getComplimentCardList(userCredential.getUserId(), cardType, pageable));
     }

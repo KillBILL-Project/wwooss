@@ -25,7 +25,7 @@ public class ComplimentCardResponse {
                 .title(complimentCardMeta.getTitle())
                 .contents(complimentCardMeta.getContents())
                 .cardType(complimentCardMeta.getCardType())
-                .cardImage(imageBase + complimentCardMeta.getCardImage())
+                .cardImage(imageBase + "/" + complimentCardMeta.getCardImage())
                 .build();
     }
 

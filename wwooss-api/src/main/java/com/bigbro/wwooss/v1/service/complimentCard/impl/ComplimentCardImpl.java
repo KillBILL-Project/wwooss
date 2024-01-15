@@ -30,6 +30,8 @@ public class ComplimentCardImpl implements ComplimentCardService {
     @Value("${aws.cloud-front.path}")
     private String imageBase;
 
+    private final String COMPLIMENT_CARD_PATH = "compliment_card";
+
     private final ComplimentCardRepository complimentCardRepository;
 
     private final ComplimentCardMetaRepository complimentCardMetaRepository;
@@ -54,10 +56,11 @@ public class ComplimentCardImpl implements ComplimentCardService {
     public ComplimentCardListResponse getComplimentCardList(Long userId, CardType cardType, Pageable pageable) {
         User user =
                 userRepository.findById(userId).orElseThrow(() -> new DataNotFoundException(WwoossResponseCode.NOT_FOUND_DATA, "존재하지 않는 유저입니다."));
-        Slice<ComplimentCard> complimentCardList = complimentCardRepository.findByUserAndShowYAndCardType(user, true, cardType, pageable);
+        Slice<ComplimentCard> complimentCardList = complimentCardRepository.findByUserAndShowYAndCardType(user, false,
+                cardType, pageable);
         List<ComplimentCardResponse> cardResponseList =
                 complimentCardList.getContent().stream().map((card) -> ComplimentCardResponse.of(card.getComplimentCardId(), card.getComplimentCardMeta(),
-                                imageBase)).toList();
+                                imageBase + COMPLIMENT_CARD_PATH)).toList();
 
         return ComplimentCardListResponse.of(complimentCardList.hasNext(), cardResponseList);
     }

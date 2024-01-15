@@ -19,11 +19,11 @@ public class ComplimentCardRepositoryImpl implements ComplimentCardRepositoryCus
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public Slice<ComplimentCard> findByUserAndShowYAndCardType(User user, boolean show, CardType cardType,
+    public Slice<ComplimentCard> findByUserAndShowYAndCardType(User user, boolean expire, CardType cardType,
             Pageable pageable) {
         JPAQuery<ComplimentCard> complimentCardJPAQuery = jpaQueryFactory.selectFrom(complimentCard)
                 .where(complimentCard.user.eq(user)
-                        .and(complimentCard.show.eq(show))
+                        .and(complimentCard.expire.eq(expire))
                         .and(complimentCard.complimentCardMeta.cardType.eq(cardType)));
         return PagingUtil.getSlice(complimentCardJPAQuery, pageable);
     }

@@ -8,5 +8,6 @@ import org.springframework.data.domain.Slice;
 
 public interface ComplimentCardRepositoryCustom {
 
-    Slice<ComplimentCard> findByUserAndShowYAndCardType(User user, boolean show, CardType cardType, Pageable pageable);
+    Slice<ComplimentCard> findByUserAndShowYAndCardType(User user, boolean expire, CardType cardType,
+            Pageable pageable);
 }

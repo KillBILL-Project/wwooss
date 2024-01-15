@@ -25,7 +25,7 @@ gcp:
   client-secret: ENC(4MxpaxhAbQngPaS4mlfZw1dPIJWYpVFpkCENOERASAwUrEkSZMhjFISZUDtuZBBq)
 aws:
   cloud-front:
-    path: ENC(e2DK483Cwm8m0/cvZhPLM+QGNOPCk80cfBM0wXiqqZ73Z31klJDyG+jLr9uXGULv)
+    path: ENC(12aqnvJir3SNWRNqlzgXUgsk+XIcEZ7WEpyz3uZU3xmmgMHeJHMlpZZLe8SgE+rm)
 
 ---
 
@@ -46,7 +46,7 @@ gcp:
   client-secret: ENC(fjlgyCC/ccYYK19VKZNNv2LZ8Wd2+EqzvUNDXfUQYYCLzWQNKH5tcC8+Uz2NgUhT)
 aws:
   cloud-front:
-    path: ENC(evG+VIHRaUsI0A+0zuu/DyBWHzvGKKIupOfbrmtpTolSs1lDq4Ob10bI+4yj4N/K)
+    path: ENC(AyXnAXEzCPMfgFEfpiaVNWsfmfEvGKorqKR6lB1mKmMVIKjgrTEuxnNXK5DgzUsH)
 
 ---
 
@@ -67,7 +67,7 @@ gcp:
   client-secret: ENC(SaxTxU09VyyUlyP6OmKemn81In88VdrJWJS3OM5K4TRiwuEOoH52fBcNo93jERl+)
 aws:
   cloud-front:
-      path: ENC(6JqEP/kQHnv3cq1wys5H5Bu48BaeE3UA1msiWtMHOljWplW8cq+VA/aTxgnFm9I9)
+      path: ENC(qWQGO1g00ajfjWhHOTLaEByBilWWF/UNW2tEUl1HKf18OQn0EyZ9xQYvS8JI8GiT)
 ---
 
 spring:
