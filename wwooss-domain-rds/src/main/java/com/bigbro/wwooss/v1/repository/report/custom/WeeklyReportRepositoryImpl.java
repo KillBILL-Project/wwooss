@@ -1,6 +1,5 @@
 package com.bigbro.wwooss.v1.repository.report.custom;
 
-import com.bigbro.wwooss.v1.dto.WeekInfo;
 import com.bigbro.wwooss.v1.entity.report.WeeklyReport;
 import com.bigbro.wwooss.v1.entity.user.User;
 import com.bigbro.wwooss.v1.utils.DateUtil;
@@ -14,13 +13,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 
-import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.temporal.TemporalAdjusters;
 import java.util.Calendar;
-import java.util.Date;
 
 import static com.bigbro.wwooss.v1.entity.report.QWeeklyReport.weeklyReport;
 

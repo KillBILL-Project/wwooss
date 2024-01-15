@@ -3,8 +3,6 @@ package com.bigbro.wwooss.v1.api.complimentCard;
 
 import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.document;
 import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.resourceDetails;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -13,15 +11,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.bigbro.wwooss.v1.annotation.TestController;
 import com.bigbro.wwooss.v1.annotation.WithMockCustomUser;
 import com.bigbro.wwooss.v1.config.DocumentConfig;
-import com.bigbro.wwooss.v1.dto.request.alarm.AlarmRequest;
 import com.bigbro.wwooss.v1.dto.request.complimentCard.ComplimentCardMetaRequest;
-import com.bigbro.wwooss.v1.dto.response.alarm.AlarmResponse;
 import com.bigbro.wwooss.v1.enumType.CardCode;
 import com.bigbro.wwooss.v1.enumType.CardType;
-import com.bigbro.wwooss.v1.enumType.DayOfWeek;
 import com.bigbro.wwooss.v1.service.complimentCard.ComplimentCardMetaService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

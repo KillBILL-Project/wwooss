@@ -23,6 +23,9 @@ gcp:
     service-account: classpath:firebase/wwooss-c5a90-firebase-adminsdk-zh2zk-8a0d0bc64f.json
   web-client-id: ENC(GhTzyx5FREQJ7vNmejAFBwhX9+0JnXNrDGT1z95ktAPyLDTEoAJl96ATccWyUFiXhA/cOrj8WmWCNCKXwuK9Vf3FTmECmbECTGMUKpjtFbbmf+YAvHmwrg==)
   client-secret: ENC(4MxpaxhAbQngPaS4mlfZw1dPIJWYpVFpkCENOERASAwUrEkSZMhjFISZUDtuZBBq)
+aws:
+  cloud-front:
+    path: ENC(e2DK483Cwm8m0/cvZhPLM+QGNOPCk80cfBM0wXiqqZ73Z31klJDyG+jLr9uXGULv)
 
 ---
 
@@ -41,6 +44,9 @@ gcp:
     service-account: classpath:firebase/wwooss-c5a90-firebase-adminsdk-zh2zk-8a0d0bc64f.json
   web-client-id: ENC(KgkwzYmB5l+IozVjBB9CeK2EPE9OwbvTGSCrm/s6jnsriM6zFUZ3vP4GpH9RPxmrWYBm1c2+j4ueo5mjd5VFMW0OocjDGskiiP2YUYtziTVr21kUlCEoLg==)
   client-secret: ENC(fjlgyCC/ccYYK19VKZNNv2LZ8Wd2+EqzvUNDXfUQYYCLzWQNKH5tcC8+Uz2NgUhT)
+aws:
+  cloud-front:
+    path: ENC(evG+VIHRaUsI0A+0zuu/DyBWHzvGKKIupOfbrmtpTolSs1lDq4Ob10bI+4yj4N/K)
 
 ---
 
@@ -59,7 +65,9 @@ gcp:
     service-account: classpath:firebase/wwooss-c5a90-firebase-adminsdk-zh2zk-8a0d0bc64f.json
   web-client-id: ENC(xQa3qyEb1EsKBi21rieEF1uRQBAfCYRW1c1+Z7Y1gVGkzxX7Oqha7wBJ24dn6Ue40EYe59yU/PwN+7E5cr/LIbvQiFc05hee0LIu7CaiMVik/zvx9ZcoEw==)
   client-secret: ENC(SaxTxU09VyyUlyP6OmKemn81In88VdrJWJS3OM5K4TRiwuEOoH52fBcNo93jERl+)
-
+aws:
+  cloud-front:
+      path: ENC(6JqEP/kQHnv3cq1wys5H5Bu48BaeE3UA1msiWtMHOljWplW8cq+VA/aTxgnFm9I9)
 ---
 
 spring:
