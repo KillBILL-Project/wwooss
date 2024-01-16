@@ -27,4 +27,9 @@ public interface ComplimentCardService {
      * 특정 기간 내 칭찬 카드 조회
      */
     List<ComplimentCardResponse> getComplimentCardAtDate(User user, LocalDateTime fromDate, LocalDateTime toDate);
+
+    /**
+     * 칭찬 카드 상세 조회
+     */
+    ComplimentCardResponse getComplimentCardDetail(Long complimentCardId);
 }

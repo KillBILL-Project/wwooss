@@ -15,6 +15,7 @@ import com.bigbro.wwooss.v1.response.WwoossResponseCode;
 import com.bigbro.wwooss.v1.service.complimentCard.ComplimentCardService;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 import org.springframework.data.domain.Pageable;
 import java.util.List;
 import lombok.AccessLevel;
@@ -73,6 +74,16 @@ public class ComplimentCardServiceImpl implements ComplimentCardService {
         List<ComplimentCard> complimentCardList = complimentCardRepository.findByUserBetweenDate(user, fromDate, toDate);
         return complimentCardList.stream().map((card) -> ComplimentCardResponse.of(card.getComplimentCardId(), card.getComplimentCardMeta(),
                                         imageBase + COMPLIMENT_CARD_PATH)).toList();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public ComplimentCardResponse getComplimentCardDetail(Long complimentCardId) {
+        ComplimentCard complimentCard =
+                complimentCardRepository.findById(complimentCardId)
+                        .orElseThrow(() -> new DataNotFoundException(WwoossResponseCode.NOT_FOUND_DATA, "존재하지 칭찬카드"));
+        return ComplimentCardResponse.of(complimentCard.getComplimentCardId(), complimentCard.getComplimentCardMeta()
+                , imageBase + COMPLIMENT_CARD_PATH);
     }
 
 }

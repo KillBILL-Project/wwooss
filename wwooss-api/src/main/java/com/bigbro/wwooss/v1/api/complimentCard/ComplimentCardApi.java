@@ -3,6 +3,7 @@ package com.bigbro.wwooss.v1.api.complimentCard;
 import com.bigbro.wwooss.v1.dto.request.complimentCard.ComplimentCardRequest;
 import com.bigbro.wwooss.v1.dto.request.user.UserCredential;
 import com.bigbro.wwooss.v1.dto.response.complimentCard.ComplimentCardListResponse;
+import com.bigbro.wwooss.v1.dto.response.complimentCard.ComplimentCardResponse;
 import com.bigbro.wwooss.v1.enumType.CardType;
 import com.bigbro.wwooss.v1.response.WwoossResponse;
 import com.bigbro.wwooss.v1.response.WwoossResponseUtil;
@@ -42,5 +43,11 @@ public class ComplimentCardApi {
             @RequestParam("card-type") CardType cardType,
             Pageable pageable, UserCredential userCredential) {
         return WwoossResponseUtil.responseOkAddData(complimentCardService.getComplimentCardList(userCredential.getUserId(), cardType, pageable));
+    }
+
+    @GetMapping("/{compliment-card-id}")
+    public ResponseEntity<WwoossResponse<ComplimentCardResponse>> getComplimentCardDetail(@PathVariable("compliment"
+            + "-card-id") Long complimentCardId) {
+        return WwoossResponseUtil.responseOkAddData(complimentCardService.getComplimentCardDetail(complimentCardId));
     }
 }

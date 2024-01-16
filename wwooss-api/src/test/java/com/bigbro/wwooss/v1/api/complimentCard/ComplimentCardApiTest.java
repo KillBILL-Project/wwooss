@@ -98,4 +98,46 @@ class ComplimentCardApiTest {
                 );
     }
 
+    @Test
+    @WithMockCustomUser
+    @DisplayName("칭찬 카드 상세 조회")
+    void getComplimentCardDetail() throws Exception {
+        ComplimentCardResponse complimentCardResponse = ComplimentCardResponse.builder()
+                        .complimentCardId(1L)
+                        .title("칭찬 제목")
+                        .contents("칭찬 내용")
+                        .cardType(CardType.WEEKLY)
+                        .cardImage("image path")
+                        .build();
+
+        given(this.complimentCardService.getComplimentCardDetail(any())).willReturn(complimentCardResponse);
+
+        this.mockMvc.perform(RestDocumentationRequestBuilders.get("/api/v1/compliment-card/{compliment-card-id}", 1L)
+                        .with(csrf().asHeader())
+                        .contextPath("/api")
+                        .contentType(MediaType.APPLICATION_JSON)
+                )
+                .andExpect(status().isOk())
+                .andDo(document("get-compliment-card-detail",
+                                resourceDetails().tags("칭찬 카드 상세 조회"),
+                                DocumentConfig.getDocumentRequest(),
+                                DocumentConfig.getDocumentResponse(),
+                                responseFields(
+                                        fieldWithPath("code").description("응답 코드"),
+                                        fieldWithPath("title").description("응답 코드 별 클라이언트 노출 제목"),
+                                        fieldWithPath("message").description("응답 코드 별 클라이언트 노출 메세지"),
+                                        fieldWithPath("data.complimentCardId").description("칭찬 카드 ID"),
+                                        fieldWithPath("data.title").description("칭찬 카드 "
+                                                + "제목"),
+                                        fieldWithPath("data.contents").description("칭찬 "
+                                                + "카드 내용"),
+                                        fieldWithPath("data.cardType").description("칭찬 "
+                                                + "카드 타입 : [WEEKLY/INTEGRATE]"),
+                                        fieldWithPath("data.cardImage").description("칭찬"
+                                                + " 카드 이미지")
+                                )
+                        )
+                );
+    }
+
 }
