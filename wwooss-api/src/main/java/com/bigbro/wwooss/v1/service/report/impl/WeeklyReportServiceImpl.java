@@ -1,6 +1,8 @@
 package com.bigbro.wwooss.v1.service.report.impl;
 
+import com.bigbro.wwooss.v1.dto.ComplimentCardIcon;
 import com.bigbro.wwooss.v1.dto.WeekInfo;
+import com.bigbro.wwooss.v1.dto.response.complimentCard.ComplimentCardResponse;
 import com.bigbro.wwooss.v1.dto.response.report.WeeklyReportDetailResponse;
 import com.bigbro.wwooss.v1.dto.response.report.WeeklyReportListResponse;
 import com.bigbro.wwooss.v1.dto.response.report.WeeklyReportResponse;
@@ -10,6 +12,7 @@ import com.bigbro.wwooss.v1.exception.DataNotFoundException;
 import com.bigbro.wwooss.v1.repository.report.WeeklyReportRepository;
 import com.bigbro.wwooss.v1.repository.user.UserRepository;
 import com.bigbro.wwooss.v1.response.WwoossResponseCode;
+import com.bigbro.wwooss.v1.service.complimentCard.ComplimentCardService;
 import com.bigbro.wwooss.v1.service.report.WeeklyReportService;
 import com.bigbro.wwooss.v1.utils.DateUtil;
 import lombok.AccessLevel;
@@ -35,6 +38,8 @@ public class WeeklyReportServiceImpl implements WeeklyReportService {
 
     private final DateUtil dateUtil;
 
+    private final ComplimentCardService complimentCardService;
+
     @Transactional(readOnly = true)
     @Override
     public WeeklyReportListResponse getWeeklyReport(String date, Long userId, Pageable pageable) {
@@ -49,9 +54,16 @@ public class WeeklyReportServiceImpl implements WeeklyReportService {
             Calendar sunday = dateUtil.getDayAtWeekOfMonth(weekInfo.getYear(), weekInfo.getMonth(), weekInfo.getWeekOfMonth(), 1);
 
             LocalDateTime fromDate = LocalDateTime.of(monday.get(Calendar.YEAR), monday.get(Calendar.MONTH) + 1, monday.get(Calendar.DATE), 0, 0);
-            LocalDateTime toDate = LocalDateTime.of(sunday.get(Calendar.YEAR), sunday.get(Calendar.MONTH) + 1, sunday.get(Calendar.DATE), 0, 0);
+            LocalDateTime toDate = LocalDateTime.of(sunday.get(Calendar.YEAR), sunday.get(Calendar.MONTH) + 1,
+                    sunday.get(Calendar.DATE), 23, 59);
 
-            return WeeklyReportResponse.of(report.getWeeklyReportId(), weekInfo, fromDate, toDate);
+            // 해당 기간 내 칭찬카드 조회
+            List<ComplimentCardResponse> complimentCardList = complimentCardService.getComplimentCardAtDate(user,
+                    fromDate, toDate);
+            List<ComplimentCardIcon> cardIconList = complimentCardList.stream()
+                    .map(card -> ComplimentCardIcon.of(card.getComplimentCardId(), card.getCardImage())).toList();
+
+            return WeeklyReportResponse.of(report.getWeeklyReportId(), weekInfo, fromDate, toDate, cardIconList);
         }).toList();
 
         return WeeklyReportListResponse.of(weeklyReport.hasNext(), weeklyReportResponseList);

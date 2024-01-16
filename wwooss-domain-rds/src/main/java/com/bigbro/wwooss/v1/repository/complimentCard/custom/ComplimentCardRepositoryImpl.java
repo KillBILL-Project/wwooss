@@ -8,6 +8,8 @@ import com.bigbro.wwooss.v1.enumType.CardType;
 import com.bigbro.wwooss.v1.utils.PagingUtil;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import java.time.LocalDateTime;
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -26,5 +28,13 @@ public class ComplimentCardRepositoryImpl implements ComplimentCardRepositoryCus
                         .and(complimentCard.expire.eq(expire))
                         .and(complimentCard.complimentCardMeta.cardType.eq(cardType)));
         return PagingUtil.getSlice(complimentCardJPAQuery, pageable);
+    }
+
+    @Override
+    public List<ComplimentCard> findByUserBetweenDate(User user, LocalDateTime fromDate, LocalDateTime toDate) {
+        return jpaQueryFactory.selectFrom(complimentCard)
+                        .where(complimentCard.user.eq(user)
+                                .and(complimentCard.createdAt.between(fromDate, toDate))
+                                ).fetch();
     }
 }

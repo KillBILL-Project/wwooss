@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
-public class ComplimentCardMetaImpl implements ComplimentCardMetaService {
+public class ComplimentCardMetaServiceImpl implements ComplimentCardMetaService {
 
     private final ComplimentCardMetaRepository complimentCardMetaRepository;
 

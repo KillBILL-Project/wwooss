@@ -13,6 +13,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.bigbro.wwooss.v1.annotation.TestController;
 import com.bigbro.wwooss.v1.annotation.WithMockCustomUser;
+import com.bigbro.wwooss.v1.dto.ComplimentCardIcon;
 import com.bigbro.wwooss.v1.dto.WeekInfo;
 import com.bigbro.wwooss.v1.dto.response.report.WeeklyReportListResponse;
 import com.bigbro.wwooss.v1.dto.response.report.WeeklyReportResponse;
@@ -44,8 +45,10 @@ class WeeklyReportApiTest {
     @DisplayName("쓰레기 목록 가져오기")
     void getWeeklyReportList() throws Exception {
         WeekInfo weekInfo = WeekInfo.of(2024, 4, 1);
+        List<ComplimentCardIcon> cardIcons = List.of(ComplimentCardIcon.of(1L, "image"));
         List<WeeklyReportResponse> weeklyReportResponseList = List.of(WeeklyReportResponse.of(1L, weekInfo,
-                LocalDateTime.now(), LocalDateTime.now()));
+                LocalDateTime.now(), LocalDateTime.now(), cardIcons));
+
         given(weeklyReportService.getWeeklyReport(any(), any(), any())).willReturn(WeeklyReportListResponse.of(false,
                 weeklyReportResponseList));
 
@@ -78,7 +81,10 @@ class WeeklyReportApiTest {
                                         fieldWithPath("data.weeklyReportResponseList[].weekInfo.weekOfMonth").description("N주차"),
                                         fieldWithPath("data.weeklyReportResponseList[].fromDate").description("N주차 "
                                                 + "시작일"),
-                                        fieldWithPath("data.weeklyReportResponseList[].toDate").description("N주차 종료일")
+                                        fieldWithPath("data.weeklyReportResponseList[].complimentCardIconList[]"
+                                                + ".complimentCardId").description("칭찬 카드 ID"),
+                                        fieldWithPath("data.weeklyReportResponseList[].complimentCardIconList[]"
+                                                + ".cardImage").description("칭찬 카드 이미지")
                                 )
                         )
                 );

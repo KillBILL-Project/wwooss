@@ -14,6 +14,7 @@ import com.bigbro.wwooss.v1.repository.user.UserRepository;
 import com.bigbro.wwooss.v1.response.WwoossResponseCode;
 import com.bigbro.wwooss.v1.service.complimentCard.ComplimentCardService;
 
+import java.time.LocalDateTime;
 import org.springframework.data.domain.Pageable;
 import java.util.List;
 import lombok.AccessLevel;
@@ -25,7 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
-public class ComplimentCardImpl implements ComplimentCardService {
+public class ComplimentCardServiceImpl implements ComplimentCardService {
 
     @Value("${aws.cloud-front.path}")
     private String imageBase;
@@ -63,6 +64,15 @@ public class ComplimentCardImpl implements ComplimentCardService {
                                 imageBase + COMPLIMENT_CARD_PATH)).toList();
 
         return ComplimentCardListResponse.of(complimentCardList.hasNext(), cardResponseList);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<ComplimentCardResponse> getComplimentCardAtDate(User user, LocalDateTime fromDate,
+            LocalDateTime toDate) {
+        List<ComplimentCard> complimentCardList = complimentCardRepository.findByUserBetweenDate(user, fromDate, toDate);
+        return complimentCardList.stream().map((card) -> ComplimentCardResponse.of(card.getComplimentCardId(), card.getComplimentCardMeta(),
+                                        imageBase + COMPLIMENT_CARD_PATH)).toList();
     }
 
 }
