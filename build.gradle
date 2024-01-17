@@ -34,7 +34,6 @@ subprojects {
 		implementation 'org.springframework.boot:spring-boot-starter-web'
 		implementation 'org.springframework.boot:spring-boot-starter-validation'
 		implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0'
-//	implementation 'org.springframework.boot:spring-boot-starter-data-elasticsearch'
 
 		compileOnly 'org.projectlombok:lombok'
 		annotationProcessor 'org.projectlombok:lombok'

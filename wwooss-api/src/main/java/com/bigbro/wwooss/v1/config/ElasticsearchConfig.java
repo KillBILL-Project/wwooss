@@ -1,4 +1,4 @@
-package com.bigbro.wwooss.v1.config;//package com.bigbro.killbill.v1.config;
+package com.bigbro.wwooss.v1.config;//package com.bigbro.wwooss.v1.config;
 //
 //import org.elasticsearch.client.RestHighLevelClient;
 //import org.springframework.beans.factory.annotation.Value;
