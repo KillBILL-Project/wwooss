@@ -4,25 +4,23 @@ import com.bigbro.wwooss.v1.converter.IntegerListConverter;
 import com.bigbro.wwooss.v1.converter.WeeklyTrashListConverter;
 import com.bigbro.wwooss.v1.dto.WeeklyTrashByCategory;
 import com.bigbro.wwooss.v1.dto.WowReport;
-import com.bigbro.wwooss.v1.entity.base.BaseEntity;
 import com.bigbro.wwooss.v1.entity.user.User;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
+import lombok.*;
 import org.hibernate.annotations.Comment;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "weekly_report")
-@SuperBuilder
 @Getter
+@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class WeeklyReport extends BaseEntity {
+@AllArgsConstructor(access = AccessLevel.PROTECTED)
+public class WeeklyReport {
 
     @Id
     @Column(name = "weekly_report_id")
@@ -53,10 +51,6 @@ public class WeeklyReport extends BaseEntity {
     @Column(name = "weekly_trash_count")
     private Long weeklyTrashCount;
 
-    @Comment("몇주차")
-    @Column(name = "week_number")
-    private Long weekNumber;
-
     @Comment("전주대비 탄소배출량 증감 / Week On Week")
     @Column(name = "wow_carbon_emission")
     private Double wowCarbonEmission;
@@ -69,6 +63,9 @@ public class WeeklyReport extends BaseEntity {
     @Column(name = "wow_trash_count")
     private Long wowTrashCount;
 
+    @Comment("주간 시작 날짜")
+    private LocalDateTime weeklyDate;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
@@ -78,8 +75,8 @@ public class WeeklyReport extends BaseEntity {
             Double weeklyCarbonEmission,
             Long weeklyRefund,
             Long weeklyTrashCount,
-            Long weekNumber,
             WowReport wowReport,
+            LocalDateTime weeklyDate,
             User user) {
         return WeeklyReport.builder()
                 .attendanceRecord(attendanceRecord)
@@ -87,10 +84,10 @@ public class WeeklyReport extends BaseEntity {
                 .weeklyCarbonEmission(weeklyCarbonEmission)
                 .weeklyRefund(weeklyRefund)
                 .weeklyTrashCount(weeklyTrashCount)
-                .weekNumber(weekNumber)
                 .wowCarbonEmission(wowReport.getWowCarbonEmission())
                 .wowRefund(wowReport.getWowRefund())
                 .wowTrashCount(wowReport.getWowTrashCount())
+                .weeklyDate(weeklyDate)
                 .user(user)
                 .build();
     }

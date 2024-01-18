@@ -13,6 +13,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.bigbro.wwooss.v1.annotation.TestController;
 import com.bigbro.wwooss.v1.annotation.WithMockCustomUser;
+import com.bigbro.wwooss.v1.dto.WeekInfo;
 import com.bigbro.wwooss.v1.dto.response.report.WeeklyReportListResponse;
 import com.bigbro.wwooss.v1.dto.response.report.WeeklyReportResponse;
 import com.bigbro.wwooss.v1.config.DocumentConfig;
@@ -42,9 +43,11 @@ class WeeklyReportApiTest {
     @WithMockCustomUser
     @DisplayName("쓰레기 목록 가져오기")
     void getWeeklyReportList() throws Exception {
-        List<WeeklyReportResponse> weeklyReportResponseList = List.of(WeeklyReportResponse.of(1L, 1L,
+        WeekInfo weekInfo = WeekInfo.of(2024, 4, 1);
+        List<WeeklyReportResponse> weeklyReportResponseList = List.of(WeeklyReportResponse.of(1L, weekInfo,
                 LocalDateTime.now(), LocalDateTime.now()));
-        given(weeklyReportService.getWeeklyReport(any(), any())).willReturn(WeeklyReportListResponse.of(false, weeklyReportResponseList));
+        given(weeklyReportService.getWeeklyReport(any(), any(), any())).willReturn(WeeklyReportListResponse.of(false,
+                weeklyReportResponseList));
 
         this.mockMvc.perform(RestDocumentationRequestBuilders.get("/api/v1/weekly-reports")
                         .with(csrf().asHeader())
@@ -59,6 +62,7 @@ class WeeklyReportApiTest {
                                 DocumentConfig.getDocumentRequest(),
                                 DocumentConfig.getDocumentResponse(),
                                 requestParameters(
+                                        parameterWithName("date").description("조회 날짜 : [null / YYYY-MM / YYYY]").optional(),
                                         parameterWithName("page").description("현재 페이지"),
                                         parameterWithName("size").description("한 페이지 당 결과값").optional()
                                 ),
@@ -69,7 +73,9 @@ class WeeklyReportApiTest {
                                         fieldWithPath("data.hasNext").description("다음 페이지 존재"),
                                         fieldWithPath("data.weeklyReportResponseList[].weeklyReportId").description(
                                                 "주간 리포트 ID"),
-                                        fieldWithPath("data.weeklyReportResponseList[].weekNumber").description("N주차"),
+                                        fieldWithPath("data.weeklyReportResponseList[].weekInfo.year").description("조회 연도"),
+                                        fieldWithPath("data.weeklyReportResponseList[].weekInfo.month").description("조회 월"),
+                                        fieldWithPath("data.weeklyReportResponseList[].weekInfo.weekOfMonth").description("N주차"),
                                         fieldWithPath("data.weeklyReportResponseList[].fromDate").description("N주차 "
                                                 + "시작일"),
                                         fieldWithPath("data.weeklyReportResponseList[].toDate").description("N주차 종료일")

@@ -19,8 +19,11 @@ import com.bigbro.wwooss.v1.repository.trash.log.TrashLogRepository;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
@@ -152,35 +155,29 @@ public class WeeklyReportJobConfig {
 
         }
 
-
         List<Integer> attendanceList = new ArrayList<>(attendanceSet);
-        long weekNumber = getWeekDay(user.getCreatedAt());
 
         return WeeklyReport.of(attendanceList,
                 weeklyTrashByCategoryList,
                 weeklyCarbonEmission,
                 weeklyRefund,
                 weeklyTrashCount,
-                weekNumber,
-                getWowResult(weekNumber,
+                getWowResult(
+                        user,
                         weeklyCarbonEmission,
                         weeklyRefund,
                         weeklyTrashCount),
+                // 전 주에 대한 값을 월요일에 생성하기 때문에 전 주날을 기록하여 해당 주차와 주간을 맞춤 + 조회할 떄 편의를 위함
+                LocalDateTime.now().minusDays(7),
                 user);
     }
 
-    // N주차 구하기
-    private long getWeekDay(LocalDateTime signupDate) {
-        // ((오늘 날짜 - 가입 날짜) / 7) 올림
-        LocalDateTime now = LocalDateTime.now();
-        return (long) Math.ceil(((double)ChronoUnit.DAYS.between(signupDate, now)) / (double) 7) ;
-    }
-
-    private WowReport getWowResult(long weekNumber,
+    // 전주 대비 증감률
+    private WowReport getWowResult(User user,
                                    double weeklyCarbonEmission,
                                    long weeklyRefund,
                                    long weeklyTrashCount) {
-        WeeklyReport lastWeekReport = weeklyReportRepository.findWeeklyReportByWeekNumber(weekNumber);
+        WeeklyReport lastWeekReport = weeklyReportRepository.findWeeklyReportByUserAtLastWeek(user);
 
         if (Objects.isNull(lastWeekReport)) {
             return WowReport.zeroReport();

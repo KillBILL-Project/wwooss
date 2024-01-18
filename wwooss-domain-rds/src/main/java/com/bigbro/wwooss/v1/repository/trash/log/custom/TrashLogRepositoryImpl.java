@@ -58,14 +58,14 @@ public class TrashLogRepositoryImpl implements TrashLogRepositoryCustom {
         String[] splitDate = date.split("-");
 
         return splitDate.length == 1 ? searchYear((Integer.parseInt(splitDate[0])))
-                : searchMonthAndDay(Integer.parseInt(splitDate[0]), Integer.parseInt(splitDate[1]));
+                : searchMonthAndMonth(Integer.parseInt(splitDate[0]), Integer.parseInt(splitDate[1]));
     }
 
     private BooleanExpression searchYear(int year) {
         return trashLog.createdAt.year().eq(year);
     }
 
-    private BooleanExpression searchMonthAndDay(int year, int month) {
+    private BooleanExpression searchMonthAndMonth(int year, int month) {
         return trashLog.createdAt.year().eq(year).and(trashLog.createdAt.month().eq(month));
     }
 

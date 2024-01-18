@@ -9,9 +9,11 @@ import com.bigbro.wwooss.v1.service.report.WeeklyReportService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -22,9 +24,10 @@ public class WeeklyReportApi {
     private final WeeklyReportService weeklyReportService;
 
     @GetMapping
-    public ResponseEntity<WwoossResponse<WeeklyReportListResponse>> getWeeklyReportList(Pageable pageable,
+    public ResponseEntity<WwoossResponse<WeeklyReportListResponse>> getWeeklyReportList(@RequestParam @Nullable String date, Pageable pageable,
             UserCredential userCredential) {
-        return WwoossResponseUtil.responseOkAddData(weeklyReportService.getWeeklyReport(userCredential.getUserId(), pageable));
+        return WwoossResponseUtil.responseOkAddData(weeklyReportService.getWeeklyReport(date,
+                userCredential.getUserId(), pageable));
     }
 
     @GetMapping("/{weekly-report-id}")

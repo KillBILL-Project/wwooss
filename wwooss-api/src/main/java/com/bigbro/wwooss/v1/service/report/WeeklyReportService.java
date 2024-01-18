@@ -8,12 +8,16 @@ public interface WeeklyReportService {
 
     /**
      * 주간 리포트 목록 조회
+     * @param date 유형
+     * null :  전체 데이터
+     * YYYY-MM : 해당 연,월 데이터
+     * YYYY : 해당 연 데이터
      * @param userId 유저 ID
      * @param pageable 페이지 정보
      *
      * @return WeeklyReportListResponse
      */
-    WeeklyReportListResponse getWeeklyReport(Long userId, Pageable pageable);
+    WeeklyReportListResponse getWeeklyReport(String date, Long userId, Pageable pageable);
 
     /**
      * 주간 리포트 상세 조회
