@@ -79,12 +79,11 @@ class WeeklyReportApiTest {
                                         fieldWithPath("data.weeklyReportResponseList[].weekInfo.year").description("조회 연도"),
                                         fieldWithPath("data.weeklyReportResponseList[].weekInfo.month").description("조회 월"),
                                         fieldWithPath("data.weeklyReportResponseList[].weekInfo.weekOfMonth").description("N주차"),
-                                        fieldWithPath("data.weeklyReportResponseList[].fromDate").description("N주차 "
-                                                + "시작일"),
-                                        fieldWithPath("data.weeklyReportResponseList[].complimentCardIconList[]"
-                                                + ".complimentCardId").description("칭찬 카드 ID"),
-                                        fieldWithPath("data.weeklyReportResponseList[].complimentCardIconList[]"
-                                                + ".cardImage").description("칭찬 카드 이미지")
+                                        fieldWithPath("data.weeklyReportResponseList[].fromDate").description("N주차 시작일"),
+                                        fieldWithPath("data.weeklyReportResponseList[].toDate").description("N주차 마지막 "
+                                                + "일"),
+                                        fieldWithPath("data.weeklyReportResponseList[].complimentCardIconList[].complimentCardId").description("칭찬 카드 ID"),
+                                        fieldWithPath("data.weeklyReportResponseList[].complimentCardIconList[].cardImage").description("칭찬 카드 이미지")
                                 )
                         )
                 );
