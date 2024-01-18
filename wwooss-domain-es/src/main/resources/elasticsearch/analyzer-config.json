@@ -1,0 +1,15 @@
+{
+  "analysis":{
+    "tokenizer" : {
+      "seunjeon" : {
+        "type" : "seunjeon_tokenizer"
+      }
+    },
+    "analyzer" : {
+      "korean" : {
+        "type" : "custom",
+        "tokenizer" : "seunjeon"
+      }
+    }
+  }
+}
