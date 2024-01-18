@@ -1,6 +1,7 @@
 package com.bigbro.wwooss.v1.api.trash.log;
 
 import com.bigbro.wwooss.v1.annotation.TestController;
+import com.bigbro.wwooss.v1.annotation.WithMockCustomUser;
 import com.bigbro.wwooss.v1.config.DocumentConfig;
 import com.bigbro.wwooss.v1.dto.response.trash.TrashLogListResponse;
 import com.bigbro.wwooss.v1.dto.response.trash.TrashLogResponse;
@@ -42,8 +43,9 @@ class TrashLogApiTest {
     private TrashLogService trashLogService;
 
     @Test
-    @DisplayName("쓰레기 정보 가져오기")
-    void getTrashInfo() throws Exception {
+    @WithMockCustomUser
+    @DisplayName("쓰레기 로그 가져오기")
+    void getTrashLog() throws Exception {
         User user = User.builder()
                 .userId(1L)
                 .build();
