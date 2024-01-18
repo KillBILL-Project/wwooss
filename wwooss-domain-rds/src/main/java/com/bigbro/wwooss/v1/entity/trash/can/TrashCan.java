@@ -2,6 +2,7 @@ package com.bigbro.wwooss.v1.entity.trash.can;
 
 import com.bigbro.wwooss.v1.entity.base.BaseEntity;
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -18,6 +19,7 @@ import org.hibernate.annotations.Comment;
  */
 
 @Table(name = "trash_can")
+@Entity
 @SuperBuilder
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -26,7 +28,7 @@ public class TrashCan extends BaseEntity {
     @Id
     @Column(name = "trash_can")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long trashCanHistoryId;
+    private Long trashCanId;
 
     @Comment("쓰레기 위치 - lng")
     @Column(name = "lng")

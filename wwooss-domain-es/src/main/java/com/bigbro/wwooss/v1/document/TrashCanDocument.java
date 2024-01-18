@@ -9,7 +9,9 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
+import org.springframework.data.elasticsearch.annotations.GeoPointField;
 import org.springframework.data.elasticsearch.annotations.Setting;
+import org.springframework.data.elasticsearch.core.geo.GeoPoint;
 
 @Getter
 @Builder
@@ -18,22 +20,27 @@ import org.springframework.data.elasticsearch.annotations.Setting;
 @Document(indexName = "trash-can")
 @Setting(settingPath = "elastic/analyzer-config.json")
 public class TrashCanDocument {
+
     @Id
     private Long id;
 
-    @Field(type = FieldType.Keyword)
-    private String standardDate;
-
-    @Field(type = FieldType.Long)
-    private Long lng;
-
-    @Field(type = FieldType.Long)
-    private Long lat;
+    @Field(type = FieldType.Object)
+    @GeoPointField
+    private GeoPoint location;
 
     @Field(type = FieldType.Text)
     private String address;
 
     @Field(type = FieldType.Keyword)
     private String trashCategory;
+
+    public static TrashCanDocument of(Long id, GeoPoint location, String address, String trashCategory) {
+        return TrashCanDocument.builder()
+                .id(id)
+                .location(location)
+                .address(address)
+                .trashCategory(trashCategory)
+                .build();
+    }
 
 }

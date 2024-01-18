@@ -18,6 +18,7 @@ ext {
 dependencies {
     implementation project(path: ':wwooss-domain-rds')
     implementation project(path: ':wwooss-common')
+    implementation project(path: ':wwooss-domain-es', compileClasspath(""))
     // rest doc
     testImplementation 'com.epages:restdocs-api-spec-mockmvc:0.16.2'
     asciidoctorExt 'org.springframework.restdocs:spring-restdocs-asciidoctor'

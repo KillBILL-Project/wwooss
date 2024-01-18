@@ -1,0 +1,12 @@
+package com.bigbro.wwooss.v1.api.es;
+
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequestMapping("/v1/trash-can/document")
+@RequiredArgsConstructor
+public class TrashCanDocumentApi {
+
+}
