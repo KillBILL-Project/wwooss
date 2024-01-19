@@ -18,7 +18,7 @@ import org.springframework.data.elasticsearch.core.geo.GeoPoint;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Document(indexName = "trash-can")
-@Setting(settingPath = "elastic/analyzer-config.json")
+@Setting(settingPath = "elasticsearch/analyzer-config.json")
 public class TrashCanDocument {
 
     @Id
