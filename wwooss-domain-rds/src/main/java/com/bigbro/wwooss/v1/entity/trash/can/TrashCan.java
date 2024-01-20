@@ -6,6 +6,7 @@ import javax.persistence.*;
 
 import com.bigbro.wwooss.v1.enumType.TrashType;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -32,19 +33,23 @@ public class TrashCan extends BaseEntity {
 
     @Comment("쓰레기 위치 - lng")
     @Column(name = "lng")
-    private Long lng;
+    private Double lng;
 
     @Comment("쓰레기 위치 - lat")
     @Column(name = "lat")
-    private Long lat;
+    private Double lat;
 
     @Comment("쓰레기 위치 - 주소")
     @Column(name = "address")
     private String address;
 
+    @Comment("Success Insert to ES")
+    @Column(name = "insert_es")
+    @Builder.Default
+    private Boolean insertEs = false;
+
     @Comment("쓰레기 종류")
     @Column(name = "trash_type")
-    @Enumerated(value = EnumType.STRING)
-    private TrashType trashType;
+    private String trashType;
 
 }
