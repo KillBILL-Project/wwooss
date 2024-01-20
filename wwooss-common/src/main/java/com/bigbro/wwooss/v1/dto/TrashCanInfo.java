@@ -1,5 +1,6 @@
 package com.bigbro.wwooss.v1.dto;
 
+import com.bigbro.wwooss.v1.enumType.TrashType;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -15,15 +16,15 @@ public class TrashCanInfo {
 
     private String address;
 
-    private String trashCategory;
+    private TrashType trashType;
 
-    public static TrashCanInfo of(Long trashCanId, Long lng, Long lat, String address, String trashCategory) {
+    public static TrashCanInfo of(Long trashCanId, Long lng, Long lat, String address, TrashType trashType) {
         return TrashCanInfo.builder()
                 .trashCanId(trashCanId)
                 .lng(lng)
                 .lat(lat)
                 .address(address)
-                .trashCategory(trashCategory)
+                .trashType(trashType)
                 .build();
     }
 }

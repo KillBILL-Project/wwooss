@@ -1,5 +1,6 @@
 package com.bigbro.wwooss.v1.document;
 
+import com.bigbro.wwooss.v1.enumType.TrashType;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -32,14 +33,14 @@ public class TrashCanDocument {
     private String address;
 
     @Field(type = FieldType.Keyword)
-    private String trashCategory;
+    private TrashType trashType;
 
-    public static TrashCanDocument of(Long id, GeoPoint location, String address, String trashCategory) {
+    public static TrashCanDocument of(Long id, GeoPoint location, String address, TrashType trashType) {
         return TrashCanDocument.builder()
                 .id(id)
                 .location(location)
                 .address(address)
-                .trashCategory(trashCategory)
+                .trashType(trashType)
                 .build();
     }
 

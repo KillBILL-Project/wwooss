@@ -43,8 +43,8 @@ public class TrashCan extends BaseEntity {
     private String address;
 
     @Comment("쓰레기 종류")
-    @Column(name = "trash_category")
+    @Column(name = "trash_type")
     @Enumerated(value = EnumType.STRING)
-    private TrashType trashCategory;
+    private TrashType trashType;
 
 }

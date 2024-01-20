@@ -36,7 +36,7 @@ public class EsServiceImpl implements EsService {
                         new GeoPoint(trashCanInfo.getLat(),
                         trashCanInfo.getLng()),
                         trashCanInfo.getAddress(),
-                        trashCanInfo.getTrashCategory());
+                        trashCanInfo.getTrashType());
 
                 IndexRequest indexRequest = new IndexRequest("trash-can")
                         .id(trashCanDocument.getId().toString())
