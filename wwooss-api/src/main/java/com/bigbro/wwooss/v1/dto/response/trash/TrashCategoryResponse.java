@@ -1,6 +1,7 @@
 package com.bigbro.wwooss.v1.dto.response.trash;
 
 import com.bigbro.wwooss.v1.entity.trash.category.TrashCategory;
+import com.bigbro.wwooss.v1.enumType.TrashType;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,7 +19,7 @@ public class TrashCategoryResponse {
     public static TrashCategoryResponse from(TrashCategory trashCategory) {
         return TrashCategoryResponse.builder()
                 .trashCategoryId(trashCategory.getTrashCategoryId())
-                .trashCategoryName(trashCategory.getTrashCategoryName())
+                .trashCategoryName(trashCategory.getTrashType().getName())
                 .build();
     }
 }

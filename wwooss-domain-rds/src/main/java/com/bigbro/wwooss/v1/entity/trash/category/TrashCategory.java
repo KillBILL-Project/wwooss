@@ -1,6 +1,7 @@
 package com.bigbro.wwooss.v1.entity.trash.category;
 
 import com.bigbro.wwooss.v1.entity.base.BaseEntity;
+import com.bigbro.wwooss.v1.enumType.TrashType;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,13 +29,14 @@ public class TrashCategory extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long trashCategoryId;
 
-    @Comment("쓰레기 카테고리 이름")
+    @Comment("쓰레기 카테고리")
     @Column(name = "trash_category_name")
-    private String trashCategoryName;
+    @Enumerated(value = EnumType.STRING)
+    private TrashType trashType;
 
-    public static TrashCategory from(String trashCategoryName) {
+    public static TrashCategory from(TrashType trashType) {
         return TrashCategory.builder()
-                .trashCategoryName(trashCategoryName)
+                .trashType(trashType)
                 .build();
     }
 }

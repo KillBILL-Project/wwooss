@@ -1,17 +1,17 @@
 package com.bigbro.wwooss.v1.entity.trash.can;
 
 import com.bigbro.wwooss.v1.entity.base.BaseEntity;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+
+import javax.persistence.*;
+
+import com.bigbro.wwooss.v1.enumType.TrashType;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.Comment;
+
+import java.util.List;
 
 /**
  * 쓰레기 위치 정보 및 기본 정보
@@ -26,7 +26,7 @@ import org.hibernate.annotations.Comment;
 public class TrashCan extends BaseEntity {
 
     @Id
-    @Column(name = "trash_can")
+    @Column(name = "trash_can_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long trashCanId;
 
@@ -44,6 +44,7 @@ public class TrashCan extends BaseEntity {
 
     @Comment("쓰레기 종류")
     @Column(name = "trash_category")
-    private String trashCategory;
+    @Enumerated(value = EnumType.STRING)
+    private TrashType trashCategory;
 
 }

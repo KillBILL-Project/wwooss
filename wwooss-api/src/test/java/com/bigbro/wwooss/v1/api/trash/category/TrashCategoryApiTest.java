@@ -4,6 +4,7 @@ import com.bigbro.wwooss.v1.annotation.TestController;
 import com.bigbro.wwooss.v1.config.DocumentConfig;
 import com.bigbro.wwooss.v1.dto.request.trash.category.TrashCategoryRequest;
 import com.bigbro.wwooss.v1.dto.response.trash.TrashCategoryResponse;
+import com.bigbro.wwooss.v1.enumType.TrashType;
 import com.bigbro.wwooss.v1.service.trash.impl.TrashCategoryServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
@@ -44,7 +45,7 @@ class TrashCategoryApiTest {
         List<TrashCategoryResponse> trashCategoryResponses =
                 List.of(TrashCategoryResponse.builder()
                         .trashCategoryId(1L)
-                        .trashCategoryName("플라스틱")
+                        .trashCategoryName(TrashType.PLASTIC.getName())
                         .build());
 
         given(this.trashCategoryService.getTrashCategories()).willReturn(trashCategoryResponses);
@@ -74,7 +75,7 @@ class TrashCategoryApiTest {
     @DisplayName("쓰레기 카테고리 생성")
     void createTrashCategory() throws Exception {
         TrashCategoryRequest trashCategoryRequest = TrashCategoryRequest.builder()
-                .trashCategoryName("플라스틱")
+                .trashType(TrashType.PAPER)
                 .build();
 
 
