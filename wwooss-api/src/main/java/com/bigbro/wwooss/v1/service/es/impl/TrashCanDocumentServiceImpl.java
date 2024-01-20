@@ -1,8 +1,8 @@
 package com.bigbro.wwooss.v1.service.es.impl;
 
 import com.bigbro.wwooss.v1.dto.TrashCanInfoList;
+import com.bigbro.wwooss.v1.dto.response.trash.TrashCanResponse;
 import com.bigbro.wwooss.v1.repository.TrashCanDocumentRepository;
-import com.bigbro.wwooss.v1.service.EsService;
 import com.bigbro.wwooss.v1.service.es.TrashCanDocumentService;
 import com.bigbro.wwooss.v1.service.trash.can.TrashCanService;
 import lombok.AccessLevel;
@@ -11,13 +11,15 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 public class TrashCanDocumentServiceImpl implements TrashCanDocumentService {
 
     private final TrashCanService trashCanService;
 
-    private final EsService esService;
+    private final TrashCanDocumentRepository trashCanDocumentRepository;
 
     @Override
     @Transactional(readOnly = true)
@@ -27,10 +29,17 @@ public class TrashCanDocumentServiceImpl implements TrashCanDocumentService {
 
         while(next) {
             TrashCanInfoList trashCanInfo = trashCanService.getTrashCanInfo(PageRequest.of(index, 10));
-            esService.saveTrashCan(trashCanInfo.getTrashCanInfoList());
+            trashCanDocumentRepository.saveTrashCan(trashCanInfo.getTrashCanInfoList());
             next = trashCanInfo.getHasNext();
             ++index;
         }
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<TrashCanResponse> getTrashCanAroundMe(Double lat, Double lng, String trashType) {
+        trashCanDocumentRepository.findTrashCanDocumentByTrashType(trashType);
+        return null;
     }
 
 }

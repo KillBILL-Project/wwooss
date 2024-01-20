@@ -3,6 +3,12 @@ dependencies {
     implementation project(path: ':wwooss-common')
 }
 
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
 tasks.named('test') {
     useJUnitPlatform()
 }

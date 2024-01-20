@@ -1,5 +1,9 @@
 package com.bigbro.wwooss.v1.service.es;
 
+import com.bigbro.wwooss.v1.dto.response.trash.TrashCanResponse;
+
+import java.util.List;
+
 public interface TrashCanDocumentService {
 
     /**
@@ -7,4 +11,10 @@ public interface TrashCanDocumentService {
      * document 생성
      */
     void migrationTrashCanDocument();
+
+    /**
+     * 내 주변 쓰레기통 정보 가져오기
+     * trashType : 쓰레기 타입 -> ,로 구분 PLASTIC,CAN
+     */
+    List<TrashCanResponse> getTrashCanAroundMe(Double lat, Double lng, String trashType);
 }

@@ -44,9 +44,9 @@ public class TrashCan extends BaseEntity {
     private String address;
 
     @Comment("Success Insert to ES")
-    @Column(name = "insert_es")
+    @Column(name = "saveCompleted")
     @Builder.Default
-    private Boolean insertEs = false;
+    private Boolean saveCompleted = false;
 
     @Comment("쓰레기 종류")
     @Column(name = "trash_type")
