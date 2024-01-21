@@ -9,3 +9,4 @@ import java.util.List;
 public interface TrashCanDocumentRepository extends ElasticsearchRepository<TrashCanDocument, Long>, TrashCanDocumentRepositoryCustom {
     List<TrashCanDocument> findTrashCanDocumentByTrashType(String trashType);
 }
+

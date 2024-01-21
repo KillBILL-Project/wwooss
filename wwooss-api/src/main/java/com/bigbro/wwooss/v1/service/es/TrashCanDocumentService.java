@@ -15,6 +15,7 @@ public interface TrashCanDocumentService {
     /**
      * 내 주변 쓰레기통 정보 가져오기
      * trashType : 쓰레기 타입 -> ,로 구분 PLASTIC,CAN
+     * distance : 내 기준 반경거리 단위 - KM
      */
-    List<TrashCanResponse> getTrashCanAroundMe(Double lat, Double lng, String trashType);
+    List<TrashCanResponse> findTrashCanByGeoLocation(Double lat, Double lng, Integer distance, String trashType);
 }

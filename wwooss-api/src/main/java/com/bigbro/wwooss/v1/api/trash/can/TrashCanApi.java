@@ -24,7 +24,8 @@ public class TrashCanApi {
     @GetMapping
     ResponseEntity<WwoossResponse<List<TrashCanResponse>>> getTrashCanAroundMe(@RequestParam("lat") Double lat,
                                                                               @RequestParam("lng") Double lng,
+                                                                               @RequestParam("distance") Integer distance,
                                                                               @RequestParam("trashType") String trashType) {
-        return WwoossResponseUtil.responseOkAddData(trashCanDocumentService.getTrashCanAroundMe(lat, lng, trashType));
+        return WwoossResponseUtil.responseOkAddData(trashCanDocumentService.findTrashCanByGeoLocation(lat, lng, distance, trashType));
     }
 }

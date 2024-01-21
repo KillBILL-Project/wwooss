@@ -22,4 +22,14 @@ public class TrashCanResponse {
 
     // , 로 구분 => PLASTIC,CAN,PAPER
     private List<String> trashType;
+
+    public static TrashCanResponse of(Long trashCanId, Double lat, Double lng, String address, List<String> trashType) {
+        return TrashCanResponse.builder()
+                .trashCanId(trashCanId)
+                .lat(lat)
+                .lng(lng)
+                .address(address)
+                .trashType(trashType)
+                .build();
+    }
 }

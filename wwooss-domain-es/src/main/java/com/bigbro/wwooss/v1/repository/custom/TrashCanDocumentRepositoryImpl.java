@@ -2,6 +2,7 @@ package com.bigbro.wwooss.v1.repository.custom;
 
 import com.bigbro.wwooss.v1.document.TrashCanDocument;
 import com.bigbro.wwooss.v1.dto.TrashCanInfo;
+import com.bigbro.wwooss.v1.enumType.TrashType;
 import com.bigbro.wwooss.v1.exception.IncorrectDataException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AccessLevel;
@@ -10,18 +11,29 @@ import org.elasticsearch.action.bulk.BulkRequest;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
+import org.elasticsearch.common.unit.DistanceUnit;
 import org.elasticsearch.xcontent.XContentType;
-import org.springframework.data.elasticsearch.core.geo.GeoPoint;
+import org.elasticsearch.common.geo.GeoPoint;
+import org.elasticsearch.index.query.GeoDistanceQueryBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
+import org.springframework.data.elasticsearch.core.SearchHit;
+import org.springframework.data.elasticsearch.core.SearchOperations;
+import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 
 import static com.bigbro.wwooss.v1.response.WwoossResponseCode.DOCUMENT_BULK_INSERT_ERROR;
 
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
-public class TrashCanDocumentRepositoryImpl implements TrashCanDocumentRepositoryCustom{
+public class TrashCanDocumentRepositoryImpl implements TrashCanDocumentRepositoryCustom {
+
+    private static final int DEFAULT_DISTANCE = 50;
 
     private final RestHighLevelClient highLevelClient;
+
+    private final SearchOperations searchOperations;
 
     @Override
     public void saveTrashCan(List<TrashCanInfo> trashCanInfoList) {
@@ -51,5 +63,19 @@ public class TrashCanDocumentRepositoryImpl implements TrashCanDocumentRepositor
         } catch (IOException e) {
             throw new IncorrectDataException(DOCUMENT_BULK_INSERT_ERROR);
         }
+    }
+
+    @Override
+    public List<TrashCanDocument> findByGeoLocationAndTrashType(Double lat, Double lng, Integer distance, String trashType) {
+        if(Objects.isNull(distance)) {
+            distance = DEFAULT_DISTANCE;
+        }
+        GeoDistanceQueryBuilder geoDistanceQueryBuilder = QueryBuilders.geoDistanceQuery("location")
+                .point(lat, lng)
+                .distance(distance, DistanceUnit.KILOMETERS);
+
+        NativeSearchQuery searchQuery = new NativeSearchQuery(geoDistanceQueryBuilder);
+        List<SearchHit<TrashCanDocument>> searchHits = searchOperations.search(searchQuery, TrashCanDocument.class).getSearchHits();
+        return searchHits.stream().map(SearchHit::getContent).toList();
     }
 }

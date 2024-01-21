@@ -22,10 +22,10 @@ public class TrashCanServiceImpl implements TrashCanService {
     @Override
     @Transactional(readOnly = true)
     public TrashCanInfoList getTrashCanInfo(Pageable pageable) {
-        Slice<TrashCan> trashCanAll = trashCanRepository.findBySaveCompleted(false, pageable);
-        List<TrashCanInfo> trashCanInfoList = trashCanAll.getContent().stream().map(
+        Slice<TrashCan> trashCanList = trashCanRepository.findBySaveCompleted(false, pageable);
+        List<TrashCanInfo> trashCanInfoList = trashCanList.getContent().stream().map(
                 (trash) -> TrashCanInfo.of(trash.getTrashCanId(), trash.getLng(), trash.getLat(),
                         trash.getAddress(), trash.getTrashType())).toList();
-        return TrashCanInfoList.of(trashCanAll.hasNext(), trashCanInfoList);
+        return TrashCanInfoList.of(trashCanList.hasNext(), trashCanInfoList);
     }
 }
