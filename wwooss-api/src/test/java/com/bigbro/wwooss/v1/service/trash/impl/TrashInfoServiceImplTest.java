@@ -3,6 +3,7 @@ package com.bigbro.wwooss.v1.service.trash.impl;
 import com.bigbro.wwooss.v1.dto.response.trash.TrashInfoResponse;
 import com.bigbro.wwooss.v1.entity.trash.category.TrashCategory;
 import com.bigbro.wwooss.v1.entity.trash.info.TrashInfo;
+import com.bigbro.wwooss.v1.enumType.TrashType;
 import com.bigbro.wwooss.v1.exception.DataNotFoundException;
 import com.bigbro.wwooss.v1.repository.trash.category.TrashCategoryRepository;
 import com.bigbro.wwooss.v1.repository.trash.info.TrashInfoRepository;
@@ -43,7 +44,7 @@ public class TrashInfoServiceImplTest {
     void findTrashInfoList() {
         TrashCategory trashCategory = TrashCategory.builder()
                 .trashCategoryId(1L)
-                .trashCategoryName("플라스틱")
+                .trashType(TrashType.PAPER)
                 .build();
 
         TrashInfo plastic = TrashInfo.builder()

@@ -2,8 +2,8 @@ spring:
   config:
     activate:
       on-profile: local
-    elasticsearch:
-      uris: "localhost:9200"
+  elasticsearch:
+    uris: "localhost:9200"
 
 ---
 
@@ -17,8 +17,8 @@ spring:
   config:
     activate:
       on-profile: develop
-    elasticsearch:
-      uris: "localhost:9200"
+  elasticsearch:
+    uris: "localhost:9200"
 
 ---
 
@@ -26,5 +26,5 @@ spring:
   config:
     activate:
       on-profile: prod
-    elasticsearch:
-      uris: "localhost:9200"
+  elasticsearch:
+    uris: "localhost:9200"

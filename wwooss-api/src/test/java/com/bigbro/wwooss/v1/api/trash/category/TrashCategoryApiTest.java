@@ -4,6 +4,7 @@ import com.bigbro.wwooss.v1.annotation.TestController;
 import com.bigbro.wwooss.v1.config.DocumentConfig;
 import com.bigbro.wwooss.v1.dto.request.trash.category.TrashCategoryRequest;
 import com.bigbro.wwooss.v1.dto.response.trash.TrashCategoryResponse;
+import com.bigbro.wwooss.v1.enumType.TrashType;
 import com.bigbro.wwooss.v1.service.trash.impl.TrashCategoryServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
@@ -20,8 +21,7 @@ import java.util.List;
 import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.document;
 import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.resourceDetails;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -44,7 +44,7 @@ class TrashCategoryApiTest {
         List<TrashCategoryResponse> trashCategoryResponses =
                 List.of(TrashCategoryResponse.builder()
                         .trashCategoryId(1L)
-                        .trashCategoryName("플라스틱")
+                        .trashCategoryName(TrashType.PLASTIC.getName())
                         .build());
 
         given(this.trashCategoryService.getTrashCategories()).willReturn(trashCategoryResponses);
@@ -74,7 +74,7 @@ class TrashCategoryApiTest {
     @DisplayName("쓰레기 카테고리 생성")
     void createTrashCategory() throws Exception {
         TrashCategoryRequest trashCategoryRequest = TrashCategoryRequest.builder()
-                .trashCategoryName("플라스틱")
+                .trashType(TrashType.PAPER)
                 .build();
 
 
@@ -89,6 +89,11 @@ class TrashCategoryApiTest {
                                 resourceDetails().tags("쓰레기 카테고리 생성"),
                                 DocumentConfig.getDocumentRequest(),
                                 DocumentConfig.getDocumentResponse(),
+                                requestFields(
+                                        fieldWithPath("trashType").description(
+                                                "쓰레기 타입 - PAPER[종이] / CAN[캔] / PLASTIC[플라스틱] / PET[페트병] / VESSEL[용기]"),
+                                        fieldWithPath("counselAt").description("상담 일시")
+                                ),
                                 responseFields(
                                         fieldWithPath("code").description("응답 코드"),
                                         fieldWithPath("title").description("응답 코드 별 클라이언트 노출 제목"),

@@ -29,6 +29,6 @@ public class TrashCategoryServiceImpl implements TrashCategoryService {
     @Override
     @Transactional
     public void createTrashCategory(TrashCategoryRequest trashCategoryRequest) {
-        trashCategoryRepository.save(TrashCategory.from(trashCategoryRequest.getTrashCategoryName()));
+        trashCategoryRepository.save(TrashCategory.from(trashCategoryRequest.getTrashType()));
     }
 }

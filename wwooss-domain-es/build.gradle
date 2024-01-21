@@ -1,5 +1,12 @@
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-elasticsearch'
+    implementation project(path: ':wwooss-common')
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
 }
 
 tasks.named('test') {
