@@ -2,13 +2,11 @@ package com.bigbro.wwooss.v1.repository.custom;
 
 import com.bigbro.wwooss.v1.document.TrashCanDocument;
 import com.bigbro.wwooss.v1.dto.TrashCanInfo;
-import com.bigbro.wwooss.v1.enumType.TrashType;
 import com.bigbro.wwooss.v1.exception.IncorrectDataException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.lucene.queryparser.xml.builders.BooleanQueryBuilder;
 import org.elasticsearch.action.bulk.BulkRequest;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.client.RequestOptions;
@@ -25,8 +23,6 @@ import org.springframework.data.elasticsearch.core.SearchOperations;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
 import org.springframework.lang.Nullable;
 
-import javax.validation.constraints.Null;
-import java.awt.print.Pageable;
 import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
