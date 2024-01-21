@@ -7,11 +7,15 @@ import com.bigbro.wwooss.v1.exception.IncorrectDataException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.lucene.queryparser.xml.builders.BooleanQueryBuilder;
 import org.elasticsearch.action.bulk.BulkRequest;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.common.unit.DistanceUnit;
+import org.elasticsearch.index.query.MatchQueryBuilder;
+import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.xcontent.XContentType;
 import org.elasticsearch.common.geo.GeoPoint;
 import org.elasticsearch.index.query.GeoDistanceQueryBuilder;
@@ -19,7 +23,10 @@ import org.elasticsearch.index.query.QueryBuilders;
 import org.springframework.data.elasticsearch.core.SearchHit;
 import org.springframework.data.elasticsearch.core.SearchOperations;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
+import org.springframework.lang.Nullable;
 
+import javax.validation.constraints.Null;
+import java.awt.print.Pageable;
 import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
@@ -66,15 +73,23 @@ public class TrashCanDocumentRepositoryImpl implements TrashCanDocumentRepositor
     }
 
     @Override
-    public List<TrashCanDocument> findByGeoLocationAndTrashType(Double lat, Double lng, Integer distance, String trashType) {
+    public List<TrashCanDocument> findByGeoLocationAndTrashType(Double lat, Double lng, Integer distance, @Nullable String trashType) {
         if(Objects.isNull(distance)) {
             distance = DEFAULT_DISTANCE;
         }
         GeoDistanceQueryBuilder geoDistanceQueryBuilder = QueryBuilders.geoDistanceQuery("location")
                 .point(lat, lng)
                 .distance(distance, DistanceUnit.KILOMETERS);
+        MatchQueryBuilder matchQueryBuilder = QueryBuilders.matchQuery("trashType", trashType);
 
-        NativeSearchQuery searchQuery = new NativeSearchQuery(geoDistanceQueryBuilder);
+        QueryBuilder search;
+        if(StringUtils.isBlank(trashType)) {
+            search = QueryBuilders.boolQuery().must(geoDistanceQueryBuilder);
+        } else {
+            search = QueryBuilders.boolQuery().must(matchQueryBuilder).must(geoDistanceQueryBuilder);
+        }
+
+        NativeSearchQuery searchQuery = new NativeSearchQuery(search);
         List<SearchHit<TrashCanDocument>> searchHits = searchOperations.search(searchQuery, TrashCanDocument.class).getSearchHits();
         return searchHits.stream().map(SearchHit::getContent).toList();
     }
