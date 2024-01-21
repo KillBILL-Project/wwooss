@@ -76,12 +76,12 @@ public class TrashCanDocumentRepositoryImpl implements TrashCanDocumentRepositor
         GeoDistanceQueryBuilder geoDistanceQueryBuilder = QueryBuilders.geoDistanceQuery("location")
                 .point(lat, lng)
                 .distance(distance, DistanceUnit.KILOMETERS);
-        MatchQueryBuilder matchQueryBuilder = QueryBuilders.matchQuery("trashType", trashType);
 
         QueryBuilder search;
         if(StringUtils.isBlank(trashType)) {
             search = QueryBuilders.boolQuery().must(geoDistanceQueryBuilder);
         } else {
+            MatchQueryBuilder matchQueryBuilder = QueryBuilders.matchQuery("trashType", trashType);
             search = QueryBuilders.boolQuery().must(matchQueryBuilder).must(geoDistanceQueryBuilder);
         }
 

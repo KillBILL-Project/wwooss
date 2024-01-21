@@ -7,6 +7,7 @@ import com.bigbro.wwooss.v1.service.es.TrashCanDocumentService;
 import com.bigbro.wwooss.v1.service.trash.can.TrashCanService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -25,7 +26,7 @@ public class TrashCanApi {
     ResponseEntity<WwoossResponse<List<TrashCanResponse>>> getTrashCanAroundMe(@RequestParam("lat") Double lat,
                                                                               @RequestParam("lng") Double lng,
                                                                                @RequestParam("distance") Integer distance,
-                                                                              @RequestParam("trashType") String trashType) {
+                                                                              @RequestParam(value = "trashType", required = false) String trashType) {
         return WwoossResponseUtil.responseOkAddData(trashCanDocumentService.findTrashCanByGeoLocation(lat, lng, distance, trashType));
     }
 }
