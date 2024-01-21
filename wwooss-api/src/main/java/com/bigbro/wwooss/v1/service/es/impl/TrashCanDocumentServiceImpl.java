@@ -39,7 +39,7 @@ public class TrashCanDocumentServiceImpl implements TrashCanDocumentService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<TrashCanResponse> findTrashCanByGeoLocationㅂ(Double lat, Double lng, Integer distance, String trashType) {
+    public List<TrashCanResponse> findTrashCanByGeoLocation(Double lat, Double lng, Integer distance, String trashType) {
         List<TrashCanDocument> findTrashCanLocation = trashCanDocumentRepository.findByGeoLocationAndTrashType(lat, lng, distance, trashType);
         return findTrashCanLocation.stream().map(trashCan -> {
             String trashTypeListString = trashCan.getTrashType();
