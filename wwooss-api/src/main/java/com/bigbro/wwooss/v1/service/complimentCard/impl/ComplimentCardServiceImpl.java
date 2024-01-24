@@ -16,6 +16,8 @@ import com.bigbro.wwooss.v1.service.complimentCard.ComplimentCardService;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
+
+import com.bigbro.wwooss.v1.utils.ImageUtil;
 import org.springframework.data.domain.Pageable;
 import java.util.List;
 import lombok.AccessLevel;
@@ -29,16 +31,13 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 public class ComplimentCardServiceImpl implements ComplimentCardService {
 
-    @Value("${aws.cloud-front.path}")
-    private String imageBase;
-
-    private final String COMPLIMENT_CARD_PATH = "compliment_card";
-
     private final ComplimentCardRepository complimentCardRepository;
 
     private final ComplimentCardMetaRepository complimentCardMetaRepository;
 
     private final UserRepository userRepository;
+
+    private final ImageUtil imageUtil;
 
 
     @Override
@@ -62,7 +61,7 @@ public class ComplimentCardServiceImpl implements ComplimentCardService {
                 cardType, pageable);
         List<ComplimentCardResponse> cardResponseList =
                 complimentCardList.getContent().stream().map((card) -> ComplimentCardResponse.of(card.getComplimentCardId(), card.getComplimentCardMeta(),
-                                imageBase + COMPLIMENT_CARD_PATH)).toList();
+                        imageUtil.baseComplimentCardImagePath())).toList();
 
         return ComplimentCardListResponse.of(complimentCardList.hasNext(), cardResponseList);
     }
@@ -73,7 +72,7 @@ public class ComplimentCardServiceImpl implements ComplimentCardService {
             LocalDateTime toDate) {
         List<ComplimentCard> complimentCardList = complimentCardRepository.findByUserBetweenDate(user, fromDate, toDate);
         return complimentCardList.stream().map((card) -> ComplimentCardResponse.of(card.getComplimentCardId(), card.getComplimentCardMeta(),
-                                        imageBase + COMPLIMENT_CARD_PATH)).toList();
+                                        imageUtil.baseComplimentCardImagePath())).toList();
     }
 
     @Override
@@ -83,7 +82,7 @@ public class ComplimentCardServiceImpl implements ComplimentCardService {
                 complimentCardRepository.findById(complimentCardId)
                         .orElseThrow(() -> new DataNotFoundException(WwoossResponseCode.NOT_FOUND_DATA, "존재하지 칭찬카드"));
         return ComplimentCardResponse.of(complimentCard.getComplimentCardId(), complimentCard.getComplimentCardMeta()
-                , imageBase + COMPLIMENT_CARD_PATH);
+                , imageUtil.baseComplimentCardImagePath());
     }
 
 }

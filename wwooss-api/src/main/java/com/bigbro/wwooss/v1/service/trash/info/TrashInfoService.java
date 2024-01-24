@@ -8,16 +8,14 @@ import java.util.List;
 public interface TrashInfoService {
 
     /**
-     * @param categoryId 쓰레기 카테고리 ID
-     *
-     * @return TrashInfoResponse List 쓰레기 카테고리 정보 목록
+     * 모든 쓰레기 메타 정보 조회
      */
-    List<TrashInfoResponse> getTrashInfoByCategoryId(Long categoryId);
+    List<TrashInfoResponse> getTrashInfo();
 
     /**
      * @param trashInfoRequest 쓰레기 기본 정보 데이터 ( weight etc...)
      *
      * @return TrashInfoResponse 쓰레기 카테고리 정보 목록
      */
-    TrashInfoResponse createTrashInfo(TrashInfoRequest trashInfoRequest);
+    void createTrashInfo(TrashInfoRequest trashInfoRequest);
 }
