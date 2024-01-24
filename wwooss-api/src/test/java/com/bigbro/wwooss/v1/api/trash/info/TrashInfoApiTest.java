@@ -4,6 +4,7 @@ import com.bigbro.wwooss.v1.annotation.TestController;
 import com.bigbro.wwooss.v1.config.DocumentConfig;
 import com.bigbro.wwooss.v1.dto.request.trash.info.TrashInfoRequest;
 import com.bigbro.wwooss.v1.dto.response.trash.TrashInfoResponse;
+import com.bigbro.wwooss.v1.enumType.TrashSize;
 import com.bigbro.wwooss.v1.service.trash.info.TrashInfoService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
@@ -83,8 +84,9 @@ class TrashInfoApiTest {
         TrashInfoRequest trashInfoRequest = TrashInfoRequest.builder()
                 .name("플라스틱")
                 .weight(1D)
-                .carbonEmissionPerGram(1D)
-                .refund(1L)
+                .refund(100L)
+                .size(TrashSize.BIG)
+                .carbonSaving(12D)
                 .trashCategoryId(1L)
                 .build();
 

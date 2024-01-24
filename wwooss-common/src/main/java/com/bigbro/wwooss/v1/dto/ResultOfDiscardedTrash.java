@@ -7,13 +7,13 @@ import lombok.Getter;
 @Builder
 public class ResultOfDiscardedTrash {
 
-    private double carbonEmission;
+    private double carbonSaving;
 
     private long refund;
 
-    public static ResultOfDiscardedTrash of(double carbonEmission, long refund) {
+    public static ResultOfDiscardedTrash of(double carbonSaving, long refund) {
         return ResultOfDiscardedTrash.builder()
-                .carbonEmission(carbonEmission)
+                .carbonSaving(carbonSaving)
                 .refund(refund)
                 .build();
     }

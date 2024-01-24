@@ -3,6 +3,7 @@ package com.bigbro.wwooss.v1.entity.trash.can;
 import com.bigbro.wwooss.v1.entity.base.BaseEntity;
 import com.bigbro.wwooss.v1.entity.trash.info.TrashInfo;
 import com.bigbro.wwooss.v1.entity.user.User;
+import com.bigbro.wwooss.v1.enumType.TrashSize;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -30,14 +31,6 @@ public class TrashCanContents extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long trashCanContentsId;
 
-    @Comment("버린 쓰레기 수")
-    @Column(name = "trash_count")
-    private Long trashCount;
-
-    @Comment("쓰레기 크기 - 10 단위")
-    @Column(name = "size")
-    private Integer size;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
@@ -46,11 +39,9 @@ public class TrashCanContents extends BaseEntity {
     @JoinColumn(name = "trash_info_id")
     private TrashInfo trashInfo;
 
-    public static TrashCanContents of(TrashInfo trashInfo, User user, Long trashCount, Integer size) {
+    public static TrashCanContents of(TrashInfo trashInfo, User user) {
         return TrashCanContents.builder()
-                .trashCount(trashCount)
                 .user(user)
-                .size(size)
                 .trashInfo(trashInfo)
                 .build();
     }

@@ -42,8 +42,8 @@ public class TrashCanContentsServiceImpl implements TrashCanContentsService {
         User user = userRepository.findById(userId).orElseThrow(() -> new DataNotFoundException(WwoossResponseCode.NOT_FOUND_DATA, "존재하지 않는 유저입니다."));
         TrashInfo trashInfo = trashInfoRepository.findById(trashCanContentsRequest.getTrashInfoId()).orElseThrow(() -> new DataNotFoundException(WwoossResponseCode.NOT_FOUND_DATA, "존재하지 않는 쓰레기 정보 입니다."));
 
-        trashCanContentsRepository.save(TrashCanContents.of(trashInfo, user, trashCanContentsRequest.getTrashCount(), trashCanContentsRequest.getSize()));
-        trashLogService.createTrashLog(user, trashInfo, trashCanContentsRequest.getTrashCount(), trashCanContentsRequest.getSize());
+        trashCanContentsRepository.save(TrashCanContents.of(trashInfo, user));
+        trashLogService.createTrashLog(user, trashInfo);
     }
 
     @Override
@@ -56,6 +56,7 @@ public class TrashCanContentsServiceImpl implements TrashCanContentsService {
             return null;
         };
 
+        // 쓰리기 비우기 전 히스토리 테이블 적재
         EmptyTrashResultResponse emptyTrashResultResponse = trashCanHistoryService.createTrashCanHistory(trashCanContentsList, user);
         trashCanContentsRepository.deleteAll(trashCanContentsList);
 

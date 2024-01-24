@@ -65,7 +65,7 @@ class TrashCanContentsServiceImplTest {
                         .name("플라스틱")
                         .weight(1D)
                         .refund(1L)
-                        .carbonEmissionPerGram(1D)
+                        .carbonSaving(1D)
                         .build();
 
         given(userRepository.findById(1L)).willReturn(Optional.ofNullable(user));
@@ -99,8 +99,6 @@ class TrashCanContentsServiceImplTest {
                 .build();
         List<TrashCanContents> trashCanContentsList = List.of(TrashCanContents.builder()
                 .trashCanContentsId(1L)
-                .trashCount(1L)
-                .size(1)
                 .user(user)
                 .build());
         given(userRepository.findById(1L)).willReturn(Optional.ofNullable(user));

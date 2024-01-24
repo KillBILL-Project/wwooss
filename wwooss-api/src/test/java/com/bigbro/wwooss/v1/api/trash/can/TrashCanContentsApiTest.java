@@ -3,10 +3,11 @@ package com.bigbro.wwooss.v1.api.trash.can;
 import com.bigbro.wwooss.v1.annotation.TestController;
 import com.bigbro.wwooss.v1.annotation.WithMockCustomUser;
 import com.bigbro.wwooss.v1.config.DocumentConfig;
-import com.bigbro.wwooss.v1.dto.CarbonEmissionByTrashCategory;
+import com.bigbro.wwooss.v1.dto.CarbonSavingByTrashCategory;
 import com.bigbro.wwooss.v1.dto.RefundByTrashCategory;
 import com.bigbro.wwooss.v1.dto.request.trash.can.TrashCanContentsRequest;
 import com.bigbro.wwooss.v1.dto.response.trash.EmptyTrashResultResponse;
+import com.bigbro.wwooss.v1.enumType.TrashType;
 import com.bigbro.wwooss.v1.service.trash.can.TrashCanContentsService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
@@ -46,8 +47,6 @@ class TrashCanContentsApiTest {
     @DisplayName("쓰레기통 내용물 적립")
     void createTrashCanContents() throws Exception {
         TrashCanContentsRequest trashCanContentsRequest = TrashCanContentsRequest.builder()
-                .trashCount(1L)
-                .size(1)
                 .trashInfoId(1L)
                 .build();
 
@@ -76,10 +75,10 @@ class TrashCanContentsApiTest {
     @WithMockCustomUser
     @DisplayName("쓰레기통 비우기")
     void deleteTrashCanContents() throws Exception {
-        List<CarbonEmissionByTrashCategory> carbonEmissionByTrashCategory = List.of(CarbonEmissionByTrashCategory.of("플라스틱", 10.0D));
-        List<RefundByTrashCategory> refundByTrashCategory = List.of(RefundByTrashCategory.of("플라스틱", 100L));
+        List<CarbonSavingByTrashCategory> carbonSavingByTrashCategory = List.of(CarbonSavingByTrashCategory.of(TrashType.CAN, 10.0D));
+        List<RefundByTrashCategory> refundByTrashCategory = List.of(RefundByTrashCategory.of(TrashType.CAN, 100L));
         EmptyTrashResultResponse emptyTrashResultResponse = EmptyTrashResultResponse.of(
-                30.0D, carbonEmissionByTrashCategory, 100L, refundByTrashCategory);
+                30.0D, carbonSavingByTrashCategory, 100L, refundByTrashCategory);
 
         given(this.trashCanContentsService.deleteTrashCanContents(1L)).willReturn(emptyTrashResultResponse);
 

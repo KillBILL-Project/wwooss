@@ -24,14 +24,6 @@ public class TrashLog extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long trashLogId;
 
-    @Comment("버린 쓰레기 수")
-    @Column(name = "trash_count")
-    private Long trashCount;
-
-    @Comment("쓰레기 크기 - 10 단위")
-    @Column(name = "size")
-    private Integer size;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
@@ -44,12 +36,10 @@ public class TrashLog extends BaseEntity {
     @JoinColumn(name = "trash_can_history_id")
     private TrashCanHistory trashCanHistory;
 
-    public static TrashLog of(User user, TrashInfo trashInfo, Long trashCount, Integer size) {
+    public static TrashLog of(User user, TrashInfo trashInfo) {
         return TrashLog.builder()
                 .user(user)
                 .trashInfo(trashInfo)
-                .trashCount(trashCount)
-                .size(size)
                 .build();
     }
 

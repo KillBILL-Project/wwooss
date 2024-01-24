@@ -40,8 +40,9 @@ public class TrashInfoServiceImpl implements TrashInfoService {
         TrashInfo trashInfo = trashInfoRepository.save(TrashInfo.of(
                 trashInfoRequest.getName(),
                 trashInfoRequest.getWeight(),
-                trashInfoRequest.getCarbonEmissionPerGram(),
-                trashInfoRequest.getRefund(), trashCategory));
+                trashInfoRequest.getCarbonSaving(),
+                trashInfoRequest.getRefund(), trashCategory, trashInfoRequest.getSize())
+        );
 
         return TrashInfoResponse.from(trashInfo);
     }

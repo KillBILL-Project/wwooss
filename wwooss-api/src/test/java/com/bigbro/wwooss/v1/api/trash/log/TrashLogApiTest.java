@@ -5,9 +5,12 @@ import com.bigbro.wwooss.v1.annotation.WithMockCustomUser;
 import com.bigbro.wwooss.v1.config.DocumentConfig;
 import com.bigbro.wwooss.v1.dto.response.trash.TrashLogListResponse;
 import com.bigbro.wwooss.v1.dto.response.trash.TrashLogResponse;
+import com.bigbro.wwooss.v1.entity.trash.category.TrashCategory;
 import com.bigbro.wwooss.v1.entity.trash.info.TrashInfo;
 import com.bigbro.wwooss.v1.entity.trash.log.TrashLog;
 import com.bigbro.wwooss.v1.entity.user.User;
+import com.bigbro.wwooss.v1.enumType.TrashSize;
+import com.bigbro.wwooss.v1.enumType.TrashType;
 import com.bigbro.wwooss.v1.service.trash.log.TrashLogService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,6 +21,7 @@ import org.springframework.http.MediaType;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.document;
@@ -49,13 +53,21 @@ class TrashLogApiTest {
         User user = User.builder()
                 .userId(1L)
                 .build();
+        TrashCategory trashCategory = TrashCategory.builder()
+                .trashCategoryId(1L)
+                .trashType(TrashType.CAN)
+                .build();
         TrashInfo trashInfo = TrashInfo.builder()
                 .trashInfoId(1L)
                 .name("플라스틱")
+                .weight(100D)
+                .size(TrashSize.BIG)
+                .trashImagePath("image/trash")
                 .refund(100L)
-                .carbonEmissionPerGram(1D)
+                .carbonSaving(1D)
+                .trashCategory(trashCategory)
                 .build();
-        TrashLog trashLog = TrashLog.of(user, trashInfo, 3L, 2);
+        TrashLog trashLog = TrashLog.of(user, trashInfo);
         List<TrashLogResponse> trashLogResponseList = List.of(TrashLogResponse.of(trashLog));
         TrashLogListResponse trashInfoResponseList =
                 TrashLogListResponse.of(false, trashLogResponseList);
@@ -87,8 +99,8 @@ class TrashLogApiTest {
                                         fieldWithPath("data.hasNext").description("다음 페이지 존재 여부"),
                                         fieldWithPath("data.trashLogResponseList[].trashLogId").description("쓰레기 기록 ID"),
                                         fieldWithPath("data.trashLogResponseList[].trashCategoryName").description("쓰레기 이름"),
-                                        fieldWithPath("data.trashLogResponseList[].size").description("버린 쓰레기 크기"),
-                                        fieldWithPath("data.trashLogResponseList[].trashCount").description("버린 쓰레기 수"),
+                                        fieldWithPath("data.trashLogResponseList[].size").description("쓰레기 크기 - [SMALL,MEDIUM,BIG]"),
+                                        fieldWithPath("data.trashLogResponseList[].trashImagePath").description("쓰레기 이미지"),
                                         fieldWithPath("data.trashLogResponseList[].createdAt").description("쓰레기 버린 날짜")
                                 )
                         )

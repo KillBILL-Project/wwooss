@@ -30,8 +30,8 @@ public class TrashLogServiceImpl implements TrashLogService {
 
     @Override
     @Transactional
-    public void createTrashLog(User user, TrashInfo trashInfo, Long trashCount, Integer size) {
-        trashLogRepository.save(TrashLog.of(user, trashInfo, trashCount, size));
+    public void createTrashLog(User user, TrashInfo trashInfo) {
+        trashLogRepository.save(TrashLog.of(user, trashInfo));
     }
 
     @Override

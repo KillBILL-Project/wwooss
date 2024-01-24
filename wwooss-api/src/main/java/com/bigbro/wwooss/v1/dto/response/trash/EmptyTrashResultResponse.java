@@ -1,6 +1,6 @@
 package com.bigbro.wwooss.v1.dto.response.trash;
 
-import com.bigbro.wwooss.v1.dto.CarbonEmissionByTrashCategory;
+import com.bigbro.wwooss.v1.dto.CarbonSavingByTrashCategory;
 import com.bigbro.wwooss.v1.dto.RefundByTrashCategory;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -18,7 +18,7 @@ public class EmptyTrashResultResponse {
     private Double totalCarbonEmission;
 
     // 물건 성분별 탄소 배출
-    private List<CarbonEmissionByTrashCategory> carbonEmissionByTrashCategoryList;
+    private List<CarbonSavingByTrashCategory> carbonEmissionByTrashCategoryList;
 
     // 환급금 총합
     private Long totalRefund;
@@ -27,7 +27,7 @@ public class EmptyTrashResultResponse {
     private List<RefundByTrashCategory> refundByTrashCategoryList;
 
     public static EmptyTrashResultResponse of(Double totalCarbonEmission,
-                                              List<CarbonEmissionByTrashCategory> carbonEmissionByTrashCategoryList,
+                                              List<CarbonSavingByTrashCategory> carbonEmissionByTrashCategoryList,
                                               Long totalRefund,
                                               List<RefundByTrashCategory> refundByTrashCategoryList) {
         return EmptyTrashResultResponse.builder()

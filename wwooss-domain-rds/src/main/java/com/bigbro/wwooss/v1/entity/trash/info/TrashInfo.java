@@ -2,6 +2,7 @@ package com.bigbro.wwooss.v1.entity.trash.info;
 
 import com.bigbro.wwooss.v1.entity.base.BaseEntity;
 import com.bigbro.wwooss.v1.entity.trash.category.TrashCategory;
+import com.bigbro.wwooss.v1.enumType.TrashSize;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -32,13 +33,22 @@ public class TrashInfo extends BaseEntity {
     @Column(name = "name")
     private String name;
 
-    @Comment("최소 쓰레기 무게 (gram)")
+    @Comment("쓰레기 무게 (gram)")
     @Column(name = "weight")
     private Double weight;
 
-    @Comment("1g당 탄소 배출량")
-    @Column(name = "carbon_emission_per_gram")
-    private Double carbonEmissionPerGram;
+    @Comment("쓰레기 크기 - [BIG/MEDIUM/SMALL]")
+    @Column(name = "size")
+    @Enumerated(EnumType.STRING)
+    private TrashSize size;
+
+    @Comment("탄소 절감량 - gCO2")
+    @Column(name = "carbon_emission")
+    private Double carbonSaving;
+
+    @Comment("쓰레기 이미지")
+    @Column(name = "trash_image_path")
+    private String trashImagePath;
 
     @Comment("환급 금액")
     @Column(name = "refund")
@@ -48,13 +58,14 @@ public class TrashInfo extends BaseEntity {
     @JoinColumn(name = "trash_category_id")
     private TrashCategory trashCategory;
 
-    public static TrashInfo of(String name, Double weight, Double carbonEmissionPerGram, Long refund, TrashCategory trashCategory) {
+    public static TrashInfo of(String name, Double weight, Double carbonSaving, Long refund, TrashCategory trashCategory, TrashSize size) {
         return TrashInfo.builder()
                 .name(name)
                 .weight(weight)
-                .carbonEmissionPerGram(carbonEmissionPerGram)
+                .carbonSaving(carbonSaving)
                 .refund(refund)
                 .trashCategory(trashCategory)
+                .size(size)
                 .build();
     }
 

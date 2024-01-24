@@ -12,10 +12,8 @@ public interface TrashLogService {
      * 로그 생성 API
      * @param user
      * @param trashInfo
-     * @param trashCount
-     * @param size
      */
-    void createTrashLog(User user, TrashInfo trashInfo, Long trashCount, Integer size);
+    void createTrashLog(User user, TrashInfo trashInfo);
 
     /**
      * 쓰레기통 비우기 히스토리 ID 추가

@@ -3,6 +3,7 @@ package com.bigbro.wwooss.v1.service.trash.impl;
 import com.bigbro.wwooss.v1.dto.response.trash.TrashInfoResponse;
 import com.bigbro.wwooss.v1.entity.trash.category.TrashCategory;
 import com.bigbro.wwooss.v1.entity.trash.info.TrashInfo;
+import com.bigbro.wwooss.v1.enumType.TrashSize;
 import com.bigbro.wwooss.v1.enumType.TrashType;
 import com.bigbro.wwooss.v1.exception.DataNotFoundException;
 import com.bigbro.wwooss.v1.repository.trash.category.TrashCategoryRepository;
@@ -42,48 +43,54 @@ public class TrashInfoServiceImplTest {
     @Test
     @DisplayName("쓰레기 정보 목록 불러오기")
     void findTrashInfoList() {
-        TrashCategory trashCategory = TrashCategory.builder()
+        TrashCategory plasticCrashCategory = TrashCategory.builder()
                 .trashCategoryId(1L)
-                .trashType(TrashType.PAPER)
+                .trashType(TrashType.PLASTIC)
                 .build();
 
-        TrashInfo plastic = TrashInfo.builder()
+        TrashInfo plastic_01 = TrashInfo.builder()
                 .trashInfoId(1L)
-                .name("플라스틱")
+                .name("플라스틱_01")
                 .weight(1D)
+                .size(TrashSize.MEDIUM)
                 .refund(1L)
-                .carbonEmissionPerGram(1D)
+                .carbonSaving(1D)
+                .trashImagePath("image/trash")
+                .trashCategory(plasticCrashCategory)
                 .build();
-        TrashInfo can = TrashInfo.builder()
+        TrashInfo plastic_02 = TrashInfo.builder()
                 .trashInfoId(2L)
-                .name("캔")
+                .name("플라스틱_02")
                 .weight(3D)
+                .size(TrashSize.BIG)
+                .carbonSaving(10D)
+                .trashImagePath("image/trash")
                 .refund(10L)
-                .carbonEmissionPerGram(2D)
+                .trashCategory(plasticCrashCategory)
                 .build();
 
-        List<TrashInfo> trashInfoList = List.of(plastic, can);
+        List<TrashInfo> trashInfoList = List.of(plastic_01, plastic_02);
 
         List<TrashInfoResponse> trashInfoResponseList = trashInfoList.stream().map(TrashInfoResponse::from).toList();
 
-        given(trashCategoryRepository.findById(1L)).willReturn(Optional.ofNullable(trashCategory));
-        given(trashInfoRepository.findTrashInfoEntitiesByTrashCategory(trashCategory)).willReturn(trashInfoList);
+        given(trashCategoryRepository.findById(1L)).willReturn(Optional.ofNullable(plasticCrashCategory));
+        given(trashInfoRepository.findTrashInfoEntitiesByTrashCategory(plasticCrashCategory)).willReturn(trashInfoList);
 
         Optional<TrashCategory> findCategoryEntity = trashCategoryRepository.findById(1L);
-        List<TrashInfo> trashInfoEntities = trashInfoRepository.findTrashInfoEntitiesByTrashCategory(trashCategory);
+        List<TrashInfo> trashInfoEntities = trashInfoRepository.findTrashInfoEntitiesByTrashCategory(plasticCrashCategory);
 
         assertThat(findCategoryEntity).isNotNull();
         assertThat(trashInfoEntities)
-                .filteredOn("name", "캔")
-                .containsOnly(can);
+                .filteredOn("name", "플라스틱_01")
+                .containsOnly(plastic_01);
         assertThat(trashInfoEntities)
                 .extracting("name", "refund")
                 .contains(
-                        tuple("플라스틱", 1L),
-                        tuple("캔", 10L)
+                        tuple("플라스틱_01", 1L),
+                        tuple("플라스틱_02", 10L)
                 );
 
-        then(findCategoryEntity).equals(trashCategory);
+        then(findCategoryEntity).equals(plasticCrashCategory);
         then(trashInfoEntities).equals(trashInfoResponseList);
     }
 
