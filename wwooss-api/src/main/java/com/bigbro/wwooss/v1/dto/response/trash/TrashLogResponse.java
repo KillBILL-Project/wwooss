@@ -25,7 +25,7 @@ public class TrashLogResponse {
         return TrashLogResponse.builder()
                 .trashLogId(trashLog.getTrashLogId())
                 .trashImagePath(trashLog.getTrashInfo().getTrashImagePath())
-                .trashCategoryName(trashLog.getTrashInfo().getName())
+                .trashCategoryName(trashLog.getTrashInfo().getTrashCategory().getTrashType().getName())
                 .createdAt(trashLog.getCreatedAt())
                 .build();
     }

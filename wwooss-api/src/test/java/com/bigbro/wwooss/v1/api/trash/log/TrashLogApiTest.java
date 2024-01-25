@@ -70,7 +70,7 @@ class TrashLogApiTest {
         TrashLog trashLog = TrashLog.of(user, trashInfo);
         List<TrashLogResponse> trashLogResponseList = List.of(TrashLogResponse.of(trashLog));
         TrashLogListResponse trashInfoResponseList =
-                TrashLogListResponse.of(false, trashLogResponseList);
+                TrashLogListResponse.of(false, 10L, trashLogResponseList);
 
         given(this.trashLogService.getTrashLogList(any(), any(), any())).willReturn(trashInfoResponseList);
 
@@ -97,6 +97,7 @@ class TrashLogApiTest {
                                         fieldWithPath("title").description("응답 코드 별 클라이언트 노출 제목"),
                                         fieldWithPath("message").description("응답 코드 별 클라이언트 노출 메세지"),
                                         fieldWithPath("data.hasNext").description("다음 페이지 존재 여부"),
+                                        fieldWithPath("data.totalCount").description("모든 로그 수"),
                                         fieldWithPath("data.trashLogResponseList[].trashLogId").description("쓰레기 기록 ID"),
                                         fieldWithPath("data.trashLogResponseList[].trashCategoryName").description("쓰레기 이름"),
                                         fieldWithPath("data.trashLogResponseList[].size").description("쓰레기 크기 - [SMALL,MEDIUM,BIG]"),

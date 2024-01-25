@@ -15,10 +15,10 @@ import java.util.List;
 public class EmptyTrashResultResponse {
 
     // 탄소배출량 총합
-    private Double totalCarbonEmission;
+    private Double totalCarbonSaving;
 
     // 물건 성분별 탄소 배출
-    private List<CarbonSavingByTrashCategory> carbonEmissionByTrashCategoryList;
+    private List<CarbonSavingByTrashCategory> carbonSavingByTrashCategoryList;
 
     // 환급금 총합
     private Long totalRefund;
@@ -26,13 +26,13 @@ public class EmptyTrashResultResponse {
     // 물건 성분별 예상 환급금
     private List<RefundByTrashCategory> refundByTrashCategoryList;
 
-    public static EmptyTrashResultResponse of(Double totalCarbonEmission,
-                                              List<CarbonSavingByTrashCategory> carbonEmissionByTrashCategoryList,
+    public static EmptyTrashResultResponse of(Double totalCarbonSaving,
+                                              List<CarbonSavingByTrashCategory> carbonSavingByTrashCategoryList,
                                               Long totalRefund,
                                               List<RefundByTrashCategory> refundByTrashCategoryList) {
         return EmptyTrashResultResponse.builder()
-                .totalCarbonEmission(totalCarbonEmission)
-                .carbonEmissionByTrashCategoryList(carbonEmissionByTrashCategoryList)
+                .totalCarbonSaving(totalCarbonSaving)
+                .carbonSavingByTrashCategoryList(carbonSavingByTrashCategoryList)
                 .totalRefund(totalRefund)
                 .refundByTrashCategoryList(refundByTrashCategoryList)
                 .build();

@@ -40,7 +40,7 @@ public class TrashCanHistoryServiceImpl implements TrashCanHistoryService {
     @Transactional
     public EmptyTrashResultResponse createTrashCanHistory(List<TrashCanContents> trashCanContentsList, User user) {
         long totalRefund = 0;
-        double totalCarbonEmission = 0;
+        double totalCarbonSaving = 0;
 
         // 카테고리별 환급금 총합
         HashMap<TrashType, Long> refundByCategory = new HashMap<>();
@@ -55,32 +55,32 @@ public class TrashCanHistoryServiceImpl implements TrashCanHistoryService {
             refundByCategory.put(trashType, refundByCategory.getOrDefault(trashType, 0L) + trashInfo.getRefund());
             carbonSavingByCategory.put(trashType, carbonSavingByCategory.getOrDefault(trashType, 0D) + trashInfo.getCarbonSaving());
 
-            totalCarbonEmission += trashInfo.getCarbonSaving();
+            totalCarbonSaving += trashInfo.getCarbonSaving();
             totalRefund += trashInfo.getRefund();
         }
 
-        TrashCanHistory savedTrashCanHistory = trashCanHistoryRepository.save(TrashCanHistory.of(totalCarbonEmission, totalRefund, user));
+        TrashCanHistory savedTrashCanHistory = trashCanHistoryRepository.save(TrashCanHistory.of(totalCarbonSaving, totalRefund, user));
         trashLogService.updateTrashLogTrashHistory(savedTrashCanHistory, user);
 
-        return getEmptyTrashResultResponse(refundByCategory, carbonSavingByCategory, totalRefund, totalCarbonEmission);
+        return getEmptyTrashResultResponse(refundByCategory, carbonSavingByCategory, totalRefund, totalCarbonSaving);
     }
 
 
     private EmptyTrashResultResponse getEmptyTrashResultResponse(HashMap<TrashType, Long> refundByCategory,
-                                                                 HashMap<TrashType, Double> carbonEmissionByCategory,
+                                                                 HashMap<TrashType, Double> carbonSavingByCategory,
                                                                  Long totalRefund,
-                                                                 Double totalCarbonEmission) {
+                                                                 Double totalCarbonSaving) {
         List<RefundByTrashCategory> refundByTrashCategoryList = refundByCategory.keySet().stream()
                 .map((categoryName) ->
                         RefundByTrashCategory.of(categoryName, refundByCategory.get(categoryName))
                 ).toList();
 
-        List<CarbonSavingByTrashCategory> carbonEmissionByTrashCategoryList = carbonEmissionByCategory.keySet().stream()
+        List<CarbonSavingByTrashCategory> carbonSavingByTrashCategoryList = carbonSavingByCategory.keySet().stream()
                 .map((categoryName) ->
-                        CarbonSavingByTrashCategory.of(categoryName, carbonEmissionByCategory.get(categoryName))
+                        CarbonSavingByTrashCategory.of(categoryName, carbonSavingByCategory.get(categoryName))
                 ).toList();
 
-        return EmptyTrashResultResponse.of(totalCarbonEmission, carbonEmissionByTrashCategoryList, totalRefund, refundByTrashCategoryList);
+        return EmptyTrashResultResponse.of(totalCarbonSaving, carbonSavingByTrashCategoryList, totalRefund, refundByTrashCategoryList);
     }
 
     @Override

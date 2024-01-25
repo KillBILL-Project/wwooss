@@ -15,12 +15,12 @@ public class CarbonSavingByTrashCategory {
     private TrashType trashCategoryName;
 
     // 카테고리별 총 탄소배출량
-    private Double carbonEmission;
+    private Double carbonSaving;
 
-    public static CarbonSavingByTrashCategory of(TrashType trashCategoryName, Double carbonEmission) {
+    public static CarbonSavingByTrashCategory of(TrashType trashCategoryName, Double carbonSaving) {
         return CarbonSavingByTrashCategory.builder()
                 .trashCategoryName(trashCategoryName)
-                .carbonEmission(carbonEmission)
+                .carbonSaving(carbonSaving)
                 .build();
     }
 
