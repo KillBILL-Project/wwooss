@@ -32,6 +32,11 @@ public class TrashLog extends BaseEntity {
     @JoinColumn(name = "trash_info_id")
     private TrashInfo trashInfo;
 
+    /**
+     * 쓰레기통 비우기 실행 시 History 값이 삽입.
+     * 비우기 전에는 null
+     * 쓰레기 비운 이력 관리
+     */
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "trash_can_history_id")
     private TrashCanHistory trashCanHistory;

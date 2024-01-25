@@ -15,7 +15,7 @@ public class TrashInfoResponse {
 
     private Long trashInfoId;
 
-    // 쓰레기 이름
+    // 쓰레기 카테고리 이름
     private TrashType trashCategoryName;
 
     // 환불 금액
