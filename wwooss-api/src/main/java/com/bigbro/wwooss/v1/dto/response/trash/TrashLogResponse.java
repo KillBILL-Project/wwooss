@@ -1,6 +1,7 @@
 package com.bigbro.wwooss.v1.dto.response.trash;
 
 import com.bigbro.wwooss.v1.entity.trash.log.TrashLog;
+import com.bigbro.wwooss.v1.enumType.TrashSize;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -14,18 +15,17 @@ public class TrashLogResponse {
 
     private String trashCategoryName;
 
-    private Integer size;
+    private TrashSize size;
 
-    private Long trashCount;
+    private String trashImagePath;
 
     private LocalDateTime createdAt;
 
     public static TrashLogResponse of(TrashLog trashLog) {
         return TrashLogResponse.builder()
                 .trashLogId(trashLog.getTrashLogId())
-                .trashCategoryName(trashLog.getTrashInfo().getName())
-                .size(trashLog.getSize())
-                .trashCount(trashLog.getTrashCount())
+                .trashImagePath(trashLog.getTrashInfo().getTrashImagePath())
+                .trashCategoryName(trashLog.getTrashInfo().getTrashCategory().getTrashType().getName())
                 .createdAt(trashLog.getCreatedAt())
                 .build();
     }

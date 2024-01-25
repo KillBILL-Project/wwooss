@@ -20,8 +20,8 @@ public class TrashInfoApi {
     private final TrashInfoService trashInfoService;
 
     @GetMapping
-    public ResponseEntity<WwoossResponse<List<TrashInfoResponse>>> getTrashInfoByCategoryId(@RequestParam(value = "categoryId") Long categoryId) {
-        return WwoossResponseUtil.responseOkAddData(trashInfoService.getTrashInfoByCategoryId(categoryId));
+    public ResponseEntity<WwoossResponse<List<TrashInfoResponse>>> getTrashInfoMeta() {
+        return WwoossResponseUtil.responseOkAddData(trashInfoService.getTrashInfo());
     }
 
     /**
@@ -29,7 +29,8 @@ public class TrashInfoApi {
      * 쓰레기 정보 생성 api
      */
     @PostMapping
-    public ResponseEntity<WwoossResponse<TrashInfoResponse>> createTrashInfo(@RequestBody @Valid TrashInfoRequest trashInfoRequest) {
-        return WwoossResponseUtil.responseCreatedAddData(trashInfoService.createTrashInfo(trashInfoRequest));
+    public ResponseEntity<WwoossResponse<Void>> createTrashInfo(@RequestBody @Valid TrashInfoRequest trashInfoRequest) {
+        trashInfoService.createTrashInfo(trashInfoRequest);
+        return WwoossResponseUtil.responseCreatedNoData();
     }
 }

@@ -17,19 +17,9 @@ import com.bigbro.wwooss.v1.repository.report.WeeklyReportRepository;
 import com.bigbro.wwooss.v1.repository.trash.log.TrashLogRepository;
 
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Locale;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import javax.persistence.EntityManagerFactory;
 
-import com.bigbro.wwooss.v1.utils.TrashUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
@@ -119,8 +109,8 @@ public class WeeklyReportJobConfig {
 
         // init
         Set<Integer> attendanceSet = new HashSet<>();
-        List<WeeklyTrashByCategory> weeklyTrashByCategoryList = new ArrayList<>();
-        double weeklyCarbonEmission = 0;
+        Map<String, Long> weeklyTrashMap = new HashMap<>();
+        double weeklyCarbonSaving = 0;
         long weeklyRefund = 0;
         long weeklyTrashCount = 0;
 
@@ -128,43 +118,31 @@ public class WeeklyReportJobConfig {
             // 출석
             attendanceSet.add(trashLog.getCreatedAt().getDayOfWeek().getValue());
 
-            // 카테고리별 쓰레기 수
-            Optional<WeeklyTrashByCategory> weeklyTrashByCategory = weeklyTrashByCategoryList.stream().filter((trash) ->
-                            trash.getTrashName().equals(trashLog.getTrashInfo().getName()))
-                    .findFirst();
+            // 카테고리별 쓰레기
+            String trashCategoryName = trashLog.getTrashInfo().getTrashCategory().getTrashType().getName();
+            weeklyTrashMap.put(trashCategoryName, weeklyTrashMap.getOrDefault(trashCategoryName, 0L) + 1);
 
-            // 주간 버린 쓰리기 탄소배출량, 환급금
-            weeklyTrashByCategory.ifPresentOrElse(
-                    trashByCategory ->
-                            trashByCategory.updateTrashCount(trashByCategory.getTrashCount() + trashLog.getTrashCount()),
-                    () ->
-                            weeklyTrashByCategoryList.add(
-                                    WeeklyTrashByCategory.of(trashLog.getTrashInfo().getName(), trashLog.getTrashCount())));
-
-            ResultOfDiscardedTrash discardedResult = TrashUtil.discardResult(trashLog.getTrashCount(),
-                    trashLog.getTrashInfo().getWeight(),
-                    trashLog.getSize(),
-                    trashLog.getTrashInfo().getCarbonEmissionPerGram(),
-                    trashLog.getTrashInfo().getRefund()
-            );
-            weeklyCarbonEmission += discardedResult.getCarbonEmission();
-            weeklyRefund += discardedResult.getRefund();
+            weeklyCarbonSaving += trashLog.getTrashInfo().getCarbonSaving();
+            weeklyRefund += trashLog.getTrashInfo().getRefund();
 
             // 주간 버린 쓰레기 수
-            weeklyTrashCount += trashLog.getTrashCount();
+            ++weeklyTrashCount;
 
         }
+
+        List<WeeklyTrashByCategory> weeklyTrashByCategoryList = weeklyTrashMap.keySet().stream()
+                .map(key -> WeeklyTrashByCategory.of(key, weeklyTrashMap.get(key))).toList();
 
         List<Integer> attendanceList = new ArrayList<>(attendanceSet);
 
         return WeeklyReport.of(attendanceList,
                 weeklyTrashByCategoryList,
-                weeklyCarbonEmission,
+                weeklyCarbonSaving,
                 weeklyRefund,
                 weeklyTrashCount,
                 getWowResult(
                         user,
-                        weeklyCarbonEmission,
+                        weeklyCarbonSaving,
                         weeklyRefund,
                         weeklyTrashCount),
                 // 전 주에 대한 값을 월요일에 생성하기 때문에 전 주날을 기록하여 해당 주차와 주간을 맞춤 + 조회할 떄 편의를 위함
@@ -174,7 +152,7 @@ public class WeeklyReportJobConfig {
 
     // 전주 대비 증감률
     private WowReport getWowResult(User user,
-                                   double weeklyCarbonEmission,
+                                   double weeklyCarbonSaving,
                                    long weeklyRefund,
                                    long weeklyTrashCount) {
         WeeklyReport lastWeekReport = weeklyReportRepository.findWeeklyReportByUserAtLastWeek(user);
@@ -183,12 +161,12 @@ public class WeeklyReportJobConfig {
             return WowReport.zeroReport();
         }
 
-        double changedCarbonEmission = weeklyCarbonEmission - lastWeekReport.getWeeklyCarbonEmission();
+        double changedCarbonSaving = weeklyCarbonSaving - lastWeekReport.getWeeklyCarbonSaving();
         long changedRefund = weeklyRefund - lastWeekReport.getWeeklyRefund();
 
         long lastTrashCount = lastWeekReport.getWeeklyTrashCount();
         long changedTrashCountPercent =((weeklyTrashCount - lastTrashCount) / lastTrashCount) * 100;
 
-        return WowReport.of(changedCarbonEmission, changedRefund, changedTrashCountPercent);
+        return WowReport.of(changedCarbonSaving, changedRefund, changedTrashCountPercent);
     }
 }

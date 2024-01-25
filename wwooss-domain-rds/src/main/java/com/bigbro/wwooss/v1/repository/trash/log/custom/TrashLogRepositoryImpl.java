@@ -11,6 +11,7 @@ import java.time.LocalTime;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 
@@ -26,13 +27,13 @@ public class TrashLogRepositoryImpl implements TrashLogRepositoryCustom {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public Slice<TrashLog> findByUserAndDate(User user, String date, Pageable pageable) {
+    public Page<TrashLog> findByUserAndDate(User user, String date, Pageable pageable) {
 
         JPAQuery<TrashLog> trashLogJPAQuery = queryFactory.selectFrom(trashLog)
                 .where(searchDateFilter(date))
                 .orderBy(trashLog.createdAt.desc());
 
-        return PagingUtil.getSlice(trashLogJPAQuery, pageable);
+        return PagingUtil.getPage(trashLogJPAQuery, pageable);
     }
 
     @Override

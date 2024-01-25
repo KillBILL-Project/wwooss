@@ -17,8 +17,8 @@ public class WeeklyReportDetailResponse {
     // 출석 요일 [1 ~ 7 / 월 ~ 일]
     private List<Integer> attendanceRecord;
 
-    // 주간 탄소배출
-    private Double weeklyCarbonEmission;
+    // 주간 탄소 절감량
+    private Double weeklyCarbonSaving;
 
     // 주간 환급금
     private Long weeklyRefund;
@@ -26,8 +26,8 @@ public class WeeklyReportDetailResponse {
     // 주간 버린 쓰레기
     private Long weeklyTrashCount;
 
-    // 전주 대비 탄소배출 증감 Week On Week
-    private Double wowCarbonEmission;
+    // 전주 대비 탄소 절감량 증감 Week On Week
+    private Double wowCarbonSaving;
 
     // 전주 대비 환불 증감 Week On Week
     private Long wowRefund;
@@ -42,11 +42,11 @@ public class WeeklyReportDetailResponse {
         return WeeklyReportDetailResponse.builder()
                 .weeklyReportId(weeklyReport.getWeeklyReportId())
                 .attendanceRecord(weeklyReport.getAttendanceRecord())
-                .weeklyCarbonEmission(weeklyReport.getWeeklyCarbonEmission())
+                .weeklyCarbonSaving(weeklyReport.getWeeklyCarbonSaving())
                 .weeklyRefund(weeklyReport.getWeeklyRefund())
                 .weeklyTrashCount(weeklyReport.getWeeklyTrashCount())
                 .weeklyTrashCountByCategoryList(weeklyReport.getWeeklyTrashCountByCategoryList())
-                .wowCarbonEmission(weeklyReport.getWowCarbonEmission())
+                .wowCarbonSaving(weeklyReport.getWowCarbonSaving())
                 .wowRefund(weeklyReport.getWowRefund())
                 .wowTrashCount(weeklyReport.getWowTrashCount())
                 .build();

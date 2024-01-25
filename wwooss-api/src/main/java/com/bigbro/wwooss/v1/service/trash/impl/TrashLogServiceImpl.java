@@ -13,6 +13,7 @@ import com.bigbro.wwooss.v1.response.WwoossResponseCode;
 import com.bigbro.wwooss.v1.service.trash.log.TrashLogService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
@@ -30,8 +31,8 @@ public class TrashLogServiceImpl implements TrashLogService {
 
     @Override
     @Transactional
-    public void createTrashLog(User user, TrashInfo trashInfo, Long trashCount, Integer size) {
-        trashLogRepository.save(TrashLog.of(user, trashInfo, trashCount, size));
+    public void createTrashLog(User user, TrashInfo trashInfo) {
+        trashLogRepository.save(TrashLog.of(user, trashInfo));
     }
 
     @Override
@@ -43,8 +44,8 @@ public class TrashLogServiceImpl implements TrashLogService {
     @Override
     public TrashLogListResponse getTrashLogList(Long userId, String date, Pageable pageable) {
         User user = userRepository.findById(userId).orElseThrow(() -> new DataNotFoundException(WwoossResponseCode.NOT_FOUND_DATA, "존재하지 않는 유저입니다."));
-        Slice<TrashLog> trashLogList = trashLogRepository.findByUserAndDate(user, date, pageable);
+        Page<TrashLog> trashLogList = trashLogRepository.findByUserAndDate(user, date, pageable);
 
-        return TrashLogListResponse.of(trashLogList.hasNext(), trashLogList.getContent().stream().map(TrashLogResponse::of).toList());
+        return TrashLogListResponse.of(trashLogList.hasNext(), trashLogList.getTotalElements(), trashLogList.getContent().stream().map(TrashLogResponse::of).toList());
     }
 }

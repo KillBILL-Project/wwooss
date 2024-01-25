@@ -4,6 +4,8 @@ import com.bigbro.wwooss.v1.annotation.TestController;
 import com.bigbro.wwooss.v1.config.DocumentConfig;
 import com.bigbro.wwooss.v1.dto.request.trash.info.TrashInfoRequest;
 import com.bigbro.wwooss.v1.dto.response.trash.TrashInfoResponse;
+import com.bigbro.wwooss.v1.enumType.TrashSize;
+import com.bigbro.wwooss.v1.enumType.TrashType;
 import com.bigbro.wwooss.v1.service.trash.info.TrashInfoService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
@@ -19,11 +21,8 @@ import java.util.List;
 
 import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.document;
 import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.resourceDetails;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -39,42 +38,42 @@ class TrashInfoApiTest {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    @Test
-    @DisplayName("쓰레기 정보 가져오기")
-    void getTrashInfo() throws Exception {
-        List<TrashInfoResponse> trashInfoResponseList =
-                List.of(TrashInfoResponse.builder()
-                        .trashInfoId(1L)
-                        .name("플라스틱")
-                        .refund(1L)
-                        .build());
 
-        given(this.trashInfoService.getTrashInfoByCategoryId(1L)).willReturn(trashInfoResponseList);
+    @Test
+    @DisplayName("쓰레기 메타정보 가져오기")
+    void getTrashInfoMeta() throws Exception {
+        List<TrashInfoResponse> trashInfoResponses = List.of(
+                TrashInfoResponse.builder()
+                        .trashInfoId(1L)
+                        .trashCategoryName(TrashType.CAN)
+                        .trashImagePath("image/can")
+                        .refund(10L)
+                        .size(TrashSize.BIG)
+                        .build()
+        );
+
+        given(this.trashInfoService.getTrashInfo()).willReturn(trashInfoResponses);
 
         this.mockMvc.perform(RestDocumentationRequestBuilders.get("/api/v1/trash-info")
-                        .with(csrf().asHeader())
-                        .param("categoryId", "1")
-                        .contextPath("/api")
-                        .contentType(MediaType.APPLICATION_JSON)
-                )
-                .andExpect(status().isOk())
-                .andDo(document("get-info-by-categoryId",
-                                resourceDetails().tags("쓰레기 정보 목록 가져오기"),
-                                DocumentConfig.getDocumentRequest(),
-                                DocumentConfig.getDocumentResponse(),
-                                requestParameters(
-                                        parameterWithName("categoryId").description("카테고리 ID")
-                                ),
-                                responseFields(
-                                        fieldWithPath("code").description("응답 코드"),
-                                        fieldWithPath("title").description("응답 코드 별 클라이언트 노출 제목"),
-                                        fieldWithPath("message").description("응답 코드 별 클라이언트 노출 메세지"),
-                                        fieldWithPath("data[].trashInfoId").description("쓰레기 정보 id"),
-                                        fieldWithPath("data[].name").description("쓰레기 이름"),
-                                        fieldWithPath("data[].refund").description("쓰레기 환급금")
-                                )
-                        )
-                );
+                .with(csrf().asHeader())
+                .contextPath("/api")
+                .contentType(MediaType.APPLICATION_JSON)
+        )
+        .andExpect(status().isOk())
+        .andDo(document("get-trash-info",
+                resourceDetails().tags("쓰레기 메타 정보 가져오기"),
+                DocumentConfig.getDocumentRequest(),
+                DocumentConfig.getDocumentResponse(),
+                responseFields(
+                        fieldWithPath("code").description("응답 코드"),
+                        fieldWithPath("title").description("응답 코드 별 클라이언트 노출 제목"),
+                        fieldWithPath("message").description("응답 코드 별 클라이언트 노출 메세지"),
+                        fieldWithPath("data[].trashInfoId").description("쓰레기 메타 정보 ID"),
+                        fieldWithPath("data[].trashCategoryName").description("쓰레기 타입"),
+                        fieldWithPath("data[].trashImagePath").description("쓰레기 이미지"),
+                        fieldWithPath("data[].refund").description("쓰레기 환불 금액"),
+                        fieldWithPath("data[].size").description("쓰레기 크기 - [SMALL/MEDIUM/BIG]")
+                )));
     }
 
     @Test
@@ -83,18 +82,11 @@ class TrashInfoApiTest {
         TrashInfoRequest trashInfoRequest = TrashInfoRequest.builder()
                 .name("플라스틱")
                 .weight(1D)
-                .carbonEmissionPerGram(1D)
-                .refund(1L)
+                .refund(100L)
+                .size(TrashSize.BIG)
+                .carbonSaving(12D)
                 .trashCategoryId(1L)
                 .build();
-
-        TrashInfoResponse trashInfoResponse = TrashInfoResponse.builder()
-                .trashInfoId(1L)
-                .name("플라스틱")
-                .refund(1L)
-                .build();
-
-        given(this.trashInfoService.createTrashInfo(any())).willReturn(trashInfoResponse);
 
         this.mockMvc.perform(RestDocumentationRequestBuilders.post("/api/v1/trash-info")
                         .with(csrf().asHeader())
@@ -111,9 +103,7 @@ class TrashInfoApiTest {
                                         fieldWithPath("code").description("응답 코드"),
                                         fieldWithPath("title").description("응답 코드 별 클라이언트 노출 제목"),
                                         fieldWithPath("message").description("응답 코드 별 클라이언트 노출 메세지"),
-                                        fieldWithPath("data.trashInfoId").description("쓰레기 정보 ID"),
-                                        fieldWithPath("data.name").description("쓰레기 이름"),
-                                        fieldWithPath("data.refund").description("쓰레기 환급금")
+                                        fieldWithPath("data").description("응답 데이터 없음")
                                 )
                         )
                 );

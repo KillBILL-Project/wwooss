@@ -71,7 +71,7 @@ public class WeeklyReportServiceImplTest {
                         .weeklyReportId(1L)
                         .attendanceRecord(List.of(1,2,3))
                         .weeklyTrashCountByCategoryList(List.of(WeeklyTrashByCategory.of("플라스틱", 2L)))
-                        .weeklyCarbonEmission(3.D)
+                        .weeklyCarbonSaving(3.D)
                         .weeklyRefund(200L)
                         .weeklyTrashCount(3L)
                         .weeklyDate(LocalDateTime.of(2024, 4, 1, 0, 0))

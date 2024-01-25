@@ -42,7 +42,7 @@ class WeeklyReportApiTest {
 
     @Test
     @WithMockCustomUser
-    @DisplayName("쓰레기 목록 가져오기")
+    @DisplayName("쓰레기 리포트 목록 가져오기")
     void getWeeklyReportList() throws Exception {
         WeekInfo weekInfo = WeekInfo.of(2024, 4, 1);
         List<ComplimentCardIcon> cardIcons = List.of(ComplimentCardIcon.of(1L, "image"));

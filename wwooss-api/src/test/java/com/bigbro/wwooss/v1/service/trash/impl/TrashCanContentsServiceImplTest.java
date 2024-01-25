@@ -1,9 +1,11 @@
 package com.bigbro.wwooss.v1.service.trash.impl;
 
 import com.bigbro.wwooss.v1.entity.trash.can.TrashCanContents;
+import com.bigbro.wwooss.v1.entity.trash.category.TrashCategory;
 import com.bigbro.wwooss.v1.entity.trash.info.TrashInfo;
 import com.bigbro.wwooss.v1.entity.user.User;
 import com.bigbro.wwooss.v1.enumType.LoginType;
+import com.bigbro.wwooss.v1.enumType.TrashType;
 import com.bigbro.wwooss.v1.exception.DataNotFoundException;
 import com.bigbro.wwooss.v1.repository.trash.can.TrashCanContentsRepository;
 import com.bigbro.wwooss.v1.repository.trash.info.TrashInfoRepository;
@@ -52,20 +54,26 @@ class TrashCanContentsServiceImplTest {
     private TrashCanContentsServiceImpl trashCanContentsService;
 
     @Test
-    @DisplayName("쓰레기통 내용물 적립")
+    @DisplayName("쓰레기통 내용물 적립(버리기)")
     void createTrashCanContents() {
         User user = User.builder()
                 .userId(1L)
                 .loginType(LoginType.GOOGLE)
                 .build();
+        TrashCategory trashCategory = TrashCategory.builder()
+                .trashCategoryId(1L)
+                .trashType(TrashType.PLASTIC)
+                .build();
 
         TrashInfo trashInfo =
                 TrashInfo.builder()
                         .trashInfoId(1L)
-                        .name("플라스틱")
+                        .name("plastic_01")
                         .weight(1D)
                         .refund(1L)
-                        .carbonEmissionPerGram(1D)
+                        .carbonSaving(1D)
+                        .trashImagePath("image/trash")
+                        .trashCategory(trashCategory)
                         .build();
 
         given(userRepository.findById(1L)).willReturn(Optional.ofNullable(user));
@@ -73,7 +81,8 @@ class TrashCanContentsServiceImplTest {
 
         assertThat(userRepository).isNotNull();
         assertThat(trashInfoRepository).isNotNull();
-        assertThat(trashInfo.getName()).isEqualTo("플라스틱");
+        assertThat(trashInfo.getName()).isEqualTo("plastic_01");
+        assertThat(trashInfo.getTrashCategory().getTrashType()).isEqualTo(TrashType.PLASTIC);
 
         then(userRepository.findById(1L)).equals(user);
         then(trashInfoRepository.findById(1L)).equals(trashInfo);
@@ -99,8 +108,6 @@ class TrashCanContentsServiceImplTest {
                 .build();
         List<TrashCanContents> trashCanContentsList = List.of(TrashCanContents.builder()
                 .trashCanContentsId(1L)
-                .trashCount(1L)
-                .size(1)
                 .user(user)
                 .build());
         given(userRepository.findById(1L)).willReturn(Optional.ofNullable(user));

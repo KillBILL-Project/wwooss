@@ -40,8 +40,8 @@ public class WeeklyReport {
     private List<WeeklyTrashByCategory> weeklyTrashCountByCategoryList = new ArrayList<>();
 
     @Comment("주간 탄소배출량")
-    @Column(name = "weekly_carbon_emission")
-    private Double weeklyCarbonEmission;
+    @Column(name = "weekly_carbon_saving")
+    private Double weeklyCarbonSaving;
 
     @Comment("주간 환급금")
     @Column(name = "weekly_refund")
@@ -52,8 +52,8 @@ public class WeeklyReport {
     private Long weeklyTrashCount;
 
     @Comment("전주대비 탄소배출량 증감 / Week On Week")
-    @Column(name = "wow_carbon_emission")
-    private Double wowCarbonEmission;
+    @Column(name = "wow_carbon_saving")
+    private Double wowCarbonSaving;
 
     @Comment("전주대비 환불 증감 / Week On Week")
     @Column(name = "wow_refund")
@@ -72,7 +72,7 @@ public class WeeklyReport {
 
     public static WeeklyReport of(List<Integer> attendanceRecord,
             List<WeeklyTrashByCategory> weeklyTrashCountByCategoryList,
-            Double weeklyCarbonEmission,
+            Double weeklyCarbonSaving,
             Long weeklyRefund,
             Long weeklyTrashCount,
             WowReport wowReport,
@@ -81,10 +81,10 @@ public class WeeklyReport {
         return WeeklyReport.builder()
                 .attendanceRecord(attendanceRecord)
                 .weeklyTrashCountByCategoryList(weeklyTrashCountByCategoryList)
-                .weeklyCarbonEmission(weeklyCarbonEmission)
+                .weeklyCarbonSaving(weeklyCarbonSaving)
                 .weeklyRefund(weeklyRefund)
                 .weeklyTrashCount(weeklyTrashCount)
-                .wowCarbonEmission(wowReport.getWowCarbonEmission())
+                .wowCarbonSaving(wowReport.getWowCarbonSaving())
                 .wowRefund(wowReport.getWowRefund())
                 .wowTrashCount(wowReport.getWowTrashCount())
                 .weeklyDate(weeklyDate)
