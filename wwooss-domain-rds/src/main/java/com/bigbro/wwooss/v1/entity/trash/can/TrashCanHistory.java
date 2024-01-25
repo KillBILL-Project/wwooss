@@ -26,9 +26,9 @@ public class TrashCanHistory extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long trashCanHistoryId;
 
-    @Comment("탄소 배출량")
-    @Column(name = "carbon_emission")
-    private Double carbonEmission;
+    @Comment("탄소 배출 절감량")
+    @Column(name = "carbon_saving")
+    private Double carbonSaving;
 
     @Comment("환급 금액")
     @Column(name = "refund")
@@ -42,9 +42,9 @@ public class TrashCanHistory extends BaseEntity {
     @Builder.Default
     private List<TrashLog> trashLogList = new ArrayList<>();
 
-    public static TrashCanHistory of(Double carbonEmission, Long refund, User user) {
+    public static TrashCanHistory of(Double carbonSaving, Long refund, User user) {
         return TrashCanHistory.builder()
-                .carbonEmission(carbonEmission)
+                .carbonSaving(carbonSaving)
                 .refund(refund)
                 .user(user)
                 .build();

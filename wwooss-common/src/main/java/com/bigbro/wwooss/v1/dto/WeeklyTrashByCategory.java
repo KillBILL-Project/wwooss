@@ -9,15 +9,15 @@ import lombok.*;
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 public class WeeklyTrashByCategory {
 
-    @JsonProperty("trashName")
-    private String trashName;
+    @JsonProperty("trashCategoryName")
+    private String trashCategoryName;
 
     @JsonProperty("trashCount")
     private Long trashCount;
 
-    public static WeeklyTrashByCategory of(String trashName, Long trashCount) {
+    public static WeeklyTrashByCategory of(String trashCategoryName, Long trashCount) {
         return WeeklyTrashByCategory.builder()
-                .trashName(trashName)
+                .trashCategoryName(trashCategoryName)
                 .trashCount(trashCount)
                 .build();
     }
@@ -27,8 +27,8 @@ public class WeeklyTrashByCategory {
     }
 
     @Override
-    public boolean equals(Object trashName) {
-        return trashName.equals(this.trashName);
+    public boolean equals(Object trashCategoryName) {
+        return trashCategoryName.equals(this.trashCategoryName);
     }
 
 }

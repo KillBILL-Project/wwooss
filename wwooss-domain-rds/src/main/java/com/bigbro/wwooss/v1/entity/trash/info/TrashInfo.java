@@ -43,7 +43,7 @@ public class TrashInfo extends BaseEntity {
     private TrashSize size;
 
     @Comment("탄소 절감량 - gCO2")
-    @Column(name = "carbon_emission")
+    @Column(name = "carbon_saving")
     private Double carbonSaving;
 
     @Comment("쓰레기 이미지")

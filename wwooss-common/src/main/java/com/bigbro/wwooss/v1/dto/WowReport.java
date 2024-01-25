@@ -8,7 +8,7 @@ import lombok.Getter;
 public class WowReport {
 
     // 전주 대비 탄소배출량 변화량
-    private double wowCarbonEmission;
+    private double wowCarbonSaving;
 
     // 전주 대비 환급금 변화량
     private long wowRefund;
@@ -16,9 +16,9 @@ public class WowReport {
     // 전주 대비 버린 쓰레기 수 변화량
     private long wowTrashCount;
 
-    public static WowReport of(double wowCarbonEmission, long wowRefund, long wowTrashCount) {
+    public static WowReport of(double wowCarbonSaving, long wowRefund, long wowTrashCount) {
         return WowReport.builder()
-                .wowCarbonEmission(wowCarbonEmission)
+                .wowCarbonSaving(wowCarbonSaving)
                 .wowRefund(wowRefund)
                 .wowTrashCount(wowTrashCount)
                 .build();
@@ -26,7 +26,7 @@ public class WowReport {
 
     public static WowReport zeroReport() {
         return WowReport.builder()
-                .wowCarbonEmission(0)
+                .wowCarbonSaving(0)
                 .wowRefund(0)
                 .wowTrashCount(0)
                 .build();
