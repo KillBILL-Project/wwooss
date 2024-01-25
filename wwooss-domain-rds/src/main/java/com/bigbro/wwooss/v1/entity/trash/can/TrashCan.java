@@ -52,4 +52,8 @@ public class TrashCan extends BaseEntity {
     @Column(name = "trash_type")
     private String trashType;
 
+    public void updateSaveCompleted(boolean saveCompleted) {
+        this.saveCompleted = saveCompleted;
+    }
+
 }

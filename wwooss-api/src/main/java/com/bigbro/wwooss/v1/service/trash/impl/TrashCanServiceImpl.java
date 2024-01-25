@@ -28,4 +28,12 @@ public class TrashCanServiceImpl implements TrashCanService {
                         trash.getAddress(), trash.getTrashType())).toList();
         return TrashCanInfoList.of(trashCanList.hasNext(), trashCanInfoList);
     }
+
+    @Override
+    @Transactional
+    public void updateSavedCompleted() {
+        List<TrashCan> trashCanList = trashCanRepository.findAllBySaveCompleted(false);
+        trashCanList.forEach(trashCan -> trashCan.updateSaveCompleted(true));
+    }
+
 }

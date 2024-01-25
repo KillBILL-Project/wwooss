@@ -9,6 +9,7 @@ import com.bigbro.wwooss.v1.service.trash.can.TrashCanService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,15 +27,20 @@ public class TrashCanDocumentServiceImpl implements TrashCanDocumentService {
     @Override
     @Transactional
     public void migrationTrashCanDocument() {
-        int index = 0;
         boolean next = true;
 
+        Pageable pageable = Pageable.ofSize(10);
+
         while(next) {
-            TrashCanInfoList trashCanInfo = trashCanService.getTrashCanInfo(PageRequest.of(index, 10));
+            // es에 저장 안된 값 가져오기
+            TrashCanInfoList trashCanInfo = trashCanService.getTrashCanInfo(pageable);
+            // es에 저장
             trashCanDocumentRepository.saveTrashCan(trashCanInfo.getTrashCanInfoList());
+            // es에 저장된 값 saveCompleted true로 변경
             next = trashCanInfo.getHasNext();
-            ++index;
+            pageable = pageable.next();
         }
+        trashCanService.updateSavedCompleted();
     }
 
     @Override
