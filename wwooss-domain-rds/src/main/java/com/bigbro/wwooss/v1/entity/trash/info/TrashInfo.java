@@ -58,7 +58,7 @@ public class TrashInfo extends BaseEntity {
     @JoinColumn(name = "trash_category_id")
     private TrashCategory trashCategory;
 
-    public static TrashInfo of(String name, Double weight, Double carbonSaving, Long refund, TrashCategory trashCategory, TrashSize size) {
+    public static TrashInfo of(String name, Double weight, Double carbonSaving, Long refund, TrashCategory trashCategory, TrashSize size, String trashImagePath) {
         return TrashInfo.builder()
                 .name(name)
                 .weight(weight)
@@ -66,6 +66,7 @@ public class TrashInfo extends BaseEntity {
                 .refund(refund)
                 .trashCategory(trashCategory)
                 .size(size)
+                .trashImagePath(trashImagePath)
                 .build();
     }
 

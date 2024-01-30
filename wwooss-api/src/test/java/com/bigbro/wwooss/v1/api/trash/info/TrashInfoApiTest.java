@@ -86,6 +86,7 @@ class TrashInfoApiTest {
                 .size(TrashSize.BIG)
                 .carbonSaving(12D)
                 .trashCategoryId(1L)
+                .trashImagePath("imagepath")
                 .build();
 
         this.mockMvc.perform(RestDocumentationRequestBuilders.post("/api/v1/trash-info")

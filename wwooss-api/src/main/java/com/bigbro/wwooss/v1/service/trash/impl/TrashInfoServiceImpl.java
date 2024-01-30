@@ -42,7 +42,9 @@ public class TrashInfoServiceImpl implements TrashInfoService {
                 trashInfoRequest.getName(),
                 trashInfoRequest.getWeight(),
                 trashInfoRequest.getCarbonSaving(),
-                trashInfoRequest.getRefund(), trashCategory, trashInfoRequest.getSize())
+                trashInfoRequest.getRefund(), trashCategory,
+                trashInfoRequest.getSize(),
+                trashInfoRequest.getTrashImagePath())
         );
     }
 }

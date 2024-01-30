@@ -29,4 +29,6 @@ public class TrashInfoRequest {
     @NotNull(message = "쓰레기 카테고리 ID 필수입니다.")
     private Long trashCategoryId;
 
+    @NotNull(message = "쓰레기 이미지는 필수입니다.")
+    private String trashImagePath;
 }
