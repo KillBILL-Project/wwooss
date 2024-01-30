@@ -91,7 +91,7 @@ class TrashCategoryApiTest {
                                 DocumentConfig.getDocumentResponse(),
                                 requestFields(
                                         fieldWithPath("trashType").description(
-                                                "쓰레기 타입 - PAPER[종이] / CAN[캔] / PLASTIC[플라스틱] / PET[페트병] / VESSEL[용기]")
+                                                "쓰레기 타입 - PAPER[종이] / CAN[캔] / PLASTIC[플라스틱] / PET[페트병] / GLASS[병] / VINYL[비닐] / COMMON[기타]")
                                 ),
                                 responseFields(
                                         fieldWithPath("code").description("응답 코드"),

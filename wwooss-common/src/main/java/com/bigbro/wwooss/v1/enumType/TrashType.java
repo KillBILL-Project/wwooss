@@ -11,7 +11,9 @@ public enum TrashType {
     PAPER("종이"),
     CAN("캔"),
     PET("페트병"),
-    VESSEL("용기");
+    GLASS("병"),
+    VINYL("비닐"),
+    COMMON("기타");
 
     private String name;
 }
