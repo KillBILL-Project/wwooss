@@ -25,6 +25,9 @@ public class User extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
 
+    @Column(name = "social_id")
+    private String socialId;
+
     @Builder.Default
     @Comment("유저 권한")
     @Column(name = "user_role")
@@ -112,7 +115,8 @@ public class User extends BaseEntity {
                                 LoginType loginType,
                                 int age, Gender gender,
                                 String country,
-                                String region) {
+                                String region,
+                              String socialId) {
         return User.builder()
                 .email(email)
                 .password(password)
@@ -121,6 +125,7 @@ public class User extends BaseEntity {
                 .gender(gender)
                 .country(country)
                 .region(region)
+                .socialId(socialId)
                 .build();
     }
 

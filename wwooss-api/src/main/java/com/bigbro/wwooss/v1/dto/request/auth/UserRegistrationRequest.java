@@ -14,4 +14,5 @@ public class UserRegistrationRequest {
     private String country;
     private String region;
     private boolean pushConsent;
+    private String socialToken;
 }
