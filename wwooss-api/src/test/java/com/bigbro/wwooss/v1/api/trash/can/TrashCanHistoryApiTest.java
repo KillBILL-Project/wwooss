@@ -41,11 +41,13 @@ class TrashCanHistoryApiTest {
 
     @Test
     @WithMockCustomUser
-    @DisplayName("쓰레기통 목록 조회")
+    @DisplayName("쓰레기통 히스토리 조회")
     void findTrashCanHistories() throws Exception {
         LocalDateTime now = LocalDateTime.now();
         List<TrashCanHistoryResponse> trashCanHistoryResponseList = List.of(TrashCanHistoryResponse.builder()
                 .trashCanHistoryId(1L)
+                .carbonSaving(1D)
+                .refund(1L)
                 .createdAt(now)
                 .build());
         TrashCanHistoryListResponse trashCanHistoryListResponse = TrashCanHistoryListResponse.builder()
@@ -65,7 +67,7 @@ class TrashCanHistoryApiTest {
                 )
                 .andExpect(status().isOk())
                 .andDo(document("get-trash-can-histories",
-                                resourceDetails().tags("쓰레기통 목록 조회"),
+                                resourceDetails().tags("쓰레기통 히스토리 조회"),
                                 DocumentConfig.getDocumentRequest(),
                                 DocumentConfig.getDocumentResponse(),
                                 requestParameters(
@@ -79,6 +81,8 @@ class TrashCanHistoryApiTest {
                                         fieldWithPath("message").description("응답 코드 별 클라이언트 노출 메세지"),
                                         fieldWithPath("data.hasNext").description("다음 페이지 존재"),
                                         fieldWithPath("data.trashCanHistoryResponseList[].trashCanHistoryId").description("쓰레기통 비우기 히스토리 ID"),
+                                        fieldWithPath("data.trashCanHistoryResponseList[].carbonSaving").description("탄소 절감량"),
+                                        fieldWithPath("data.trashCanHistoryResponseList[].refund").description("환급금"),
                                         fieldWithPath("data.trashCanHistoryResponseList[].createdAt").description("비우기 생성 일자")
                                 )
                         )
