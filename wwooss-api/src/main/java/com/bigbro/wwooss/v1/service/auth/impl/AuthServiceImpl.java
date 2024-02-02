@@ -181,7 +181,9 @@ public class AuthServiceImpl implements AuthService {
 
         JsonObject data = (JsonObject) JsonParser.parseString(result.toString());
 
-        return GOOGLE_ID_PREFIX + data.get("user_id");
+        // 쌍따움표 제거 : ""abc""이와 같이 리턴됨
+        String removedDoubleQuotes = data.get("user_id").toString().substring(1, data.get("user_id").toString().length() - 1);
+        return GOOGLE_ID_PREFIX + removedDoubleQuotes;
     }
 
     /**
