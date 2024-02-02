@@ -58,7 +58,7 @@ class TrashCanContentsApiTest {
                 )
                 .andExpect(status().isCreated())
                 .andDo(document("create-trash-can-contents",
-                                resourceDetails().tags("쓰레기통 내용물 생성"),
+                                resourceDetails().tags("쓰레기 버리기"),
                                 DocumentConfig.getDocumentRequest(),
                                 DocumentConfig.getDocumentResponse(),
                                 responseFields(
