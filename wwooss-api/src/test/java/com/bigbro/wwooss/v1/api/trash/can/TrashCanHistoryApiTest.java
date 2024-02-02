@@ -67,7 +67,7 @@ class TrashCanHistoryApiTest {
                 )
                 .andExpect(status().isOk())
                 .andDo(document("get-trash-can-histories",
-                                resourceDetails().tags("쓰레기통 히스토리 조회"),
+                                resourceDetails().tags("쓰레기통 비우기 이력 조회"),
                                 DocumentConfig.getDocumentRequest(),
                                 DocumentConfig.getDocumentResponse(),
                                 requestParameters(
