@@ -1,20 +1,13 @@
 package com.bigbro.wwooss.v1.api.complimentCard;
 
-
-import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.document;
-import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.resourceDetails;
-import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 import com.bigbro.wwooss.v1.annotation.TestController;
 import com.bigbro.wwooss.v1.annotation.WithMockCustomUser;
 import com.bigbro.wwooss.v1.config.DocumentConfig;
 import com.bigbro.wwooss.v1.dto.request.complimentCard.ComplimentCardMetaRequest;
 import com.bigbro.wwooss.v1.enumType.CardCode;
 import com.bigbro.wwooss.v1.enumType.CardType;
-import com.bigbro.wwooss.v1.service.complimentCard.ComplimentCardMetaService;
+import com.bigbro.wwooss.v1.service.complimentCard.ComplimentCardService;
+import com.bigbro.wwooss.v1.service.complimentCard.ComplimentConditionLogService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -25,39 +18,38 @@ import org.springframework.http.MediaType;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.document;
+import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.resourceDetails;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 @TestController
-@WebMvcTest(ComplimentCardMetaApi.class)
-class ComplimentCardMetaApiTest {
+@WebMvcTest(ComplimentConditionLogApi.class)
+class ComplimentConditionLogApiTest {
 
     @Autowired
     private MockMvc mockMvc;
 
     @MockBean
-    private ComplimentCardMetaService complimentCardMetaService;
+    private ComplimentConditionLogService complimentConditionLogService;
 
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    @MockBean
+    private ComplimentCardService complimentCardService;
 
     @Test
     @WithMockCustomUser
-    @DisplayName("칭찬카드 메타 생성")
+    @DisplayName("로그인 로그 생성")
     void createAlarm() throws Exception {
-        ComplimentCardMetaRequest complimentCardMetaRequest = ComplimentCardMetaRequest.builder()
-                .title("칭찬")
-                .contents("로그인 3번")
-                .cardCode(CardCode.login_30)
-                .cardType(CardType.WEEKLY)
-                .cardImage("imageUrl")
-                .build();
-
-        this.mockMvc.perform(RestDocumentationRequestBuilders.post("/api/v1/compliment-card-meta")
+        this.mockMvc.perform(RestDocumentationRequestBuilders.post("/api/v1/compliment-condition-log/login")
                         .with(csrf().asHeader())
                         .contextPath("/api")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(complimentCardMetaRequest))
                 )
                 .andExpect(status().isCreated())
                 .andDo(document("create-compliment-card-meta",
-                                resourceDetails().tags("칭찬카드 메타 생성 생성 - 내부 API"),
+                                resourceDetails().tags("로그인 로그"),
                                 DocumentConfig.getDocumentRequest(),
                                 DocumentConfig.getDocumentResponse(),
                                 responseFields(

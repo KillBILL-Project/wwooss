@@ -17,4 +17,5 @@ public interface UserService {
      * @param userId 유저 ID
      */
     public void updatePushConsentStatus(boolean pushConsent, long userId);
+
 }
