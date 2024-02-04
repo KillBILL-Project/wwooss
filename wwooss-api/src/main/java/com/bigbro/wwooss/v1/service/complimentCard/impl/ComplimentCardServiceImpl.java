@@ -45,6 +45,12 @@ public class ComplimentCardServiceImpl implements ComplimentCardService {
 
     private final ImageUtil imageUtil;
 
+    private static final int LOG_IN_COUNT_30 = 30;
+    private static final int LOG_IN_COUNT_100 = 100;
+    private static final int LOG_IN_COUNT_365 = 365;
+
+    private static final int CONTINUITY_LOG_IN_COUNT = 3;
+
 
     @Override
     @Transactional
@@ -63,11 +69,11 @@ public class ComplimentCardServiceImpl implements ComplimentCardService {
     private void createIntegrateComplimentCard(User user ,List<ComplimentConditionLog> complimentConditionLogs) {
         CardCode cardCode;
         // 통합 칭찬 스티커 생성
-        if (complimentConditionLogs.size() >= 30 && complimentConditionLogs.size() < 100) {
+        if (complimentConditionLogs.size() >= LOG_IN_COUNT_30 && complimentConditionLogs.size() < LOG_IN_COUNT_100) {
             cardCode = CardCode.login_30;
-        } else if (complimentConditionLogs.size() >= 100 && complimentConditionLogs.size() < 365) {
+        } else if (complimentConditionLogs.size() >= LOG_IN_COUNT_100 && complimentConditionLogs.size() < LOG_IN_COUNT_365) {
             cardCode = CardCode.login_100;
-        } else if(complimentConditionLogs.size() >= 365) {
+        } else if(complimentConditionLogs.size() >= LOG_IN_COUNT_365) {
             cardCode = CardCode.login_365;
         } else {
             return;
@@ -82,7 +88,7 @@ public class ComplimentCardServiceImpl implements ComplimentCardService {
     }
 
     private void createWeeklyComplimentCard(User user, ComplimentConditionLog latestComplimentLog) {
-        if (latestComplimentLog.getContinuity() != 3) return;
+        if (latestComplimentLog.getContinuity() != CONTINUITY_LOG_IN_COUNT) return;
 
         // 연속 3회
         CardCode cardCode = CardCode.login_03_in_a_low;
