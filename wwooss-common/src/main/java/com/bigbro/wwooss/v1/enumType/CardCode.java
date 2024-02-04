@@ -19,8 +19,7 @@ public enum CardCode {
     find_trash_can_30, // 쓰레기통 위치 찾기 30회
     find_trash_can_100, // 쓰레기통 위치 찾기 100회
     find_trash_can_365, // 쓰레기통 위치 찾기 365회
-    share_compliment_card_30, // 칭찬 카드 공유 30회
-    share_compliment_card_100, // 칭찬 카드 공유 100회
-    share_compliment_card_365, // 칭찬 카드 공유 365회
-
+    throw_trash_30, // 쓰레기 버리기 30회
+    throw_trash_100, // 쓰레기 버리기 100회
+    throw_trash_365, // 쓰레기 버리기 365회
 }
