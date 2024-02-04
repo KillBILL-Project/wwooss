@@ -65,10 +65,10 @@ public class ComplimentCardServiceImpl implements ComplimentCardService {
         // 통합 칭찬 스티커 생성
         if (complimentConditionLogs.size() >= 30 && complimentConditionLogs.size() < 100) {
             cardCode = CardCode.login_30;
-        } else if (complimentConditionLogs.size() >= 100 && complimentConditionLogs.size() < 300) {
+        } else if (complimentConditionLogs.size() >= 100 && complimentConditionLogs.size() < 365) {
             cardCode = CardCode.login_100;
-        } else if(complimentConditionLogs.size() >= 300) {
-            cardCode = CardCode.login_300;
+        } else if(complimentConditionLogs.size() >= 365) {
+            cardCode = CardCode.login_365;
         } else {
             return;
         }
