@@ -40,6 +40,9 @@ public class WeeklyReportServiceImpl implements WeeklyReportService {
 
     private final ComplimentCardService complimentCardService;
 
+    private static final int MONDAY = 2;
+    private static final int SUNDAY = 1;
+
     @Transactional(readOnly = true)
     @Override
     public WeeklyReportListResponse getWeeklyReport(String date, Long userId, Pageable pageable) {
@@ -50,8 +53,8 @@ public class WeeklyReportServiceImpl implements WeeklyReportService {
             WeekInfo weekInfo = dateUtil.getCurrentWeekOfMonth(dateUtil.convertToDate(report.getWeeklyDate()));
 
             // 월요일, 일요일 날짜
-            Calendar monday = dateUtil.getDayAtWeekOfMonth(weekInfo.getYear(), weekInfo.getMonth(), weekInfo.getWeekOfMonth(), 2);
-            Calendar sunday = dateUtil.getDayAtWeekOfMonth(weekInfo.getYear(), weekInfo.getMonth(), weekInfo.getWeekOfMonth(), 1);
+            Calendar monday = dateUtil.getDayAtWeekOfMonth(weekInfo.getYear(), weekInfo.getMonth(), weekInfo.getWeekOfMonth(), MONDAY);
+            Calendar sunday = dateUtil.getDayAtWeekOfMonth(weekInfo.getYear(), weekInfo.getMonth(), weekInfo.getWeekOfMonth(), SUNDAY);
 
             LocalDateTime fromDate = LocalDateTime.of(monday.get(Calendar.YEAR), monday.get(Calendar.MONTH) + 1, monday.get(Calendar.DATE), 0, 0);
             LocalDateTime toDate = LocalDateTime.of(sunday.get(Calendar.YEAR), sunday.get(Calendar.MONTH) + 1,
