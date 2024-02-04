@@ -42,7 +42,7 @@ public class ComplementCardImplTest {
                 .createdAt(LocalDateTime.of(2023, 10, 24, 13, 10))
                 .build();
         ComplimentCardMeta complimentCardMeta = ComplimentCardMeta.of("card meta", "card", CardType.WEEKLY,
-                CardCode.login_03, "image");
+                CardCode.login_30, "image");
 
         Slice<ComplimentCard> complimentCardList = new SliceImpl<>(List.of(ComplimentCard.builder()
                 .complimentCardId(1L)

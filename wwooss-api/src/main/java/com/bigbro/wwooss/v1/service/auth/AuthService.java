@@ -38,4 +38,6 @@ public interface AuthService {
       * @return 로그인 타입이 일치하는 이메일 존재 여부
       */
      Boolean existsUser(UserExistsRequest userExistsRequest);
+
+
 }

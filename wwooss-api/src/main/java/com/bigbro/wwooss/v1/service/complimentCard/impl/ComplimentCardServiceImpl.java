@@ -5,16 +5,20 @@ import com.bigbro.wwooss.v1.dto.response.complimentCard.ComplimentCardListRespon
 import com.bigbro.wwooss.v1.dto.response.complimentCard.ComplimentCardResponse;
 import com.bigbro.wwooss.v1.entity.complimentCard.ComplimentCard;
 import com.bigbro.wwooss.v1.entity.complimentCard.ComplimentCardMeta;
+import com.bigbro.wwooss.v1.entity.complimentCard.ComplimentConditionLog;
 import com.bigbro.wwooss.v1.entity.user.User;
+import com.bigbro.wwooss.v1.enumType.CardCode;
 import com.bigbro.wwooss.v1.enumType.CardType;
 import com.bigbro.wwooss.v1.exception.DataNotFoundException;
 import com.bigbro.wwooss.v1.repository.complimentCard.ComplimentCardMetaRepository;
 import com.bigbro.wwooss.v1.repository.complimentCard.ComplimentCardRepository;
+import com.bigbro.wwooss.v1.repository.complimentCard.ComplimentConditionLogRepository;
 import com.bigbro.wwooss.v1.repository.user.UserRepository;
 import com.bigbro.wwooss.v1.response.WwoossResponseCode;
 import com.bigbro.wwooss.v1.service.complimentCard.ComplimentCardService;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.Optional;
 
 import com.bigbro.wwooss.v1.utils.ImageUtil;
@@ -35,6 +39,8 @@ public class ComplimentCardServiceImpl implements ComplimentCardService {
 
     private final ComplimentCardMetaRepository complimentCardMetaRepository;
 
+    private final ComplimentConditionLogRepository complimentConditionLogRepository;
+
     private final UserRepository userRepository;
 
     private final ImageUtil imageUtil;
@@ -43,11 +49,47 @@ public class ComplimentCardServiceImpl implements ComplimentCardService {
     @Override
     @Transactional
     public void createComplimentCard(ComplimentCardRequest complimentCardRequest) {
-        ComplimentCardMeta complimentCardMeta = complimentCardMetaRepository.findByCardCode(
-                complimentCardRequest.getCardCode()).orElseThrow(() -> new DataNotFoundException(
-                WwoossResponseCode.NOT_FOUND_DATA, "존재하지 칭찬 코드입니다."));
         User user =
                 userRepository.findById(complimentCardRequest.getUserId()).orElseThrow(() -> new DataNotFoundException(WwoossResponseCode.NOT_FOUND_DATA, "존재하지 않는 유저입니다."));
+        List<ComplimentConditionLog> complimentConditionLogs = complimentConditionLogRepository.findByUserAndComplimentTypeOrderByCreatedAtDesc(user, complimentCardRequest.getComplimentType());
+
+        // 통합 칭찬 스티커 생성
+        createIntegrateComplimentCard(user, complimentConditionLogs);
+
+        // 주간 칭찬 스티커 생성
+        createWeeklyComplimentCard(user, complimentConditionLogs.get(0));
+    }
+
+    private void createIntegrateComplimentCard(User user ,List<ComplimentConditionLog> complimentConditionLogs) {
+        CardCode cardCode;
+        // 통합 칭찬 스티커 생성
+        if (complimentConditionLogs.size() >= 30 && complimentConditionLogs.size() < 100) {
+            cardCode = CardCode.login_30;
+        } else if (complimentConditionLogs.size() >= 100 && complimentConditionLogs.size() < 300) {
+            cardCode = CardCode.login_100;
+        } else if(complimentConditionLogs.size() >= 300) {
+            cardCode = CardCode.login_300;
+        } else {
+            return;
+        }
+
+        ComplimentCardMeta complimentCardMeta = complimentCardMetaRepository.findByCardCode(
+                cardCode).orElseThrow(() -> new DataNotFoundException(WwoossResponseCode.NOT_FOUND_DATA, "존재하지 칭찬 코드입니다."));
+        ComplimentCard complimentCard = complimentCardRepository.findByUserAndExpireAndComplimentCardMeta(user, false, complimentCardMeta);
+        if (Objects.nonNull(complimentCard)) return;
+
+        complimentCardRepository.save(ComplimentCard.of(user, complimentCardMeta));
+    }
+
+    private void createWeeklyComplimentCard(User user, ComplimentConditionLog latestComplimentLog) {
+        if (latestComplimentLog.getContinuity() != 3) return;
+
+        // 연속 3회
+        CardCode cardCode = CardCode.login_03_in_a_low;
+        ComplimentCardMeta complimentCardMeta = complimentCardMetaRepository.findByCardCode(cardCode)
+                .orElseThrow(() -> new DataNotFoundException(WwoossResponseCode.NOT_FOUND_DATA, "존재하지 칭찬 코드입니다."));
+        ComplimentCard complimentCard = complimentCardRepository.findByUserAndExpireAndComplimentCardMeta(user, false, complimentCardMeta);
+        if (Objects.nonNull(complimentCard)) return;
 
         complimentCardRepository.save(ComplimentCard.of(user, complimentCardMeta));
     }
