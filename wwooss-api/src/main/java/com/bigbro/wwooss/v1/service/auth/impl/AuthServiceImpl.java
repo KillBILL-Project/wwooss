@@ -214,6 +214,7 @@ public class AuthServiceImpl implements AuthService {
         String[] decodeArray = identityToken.split("\\.");
         String header = new String(Base64.getDecoder().decode(decodeArray[0]));
 
+        // TODO : response dto, compareTo, equals, stream
         // apple에서 제공해주는 kid, alg 일치 확인
         // kid : key ID - key rolling이 일어나는 시점에는 여러개의 key들이 동시에 존재할 수 있음. 이를 구분하기 위해 필요
         // alg : algorithm - 어떤 알고리즘을 적용하는지
