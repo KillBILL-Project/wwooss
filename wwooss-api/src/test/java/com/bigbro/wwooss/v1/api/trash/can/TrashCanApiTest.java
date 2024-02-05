@@ -64,7 +64,7 @@ class TrashCanApiTest {
                                         parameterWithName("lat").description("화면 중심 위도"),
                                         parameterWithName("lng").description("화면 중심 경도"),
                                         parameterWithName("distance").description("화면중심을 기준으로 검색하고자 하는 반경 - 단위 [KM]"),
-                                        parameterWithName("trashType").description("쓰레기통 타입 - [PAPER[종이] / CAN[캔] / PLASTIC[플라스틱] / PET[페트병] / GLASS[병] / VINYL[비닐] / COMMON[기타]/Null[전체검색]]").optional()
+                                        parameterWithName("trashType").description("쓰레기통 타입 - [PAPER[종이] / CAN[캔] / PLASTIC[플라스틱] / PET[페트병] / GLASS[병] / VINYL[비닐] / COMMON[기타]/ VASSEL[빈용기] /Null[전체검색]]").optional()
                                 ),
                                 responseFields(
                                         fieldWithPath("code").description("응답 코드"),
