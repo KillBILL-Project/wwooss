@@ -32,15 +32,19 @@ public class TrashCanDocument {
     @Field(type = FieldType.Text)
     private String address;
 
+    @Field(type = FieldType.Text)
+    private String locationName;
+
     // ,로 구분 PAPER,CAN,PAPER
     @Field(type = FieldType.Text)
     private String trashType;
 
-    public static TrashCanDocument of(Long id, GeoPoint location, String address, String trashType) {
+    public static TrashCanDocument of(Long id, GeoPoint location, String address, String locationName, String trashType) {
         return TrashCanDocument.builder()
                 .id(id)
                 .location(location)
                 .address(address)
+                .locationName(locationName)
                 .trashType(trashType)
                 .build();
     }

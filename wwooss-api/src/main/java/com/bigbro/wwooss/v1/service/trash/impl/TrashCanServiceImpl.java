@@ -25,7 +25,7 @@ public class TrashCanServiceImpl implements TrashCanService {
         Slice<TrashCan> trashCanList = trashCanRepository.findBySaveCompleted(false, pageable);
         List<TrashCanInfo> trashCanInfoList = trashCanList.getContent().stream().map(
                 (trash) -> TrashCanInfo.of(trash.getTrashCanId(), trash.getLng(), trash.getLat(),
-                        trash.getAddress(), trash.getTrashType())).toList();
+                        trash.getAddress(), trash.getLocationName(), trash.getTrashType())).toList();
         return TrashCanInfoList.of(trashCanList.hasNext(), trashCanInfoList);
     }
 

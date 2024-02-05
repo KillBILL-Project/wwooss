@@ -50,6 +50,7 @@ public class TrashCanDocumentRepositoryImpl implements TrashCanDocumentRepositor
                         new GeoPoint(trashCanInfo.getLat(),
                                 trashCanInfo.getLng()),
                         trashCanInfo.getAddress(),
+                        trashCanInfo.getLocationName(),
                         trashCanInfo.getTrashType());
 
                 IndexRequest indexRequest = new IndexRequest("trash-can")
