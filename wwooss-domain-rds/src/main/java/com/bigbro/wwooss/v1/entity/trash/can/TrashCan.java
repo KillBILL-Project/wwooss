@@ -44,7 +44,7 @@ public class TrashCan extends BaseEntity {
     private String address;
 
     @Comment("쓰레기 위치 - 위치명")
-    @Column(name = "location_name")
+    @Column(name = "place_name")
     private String placeName;
 
     @Comment("Success Insert to ES")
