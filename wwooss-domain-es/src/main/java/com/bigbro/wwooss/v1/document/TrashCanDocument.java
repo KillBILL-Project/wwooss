@@ -12,7 +12,7 @@ import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 import org.springframework.data.elasticsearch.annotations.GeoPointField;
 import org.springframework.data.elasticsearch.annotations.Setting;
-import org.elasticsearch.common.geo.GeoPoint;
+import org.springframework.data.elasticsearch.core.geo.GeoPoint;
 
 @Getter
 @Builder
@@ -33,18 +33,18 @@ public class TrashCanDocument {
     private String address;
 
     @Field(type = FieldType.Text)
-    private String locationName;
+    private String placeName;
 
     // ,로 구분 PAPER,CAN,PAPER
     @Field(type = FieldType.Text)
     private String trashType;
 
-    public static TrashCanDocument of(Long id, GeoPoint location, String address, String locationName, String trashType) {
+    public static TrashCanDocument of(Long id, GeoPoint location, String address, String placeName, String trashType) {
         return TrashCanDocument.builder()
                 .id(id)
                 .location(location)
                 .address(address)
-                .locationName(locationName)
+                .placeName(placeName)
                 .trashType(trashType)
                 .build();
     }

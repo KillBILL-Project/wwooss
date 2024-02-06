@@ -6,8 +6,10 @@ import com.bigbro.wwooss.v1.exception.IncorrectDataException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.action.bulk.BulkRequest;
+import org.elasticsearch.action.bulk.BulkResponse;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
@@ -15,7 +17,7 @@ import org.elasticsearch.common.unit.DistanceUnit;
 import org.elasticsearch.index.query.MatchQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.xcontent.XContentType;
-import org.elasticsearch.common.geo.GeoPoint;
+import org.springframework.data.elasticsearch.core.geo.GeoPoint;
 import org.elasticsearch.index.query.GeoDistanceQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.springframework.data.elasticsearch.core.SearchHit;
@@ -29,6 +31,7 @@ import java.util.Objects;
 
 import static com.bigbro.wwooss.v1.response.WwoossResponseCode.DOCUMENT_BULK_INSERT_ERROR;
 
+@Slf4j
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 public class TrashCanDocumentRepositoryImpl implements TrashCanDocumentRepositoryCustom {
 
@@ -50,7 +53,7 @@ public class TrashCanDocumentRepositoryImpl implements TrashCanDocumentRepositor
                         new GeoPoint(trashCanInfo.getLat(),
                                 trashCanInfo.getLng()),
                         trashCanInfo.getAddress(),
-                        trashCanInfo.getLocationName(),
+                        trashCanInfo.getPlaceName(),
                         trashCanInfo.getTrashType());
 
                 IndexRequest indexRequest = new IndexRequest("trash-can")
@@ -62,7 +65,11 @@ public class TrashCanDocumentRepositoryImpl implements TrashCanDocumentRepositor
 
             boolean existRequest = request.estimatedSizeInBytes() != 0;
             if (existRequest) {
-                highLevelClient.bulk(request, RequestOptions.DEFAULT);
+                BulkResponse bulk = highLevelClient.bulk(request, RequestOptions.DEFAULT);
+                if (bulk.hasFailures()) {
+                    log.error("bulk insert error response : {}", bulk.buildFailureMessage());
+                    throw new IOException();
+                }
             };
         } catch (IOException e) {
             throw new IncorrectDataException(DOCUMENT_BULK_INSERT_ERROR);

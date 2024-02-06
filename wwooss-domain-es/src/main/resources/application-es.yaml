@@ -4,6 +4,15 @@ spring:
       on-profile: local
   elasticsearch:
     uris: "localhost:9200"
+logging:
+  level:
+    org:
+      elasticsearch:
+        client: trace
+      apache:
+        http: trace
+
+
 
 ---
 
@@ -19,6 +28,14 @@ spring:
       on-profile: develop
   elasticsearch:
     uris: "ec2-3-38-150-8.ap-northeast-2.compute.amazonaws.com:9200"
+logging:
+  level:
+    org:
+      springframework:
+        data:
+          elasticsearch:
+            core: debug
+
 
 ---
 
