@@ -11,6 +11,8 @@ public interface TrashLogRepository extends JpaRepository<TrashLog, Long>, Trash
 
     List<TrashLog> findAllByUserAndTrashCanHistoryNull(User user);
 
+    List<TrashLog> findByUser(User user);
+
     void deleteByUser(User user);
 
 }
