@@ -36,12 +36,14 @@ public class TrashLogServiceImpl implements TrashLogService {
     }
 
     @Override
+    @Transactional
     public void updateTrashLogTrashHistory(TrashCanHistory trashCanHistory, User user) {
         List<TrashLog> trashLogList = trashLogRepository.findAllByUserAndTrashCanHistoryNull(user);
         trashLogList.forEach((trashLog -> trashLog.updateTrashHistory(trashCanHistory)));
     }
 
     @Override
+    @Transactional(readOnly = true)
     public TrashLogListResponse getTrashLogList(Long userId, String date, Pageable pageable) {
         User user = userRepository.findById(userId).orElseThrow(() -> new DataNotFoundException(WwoossResponseCode.NOT_FOUND_DATA, "존재하지 않는 유저입니다."));
         Page<TrashLog> trashLogList = trashLogRepository.findByUserAndDate(user, date, pageable);

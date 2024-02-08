@@ -30,7 +30,7 @@ public class TrashLogRepositoryImpl implements TrashLogRepositoryCustom {
     public Page<TrashLog> findByUserAndDate(User user, String date, Pageable pageable) {
 
         JPAQuery<TrashLog> trashLogJPAQuery = queryFactory.selectFrom(trashLog)
-                .where(searchDateFilter(date))
+                .where(trashLog.user.eq(user).and(searchDateFilter(date)))
                 .orderBy(trashLog.createdAt.desc());
 
         return PagingUtil.getPage(trashLogJPAQuery, pageable);

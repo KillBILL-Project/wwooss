@@ -25,7 +25,7 @@ public class TrashCanHistoryRepositoryImpl implements TrashCanHistoryRepositoryC
     public Slice<TrashCanHistory> findTrashCanHistoriesByUserAndDate(User user, String date, Pageable pageable) {
 
         JPAQuery<TrashCanHistory> trashCanHistoryJPAQuery = queryFactory.selectFrom(trashCanHistory)
-                .where(searchDateFilter(date))
+                .where(trashCanHistory.user.eq(user).and(searchDateFilter(date)))
                 .orderBy(trashCanHistory.createdAt.desc());
 
         return PagingUtil.getSlice(trashCanHistoryJPAQuery, pageable);
