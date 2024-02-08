@@ -8,4 +8,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface AlarmRepository extends JpaRepository<Alarm, Long>, AlarmRepositoryCustom {
     List<Alarm> findAlarmByUser(User user);
+
+    void deleteByUser(User user);
 }

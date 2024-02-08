@@ -5,11 +5,21 @@ import com.bigbro.wwooss.v1.dto.request.auth.UserLoginRequest;
 import com.bigbro.wwooss.v1.dto.request.auth.UserRegistrationRequest;
 import com.bigbro.wwooss.v1.dto.response.auth.TokenResponse;
 import com.bigbro.wwooss.v1.entity.user.User;
+import com.bigbro.wwooss.v1.entity.user.WithdrawalUser;
 import com.bigbro.wwooss.v1.enumType.LoginType;
 import com.bigbro.wwooss.v1.exception.CustomGlobalException;
 import com.bigbro.wwooss.v1.exception.DataNotFoundException;
 import com.bigbro.wwooss.v1.exception.IncorrectDataException;
+import com.bigbro.wwooss.v1.repository.alarm.AlarmRepository;
+import com.bigbro.wwooss.v1.repository.complimentCard.ComplimentCardRepository;
+import com.bigbro.wwooss.v1.repository.complimentCard.ComplimentConditionLogRepository;
+import com.bigbro.wwooss.v1.repository.notification.NotificationRepository;
+import com.bigbro.wwooss.v1.repository.report.WeeklyReportRepository;
+import com.bigbro.wwooss.v1.repository.trash.can.TrashCanContentsRepository;
+import com.bigbro.wwooss.v1.repository.trash.can.TrashCanHistoryRepository;
+import com.bigbro.wwooss.v1.repository.trash.log.TrashLogRepository;
 import com.bigbro.wwooss.v1.repository.user.UserRepository;
+import com.bigbro.wwooss.v1.repository.user.WithdrawalUserRepository;
 import com.bigbro.wwooss.v1.response.WwoossResponseCode;
 import com.bigbro.wwooss.v1.security.TokenInfo;
 import com.bigbro.wwooss.v1.security.TokenProvider;
@@ -64,9 +74,19 @@ public class AuthServiceImpl implements AuthService {
     private static final String IOS_ID_PREFIX = "APPLE_";
 
     private final UserRepository userRepository;
+    private final WithdrawalUserRepository withdrawalUserRepository;
     private final PasswordEncoder passwordEncoder;
     private final TokenProvider tokenProvider;
     private final RestTemplate restTemplate;
+
+    private final AlarmRepository alarmRepository;
+    private final NotificationRepository notificationRepository;
+    private final ComplimentCardRepository complimentCardRepository;
+    private final ComplimentConditionLogRepository complimentConditionLogRepository;
+    private final TrashCanContentsRepository trashCanContentsRepository;
+    private final TrashLogRepository trashLogRepository;
+    private final TrashCanHistoryRepository trashCanHistoryRepository;
+    private final WeeklyReportRepository weeklyReportRepository;
 
 
 
@@ -120,6 +140,49 @@ public class AuthServiceImpl implements AuthService {
 
     public Boolean existsUser(UserExistsRequest userExistsRequest) {
         return userRepository.findUserByEmailAndLoginType(userExistsRequest.getEmail(), userExistsRequest.getLoginType()).isEmpty();
+    }
+
+    @Override
+    @Transactional
+    public void withdrawalUser(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new DataNotFoundException(WwoossResponseCode.NOT_FOUND_DATA, "존재하지 않는 유저입니다."));
+
+        // 알람
+        alarmRepository.deleteByUser(user);
+
+        // 알림
+        notificationRepository.deleteByUser(user);
+
+        // 칭찬 카드
+        complimentCardRepository.deleteByUser(user);
+
+        // 칭찬 카드 로그
+        complimentConditionLogRepository.deleteByUser(user);
+
+        // 쓰레기 버린 이력
+        trashLogRepository.deleteByUser(user);
+
+        // 쓰레기 내용물
+        trashCanContentsRepository.deleteByUser(user);
+
+        // 쓰레기 비운 이력
+        trashCanHistoryRepository.deleteByUser(user);
+
+        // 주간 리포트
+        weeklyReportRepository.deleteByUser(user);
+
+        // 회원탈퇴 테이블 적재
+        withdrawalUserRepository.save(WithdrawalUser.of(
+                userId,
+                user.getUserRole(),
+                user.getGender(),
+                user.getAge(),
+                user.getLoginType(),
+                user.getCountry(),
+                user.getRegion()
+        ));
+        // 유저 삭제
+        userRepository.delete(user);
     }
 
     @Transactional

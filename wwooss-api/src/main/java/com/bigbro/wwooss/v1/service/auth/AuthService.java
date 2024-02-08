@@ -39,5 +39,10 @@ public interface AuthService {
       */
      Boolean existsUser(UserExistsRequest userExistsRequest);
 
+     /**
+      * 회원 탈퇴
+      */
+     void withdrawalUser(Long userId);
+
 
 }
