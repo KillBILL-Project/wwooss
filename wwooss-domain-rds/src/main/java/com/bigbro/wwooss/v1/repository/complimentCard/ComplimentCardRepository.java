@@ -9,4 +9,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface ComplimentCardRepository extends JpaRepository<ComplimentCard, Long>, ComplimentCardRepositoryCustom {
     ComplimentCard findByUserAndExpireAndComplimentCardMeta(User user, boolean expire, ComplimentCardMeta complimentCardMeta);
 
+    void deleteByUser(User user);
+
 }

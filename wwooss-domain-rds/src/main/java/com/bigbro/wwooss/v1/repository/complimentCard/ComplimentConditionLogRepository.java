@@ -11,4 +11,6 @@ public interface ComplimentConditionLogRepository extends JpaRepository<Complime
 
     List<ComplimentConditionLog> findByUserAndComplimentTypeOrderByCreatedAtDesc(User user, ComplimentType complimentType);
 
+    void deleteByUser(User user);
+
 }

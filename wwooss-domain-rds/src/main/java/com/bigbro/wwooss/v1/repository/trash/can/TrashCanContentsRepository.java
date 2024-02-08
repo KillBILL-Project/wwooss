@@ -10,4 +10,6 @@ public interface TrashCanContentsRepository extends JpaRepository<TrashCanConten
 
     List<TrashCanContents> findAllByUser(User user);
 
+    void deleteByUser(User user);
+
 }

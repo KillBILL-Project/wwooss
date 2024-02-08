@@ -10,4 +10,6 @@ import java.util.Optional;
 public interface WeeklyReportRepository extends JpaRepository<WeeklyReport, Long>, WeeklyReportRepositoryCustom {
 
     Optional<WeeklyReport> findWeeklyReportByWeeklyReportIdAndUser(long weeklyReportId, User user);
+
+    void deleteByUser(User user);
 }

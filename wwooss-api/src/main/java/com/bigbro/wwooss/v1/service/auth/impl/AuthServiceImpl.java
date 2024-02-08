@@ -5,6 +5,7 @@ import com.bigbro.wwooss.v1.dto.request.auth.UserLoginRequest;
 import com.bigbro.wwooss.v1.dto.request.auth.UserRegistrationRequest;
 import com.bigbro.wwooss.v1.dto.response.auth.TokenResponse;
 import com.bigbro.wwooss.v1.entity.user.User;
+import com.bigbro.wwooss.v1.entity.user.WithdrawalUser;
 import com.bigbro.wwooss.v1.enumType.LoginType;
 import com.bigbro.wwooss.v1.exception.CustomGlobalException;
 import com.bigbro.wwooss.v1.exception.DataNotFoundException;
@@ -147,22 +148,41 @@ public class AuthServiceImpl implements AuthService {
         User user = userRepository.findById(userId).orElseThrow(() -> new DataNotFoundException(WwoossResponseCode.NOT_FOUND_DATA, "존재하지 않는 유저입니다."));
 
         // 알람
+        alarmRepository.deleteByUser(user);
 
         // 알림
+        notificationRepository.deleteByUser(user);
 
         // 칭찬 카드
+        complimentCardRepository.deleteByUser(user);
 
         // 칭찬 카드 로그
-
-        // 쓰레기 내용물
-
-        // 쓰레기 비운 이력
+        complimentConditionLogRepository.deleteByUser(user);
 
         // 쓰레기 버린 이력
+        trashLogRepository.deleteByUser(user);
+
+        // 쓰레기 내용물
+        trashCanContentsRepository.deleteByUser(user);
+
+        // 쓰레기 비운 이력
+        trashCanHistoryRepository.deleteByUser(user);
 
         // 주간 리포트
+        weeklyReportRepository.deleteByUser(user);
 
         // 회원탈퇴 테이블 적재
+        withdrawalUserRepository.save(WithdrawalUser.of(
+                userId,
+                user.getUserRole(),
+                user.getGender(),
+                user.getAge(),
+                user.getLoginType(),
+                user.getCountry(),
+                user.getRegion()
+        ));
+        // 유저 삭제
+        userRepository.delete(user);
     }
 
     @Transactional
