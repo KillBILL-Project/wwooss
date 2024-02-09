@@ -25,7 +25,7 @@ public class CustomAuthenticationProcessingFilter extends AbstractAuthentication
 
     private final String ROLE_PREFIX = "ROLE_";
 
-    private static final List<String> UNFILTERED_URIS = List.of("/api/v1/auth/login", "/api/v1/auth/register",
+    private static final List<String> UNFILTERED_URIS = List.of("/api/v1/auth/login", "/api/v1/auth/register", "/api/v1/auth/reset-password",
             "/api/v1/health");
     private final TokenProvider tokenProvider;
 

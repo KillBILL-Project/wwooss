@@ -15,6 +15,19 @@ spring:
     import:
       - application-rds.yaml
       - application-es.yaml
+  mail:
+    host: ENC(z3tvDgt/YAjyPkKQM0CCxZa3IkK99lwr)
+    port: 587
+    username: ENC(4AlShmfJzK+GhbSOb4a6yzfn40vp+0DnkvQvHwaic8E=)
+    password: ENC(c+96aFFyVm1ZuAng6mOzwCe8MerW2JqJcBXS3x0ctEE=)
+    properties:
+      mail:
+        debug: true
+        smtp:
+          auth: true
+          timeout: 5000
+          starttls:
+            enable: true
 jwt:
   secret: ENC(7VtELZyUJVHc6bI0fglafnxG26a+pWEuhI3CZbmdrC6VqdwH7DN8t0mKyRuix+1oob/tKU0BqcFdOaYaFRZQ89X8XkfXpJa8P7qkmmzc84MliYA24609Ca0kl0yonZbcMepEbVkYoNOwilyUXUIkEUBB8lh3HEfd)
   access-token-validity-in-milliseconds: 600000
@@ -38,6 +51,19 @@ spring:
     import:
       - application-rds.yaml
       - application-es.yaml
+  mail:
+    host: ENC(vXkNpYTZWDakGdn9+ORj/Qpe8vlvjDIF)
+    port: 587
+    username: ENC(h4vRGpAOYX0MYDoM7gXYVfdblXZNnZ4sjHQa6kdGWjE=)
+    password: ENC(wbwNDH0JLz1cwH91cqCk0OLmVIDCE+H9R3zGH35yF14=)
+    properties:
+      mail:
+        debug: true
+        smtp:
+          auth: true
+          timeout: 5000
+          starttls:
+            enable: true
 jwt:
   secret: ENC(eIH5HLuOv+l9LQXV41b6kw6bgg9t/ZYgBlijNir0OcYKVfnGzMn/F4HHm+zH54mdbG9Pm7KYmcdkL4wBjY6l3eweQgKY0lJT2quZLFJTZrYSUCGZGXjPlFXospPwlXqdJGJdXJPc72dcVxMo4NW/xjHEhAZIjTf6)
   access-token-validity-in-milliseconds: 600000
@@ -61,6 +87,19 @@ spring:
     import:
       - application-rds.yaml
       - application-es.yaml
+  mail:
+    host: ENC(HzbajL3yXiEh2GBzGApbmkAzJ1rjagyx)
+    port: 587
+    username: ENC(V47tNDWvfwNMUf7t1mY1gE87XgboXiV1F6i+N+L3+vU=)
+    password: ENC(JXd+gD5V20VKGSsPjpY4Lot32A+jYr/4l5jWUfbw68A=)
+    properties:
+      mail:
+        debug: true
+        smtp:
+          auth: true
+          timeout: 5000
+          starttls:
+            enable: true
 jwt:
   secret: ENC(bzaIHyRxaZ01mhYXcDBK9MmHo1apGoAXGKI7F9O1GLQ7dZwhSOAUeHs266E9S1dglLd/ERiLfAfStWGUSmgqsT4tQffNleigroJigEOmvLKcMdhyzaSz3YFKWZQ50HHCJsE6TaIijnnnU480f0Gabdld6mOGxfCB)
   access-token-validity-in-milliseconds: 600000
