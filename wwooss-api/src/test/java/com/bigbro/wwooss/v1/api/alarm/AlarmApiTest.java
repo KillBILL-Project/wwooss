@@ -60,6 +60,7 @@ public class AlarmApiTest {
         this.mockMvc.perform(RestDocumentationRequestBuilders.get("/api/v1/alarm")
                         .with(csrf().asHeader())
                         .contextPath("/api")
+                        .header("Authorization", "bearer TEST_ACCESS")
                         .contentType(MediaType.APPLICATION_JSON)
                 )
                 .andExpect(status().isOk())
@@ -106,6 +107,7 @@ public class AlarmApiTest {
 
         this.mockMvc.perform(RestDocumentationRequestBuilders.post("/api/v1/alarm")
                         .with(csrf().asHeader())
+                        .header("Authorization", "bearer TEST_ACCESS")
                         .contextPath("/api")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(alarmRequest))
@@ -119,7 +121,7 @@ public class AlarmApiTest {
                                         headerWithName("Authorization").description("인증 토큰")
                                 ),
                                 requestFields(
-                                        fieldWithPath("dayOfWeekList").type(JsonFieldType.NUMBER).description("알람 발송 요일 - 월[1] ... 일[7]"),
+                                        fieldWithPath("dayOfWeekList").type(JsonFieldType.ARRAY).description("알람 발송 요일 - 월[1] ... 일[7]"),
                                         fieldWithPath("sendHour").type(JsonFieldType.NUMBER).description("알람 보내는 시간 - 예) 15"),
                                         fieldWithPath("sendMinute").type(JsonFieldType.NUMBER).description("알람 보내는 분")
                                 ),
@@ -146,6 +148,7 @@ public class AlarmApiTest {
 
         this.mockMvc.perform(RestDocumentationRequestBuilders.patch("/api/v1/alarm/{alarm-id}/on-off", 1L)
                         .with(csrf().asHeader())
+                        .header("Authorization", "bearer TEST_ACCESS")
                         .contextPath("/api")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(alarmOnOffRequest))
@@ -191,6 +194,7 @@ public class AlarmApiTest {
                         .with(csrf().asHeader())
                         .contextPath("/api")
                         .contentType(MediaType.APPLICATION_JSON)
+                        .header("Authorization", "bearer TEST_ACCESS")
                         .content(objectMapper.writeValueAsString(alarmRequest))
                 )
                 .andExpect(status().isOk())
@@ -202,7 +206,7 @@ public class AlarmApiTest {
                                         headerWithName("Authorization").description("인증 토큰")
                                 ),
                                 requestFields(
-                                        fieldWithPath("dayOfWeekList").type(JsonFieldType.NUMBER).description("알람 발송 요일 - 월[1] ... 일[7]"),
+                                        fieldWithPath("dayOfWeekList").type(JsonFieldType.ARRAY).description("알람 발송 요일 - 월[1] ... 일[7]"),
                                         fieldWithPath("sendHour").type(JsonFieldType.NUMBER).description("알람 보내는 시간 - 예) 15"),
                                         fieldWithPath("sendMinute").type(JsonFieldType.NUMBER).description("알람 보내는 분")
                                 ),
@@ -227,6 +231,7 @@ public class AlarmApiTest {
         this.mockMvc.perform(RestDocumentationRequestBuilders.delete("/api/v1/alarm/{alarm-id}", 1L)
                         .with(csrf().asHeader())
                         .contextPath("/api")
+                        .header("Authorization", "bearer TEST_ACCESS")
                         .contentType(MediaType.APPLICATION_JSON)
                 )
                 .andExpect(status().isOk())

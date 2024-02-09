@@ -3,6 +3,8 @@ package com.bigbro.wwooss.v1.api.complimentCard;
 
 import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.document;
 import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.resourceDetails;
+import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
+import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -51,6 +53,7 @@ class ComplimentCardMetaApiTest {
 
         this.mockMvc.perform(RestDocumentationRequestBuilders.post("/api/v1/compliment-card-meta")
                         .with(csrf().asHeader())
+                        .header("Authorization", "bearer TEST_ACCESS")
                         .contextPath("/api")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(complimentCardMetaRequest))
@@ -60,6 +63,9 @@ class ComplimentCardMetaApiTest {
                                 resourceDetails().tags("칭찬카드 메타 생성 생성 - 내부 API"),
                                 DocumentConfig.getDocumentRequest(),
                                 DocumentConfig.getDocumentResponse(),
+                                requestHeaders(
+                                        headerWithName("Authorization").description("인증 토큰")
+                                ),
                                 responseFields(
                                         fieldWithPath("code").description("응답 코드"),
                                         fieldWithPath("title").description("응답 코드 별 클라이언트 노출 제목"),

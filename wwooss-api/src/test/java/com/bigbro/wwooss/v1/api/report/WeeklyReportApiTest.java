@@ -57,6 +57,7 @@ class WeeklyReportApiTest {
         this.mockMvc.perform(RestDocumentationRequestBuilders.get("/api/v1/weekly-reports")
                         .with(csrf().asHeader())
                         .contextPath("/api")
+                        .header("Authorization", "bearer TEST_ACCESS")
                         .param("size", "10")
                         .param("page", "0")
                         .contentType(MediaType.APPLICATION_JSON)

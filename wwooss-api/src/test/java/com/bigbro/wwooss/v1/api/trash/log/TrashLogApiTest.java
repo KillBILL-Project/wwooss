@@ -78,6 +78,7 @@ class TrashLogApiTest {
 
         this.mockMvc.perform(RestDocumentationRequestBuilders.get("/api/v1/trash-log")
                         .with(csrf().asHeader())
+                        .header("Authorization", "bearer TEST_ACCESS")
                         .param("date", "2023-10")
                         .param("size", "15")
                         .param("page", "1")

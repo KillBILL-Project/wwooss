@@ -46,6 +46,7 @@ class UserApiTest {
 
         this.mockMvc.perform(RestDocumentationRequestBuilders.patch("/api/v1/user/push-consent")
                         .with(csrf().asHeader())
+                        .header("Authorization", "bearer TEST_ACCESS")
                         .contextPath("/api")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(pushConsentRequest))

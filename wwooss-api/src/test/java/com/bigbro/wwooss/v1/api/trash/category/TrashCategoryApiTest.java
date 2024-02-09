@@ -53,6 +53,7 @@ class TrashCategoryApiTest {
 
         this.mockMvc.perform(RestDocumentationRequestBuilders.get("/api/v1/trash-categories")
                         .with(csrf().asHeader())
+                        .header("Authorization", "bearer TEST_ACCESS")
                         .contextPath("/api")
                         .contentType(MediaType.APPLICATION_JSON)
                 )
@@ -85,6 +86,7 @@ class TrashCategoryApiTest {
 
         this.mockMvc.perform(RestDocumentationRequestBuilders.post("/api/v1/trash-categories")
                         .with(csrf().asHeader())
+                        .header("Authorization", "bearer TEST_ACCESS")
                         .contextPath("/api")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(trashCategoryRequest))
@@ -97,6 +99,9 @@ class TrashCategoryApiTest {
                                 requestFields(
                                         fieldWithPath("trashType").description(
                                                 "쓰레기 타입 - PAPER[종이] / CAN[캔] / PLASTIC[플라스틱] / PET[페트병] / GLASS[병] / VINYL[비닐] / COMMON[기타]")
+                                ),
+                                requestHeaders(
+                                        headerWithName("Authorization").description("인증 토큰")
                                 ),
                                 responseFields(
                                         fieldWithPath("code").description("응답 코드"),

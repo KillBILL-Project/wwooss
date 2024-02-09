@@ -62,6 +62,7 @@ class TrashCanHistoryApiTest {
         this.mockMvc.perform(RestDocumentationRequestBuilders.get("/api/v1/trash-can-histories")
                         .with(csrf().asHeader())
                         .contextPath("/api")
+                        .header("Authorization", "bearer TEST_ACCESS")
                         .param("date", "2023-10")
                         .param("size", "10")
                         .param("page", "0")

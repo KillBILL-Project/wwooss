@@ -54,6 +54,7 @@ class TrashCanContentsApiTest {
 
         this.mockMvc.perform(RestDocumentationRequestBuilders.post("/api/v1/trash-can-contents")
                         .with(csrf().asHeader())
+                        .header("Authorization", "bearer TEST_ACCESS")
                         .contextPath("/api")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(trashCanContentsRequest))
@@ -89,6 +90,7 @@ class TrashCanContentsApiTest {
 
         this.mockMvc.perform(RestDocumentationRequestBuilders.delete("/api/v1/trash-can-contents")
                         .with(csrf().asHeader())
+                        .header("Authorization", "bearer TEST_ACCESS")
                         .contextPath("/api")
                         .contentType(MediaType.APPLICATION_JSON)
                 )

@@ -60,6 +60,7 @@ class TrashInfoApiTest {
         this.mockMvc.perform(RestDocumentationRequestBuilders.get("/api/v1/trash-info")
                 .with(csrf().asHeader())
                 .contextPath("/api")
+                .header("Authorization", "bearer TEST_ACCESS")
                 .contentType(MediaType.APPLICATION_JSON)
         )
         .andExpect(status().isOk())

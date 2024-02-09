@@ -51,6 +51,7 @@ class TrashCanApiTest {
         this.mockMvc.perform(RestDocumentationRequestBuilders.get("/api/v1/trash-can")
                         .with(csrf().asHeader())
                         .contextPath("/api")
+                        .header("Authorization", "bearer TEST_ACCESS")
                         .param("lat", "37.53519607656067D")
                         .param("lng", "126.82551415214544D")
                         .param("distance", "100")
