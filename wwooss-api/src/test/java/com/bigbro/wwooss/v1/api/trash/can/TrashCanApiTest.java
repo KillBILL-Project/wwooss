@@ -20,6 +20,8 @@ import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.docume
 import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.resourceDetails;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.ArgumentMatchers.any;
+import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
+import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
@@ -65,6 +67,9 @@ class TrashCanApiTest {
                                         parameterWithName("lng").description("화면 중심 경도"),
                                         parameterWithName("distance").description("화면중심을 기준으로 검색하고자 하는 반경 - 단위 [KM]"),
                                         parameterWithName("trashType").description("쓰레기통 타입 - [PAPER[종이] / CAN[캔] / PLASTIC[플라스틱] / PET[페트병] / GLASS[병] / VINYL[비닐] / COMMON[기타]/ VASSEL[빈용기] /Null[전체검색]]").optional()
+                                ),
+                                requestHeaders(
+                                        headerWithName("Authorization").description("인증 토큰")
                                 ),
                                 responseFields(
                                         fieldWithPath("code").description("응답 코드"),

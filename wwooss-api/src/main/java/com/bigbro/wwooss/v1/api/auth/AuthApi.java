@@ -1,5 +1,6 @@
 package com.bigbro.wwooss.v1.api.auth;
 
+import com.bigbro.wwooss.v1.dto.request.auth.ResetPasswordRequest;
 import com.bigbro.wwooss.v1.dto.request.auth.UserExistsRequest;
 import com.bigbro.wwooss.v1.dto.request.auth.UserLoginRequest;
 import com.bigbro.wwooss.v1.dto.request.auth.UserRegistrationRequest;
@@ -48,6 +49,12 @@ public class AuthApi {
     @DeleteMapping("/withdrawal")
     public ResponseEntity<WwoossResponse<Void>> withdrawal(UserCredential userCredential) {
         authService.withdrawalUser(userCredential.getUserId());
+        return WwoossResponseUtil.responseOkNoData();
+    }
+
+    @PatchMapping("/reset-password")
+    public ResponseEntity<WwoossResponse<Void>> resetPassword(@RequestBody ResetPasswordRequest resetPasswordRequest) {
+        authService.resetPassword(resetPasswordRequest.getEmail());
         return WwoossResponseUtil.responseOkNoData();
     }
 

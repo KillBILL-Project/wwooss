@@ -4,8 +4,9 @@ import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.docume
 import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.resourceDetails;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
+import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -26,6 +27,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
+import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.MockMvc;
 
 @TestController
@@ -65,6 +67,9 @@ public class AlarmApiTest {
                                 resourceDetails().tags("알람 목록 가져오기"),
                                 DocumentConfig.getDocumentRequest(),
                                 DocumentConfig.getDocumentResponse(),
+                                requestHeaders(
+                                        headerWithName("Authorization").description("인증 토큰")
+                                ),
                                 responseFields(
                                         fieldWithPath("code").description("응답 코드"),
                                         fieldWithPath("title").description("응답 코드 별 클라이언트 노출 제목"),
@@ -110,6 +115,14 @@ public class AlarmApiTest {
                                 resourceDetails().tags("알람 생성"),
                                 DocumentConfig.getDocumentRequest(),
                                 DocumentConfig.getDocumentResponse(),
+                                requestHeaders(
+                                        headerWithName("Authorization").description("인증 토큰")
+                                ),
+                                requestFields(
+                                        fieldWithPath("dayOfWeekList").type(JsonFieldType.NUMBER).description("알람 발송 요일 - 월[1] ... 일[7]"),
+                                        fieldWithPath("sendHour").type(JsonFieldType.NUMBER).description("알람 보내는 시간 - 예) 15"),
+                                        fieldWithPath("sendMinute").type(JsonFieldType.NUMBER).description("알람 보내는 분")
+                                ),
                                 responseFields(
                                         fieldWithPath("code").description("응답 코드"),
                                         fieldWithPath("title").description("응답 코드 별 클라이언트 노출 제목"),
@@ -142,6 +155,9 @@ public class AlarmApiTest {
                                 resourceDetails().tags("알람 on/off"),
                                 DocumentConfig.getDocumentRequest(),
                                 DocumentConfig.getDocumentResponse(),
+                                requestHeaders(
+                                        headerWithName("Authorization").description("인증 토큰")
+                                ),
                                 responseFields(
                                         fieldWithPath("code").description("응답 코드"),
                                         fieldWithPath("title").description("응답 코드 별 클라이언트 노출 제목"),
@@ -182,6 +198,14 @@ public class AlarmApiTest {
                                 resourceDetails().tags("알람 업데이트"),
                                 DocumentConfig.getDocumentRequest(),
                                 DocumentConfig.getDocumentResponse(),
+                                requestHeaders(
+                                        headerWithName("Authorization").description("인증 토큰")
+                                ),
+                                requestFields(
+                                        fieldWithPath("dayOfWeekList").type(JsonFieldType.NUMBER).description("알람 발송 요일 - 월[1] ... 일[7]"),
+                                        fieldWithPath("sendHour").type(JsonFieldType.NUMBER).description("알람 보내는 시간 - 예) 15"),
+                                        fieldWithPath("sendMinute").type(JsonFieldType.NUMBER).description("알람 보내는 분")
+                                ),
                                 responseFields(
                                         fieldWithPath("code").description("응답 코드"),
                                         fieldWithPath("title").description("응답 코드 별 클라이언트 노출 제목"),
@@ -210,6 +234,9 @@ public class AlarmApiTest {
                                 resourceDetails().tags("알람 삭제"),
                                 DocumentConfig.getDocumentRequest(),
                                 DocumentConfig.getDocumentResponse(),
+                                requestHeaders(
+                                        headerWithName("Authorization").description("인증 토큰")
+                                ),
                                 responseFields(
                                         fieldWithPath("code").description("응답 코드"),
                                         fieldWithPath("title").description("응답 코드 별 클라이언트 노출 제목"),

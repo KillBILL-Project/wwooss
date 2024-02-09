@@ -1,5 +1,6 @@
 package com.bigbro.wwooss.v1.service.auth.impl;
 
+import com.bigbro.wwooss.v1.dto.SendEmail;
 import com.bigbro.wwooss.v1.dto.request.auth.UserExistsRequest;
 import com.bigbro.wwooss.v1.dto.request.auth.UserLoginRequest;
 import com.bigbro.wwooss.v1.dto.request.auth.UserRegistrationRequest;
@@ -7,6 +8,7 @@ import com.bigbro.wwooss.v1.dto.response.auth.TokenResponse;
 import com.bigbro.wwooss.v1.entity.user.User;
 import com.bigbro.wwooss.v1.entity.user.WithdrawalUser;
 import com.bigbro.wwooss.v1.enumType.LoginType;
+import com.bigbro.wwooss.v1.enumType.SendEmailType;
 import com.bigbro.wwooss.v1.exception.CustomGlobalException;
 import com.bigbro.wwooss.v1.exception.DataNotFoundException;
 import com.bigbro.wwooss.v1.exception.IncorrectDataException;
@@ -24,6 +26,8 @@ import com.bigbro.wwooss.v1.response.WwoossResponseCode;
 import com.bigbro.wwooss.v1.security.TokenInfo;
 import com.bigbro.wwooss.v1.security.TokenProvider;
 import com.bigbro.wwooss.v1.service.auth.AuthService;
+import com.bigbro.wwooss.v1.service.email.EmailService;
+import com.bigbro.wwooss.v1.utils.WwoossUtil;
 import com.google.gson.*;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -50,6 +54,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.security.KeyFactory;
 import java.security.PublicKey;
+import java.security.SecureRandom;
 import java.security.spec.RSAPublicKeySpec;
 import java.time.LocalDateTime;
 import java.util.Base64;
@@ -73,6 +78,8 @@ public class AuthServiceImpl implements AuthService {
     private static final String GOOGLE_ID_PREFIX = "GOOGLE_";
     private static final String IOS_ID_PREFIX = "APPLE_";
 
+    private static final int RESET_PASSWORD_LENGTH = 15;
+
     private final UserRepository userRepository;
     private final WithdrawalUserRepository withdrawalUserRepository;
     private final PasswordEncoder passwordEncoder;
@@ -88,6 +95,9 @@ public class AuthServiceImpl implements AuthService {
     private final TrashCanHistoryRepository trashCanHistoryRepository;
     private final WeeklyReportRepository weeklyReportRepository;
 
+    private final EmailService emailService;
+
+    private final WwoossUtil wwoossUtil;
 
 
     @Transactional
@@ -183,6 +193,16 @@ public class AuthServiceImpl implements AuthService {
         ));
         // 유저 삭제
         userRepository.delete(user);
+    }
+
+    @Override
+    @Transactional
+    public void resetPassword(String email) {
+        User user = userRepository.findUserByEmailAndLoginType(email, LoginType.EMAIL).orElseThrow(() -> new DataNotFoundException(WwoossResponseCode.NOT_FOUND_DATA, "존재하지 않는 유저입니다."));
+        String randomPW = wwoossUtil.makeRandomPw(RESET_PASSWORD_LENGTH);
+
+        emailService.sendEmail(SendEmail.of(user.getEmail(), SendEmailType.RESET_PASSWORD), randomPW);
+        user.updatePassword(passwordEncoder.encode(randomPW));
     }
 
     @Transactional

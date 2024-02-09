@@ -44,5 +44,10 @@ public interface AuthService {
       */
      void withdrawalUser(Long userId);
 
+     /**
+      * 비밀번호 초기화
+      * 입력 받은 이메일에 임의의 값 비밀번호 전송
+      */
+     void resetPassword(String email);
 
 }

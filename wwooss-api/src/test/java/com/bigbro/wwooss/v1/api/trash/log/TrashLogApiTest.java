@@ -28,6 +28,8 @@ import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.docume
 import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.resourceDetails;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
+import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
@@ -91,6 +93,9 @@ class TrashLogApiTest {
                                         parameterWithName("date").description("조회 날짜 : [null / YYYY-MM / YYYY]").optional(),
                                         parameterWithName("size").description("조회 size").optional(),
                                         parameterWithName("page").description("조회 page").optional()
+                                ),
+                                requestHeaders(
+                                        headerWithName("Authorization").description("인증 토큰")
                                 ),
                                 responseFields(
                                         fieldWithPath("code").description("응답 코드"),
