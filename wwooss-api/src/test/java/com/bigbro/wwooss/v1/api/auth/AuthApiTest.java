@@ -3,10 +3,7 @@ package com.bigbro.wwooss.v1.api.auth;
 import com.bigbro.wwooss.v1.annotation.TestController;
 import com.bigbro.wwooss.v1.annotation.WithMockCustomUser;
 import com.bigbro.wwooss.v1.config.DocumentConfig;
-import com.bigbro.wwooss.v1.dto.request.alarm.AlarmRequest;
 import com.bigbro.wwooss.v1.dto.request.auth.ResetPasswordRequest;
-import com.bigbro.wwooss.v1.dto.response.alarm.AlarmResponse;
-import com.bigbro.wwooss.v1.enumType.DayOfWeek;
 import com.bigbro.wwooss.v1.service.auth.AuthService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
@@ -16,14 +13,14 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
+import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.document;
 import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.resourceDetails;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
-import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -44,6 +41,7 @@ class AuthApiTest {
     void withdrawal() throws Exception {
         this.mockMvc.perform(RestDocumentationRequestBuilders.delete("/api/v1/auth/withdrawal")
                         .with(csrf().asHeader())
+                        .header("Authorization", "bearer TEST_ACCESS")
                         .contextPath("/api")
                         .header("Authorization", "bearer TEST_ACCESS")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -83,6 +81,9 @@ class AuthApiTest {
                                 resourceDetails().tags("임시 비밀번호 발급"),
                                 DocumentConfig.getDocumentRequest(),
                                 DocumentConfig.getDocumentResponse(),
+                                requestFields(
+                                        fieldWithPath("email").type(JsonFieldType.STRING).description("이메일")
+                                ),
                                 responseFields(
                                         fieldWithPath("code").description("응답 코드"),
                                         fieldWithPath("title").description("응답 코드 별 클라이언트 노출 제목"),

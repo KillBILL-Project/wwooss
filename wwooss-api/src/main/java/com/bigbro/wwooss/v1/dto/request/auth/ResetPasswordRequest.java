@@ -1,10 +1,11 @@
 package com.bigbro.wwooss.v1.dto.request.auth;
 
-import lombok.Builder;
-import lombok.Getter;
+import lombok.*;
 
 @Getter
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ResetPasswordRequest {
     private String email;
 
