@@ -22,6 +22,8 @@ import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.docume
 import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.resourceDetails;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
+import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
@@ -74,6 +76,9 @@ class TrashCanHistoryApiTest {
                                         parameterWithName("date").description("조회 날짜 : [null / YYYY-MM / YYYY]").optional(),
                                         parameterWithName("page").description("현재 페이지"),
                                         parameterWithName("size").description("한 페이지 당 결과값").optional()
+                                ),
+                                requestHeaders(
+                                        headerWithName("Authorization").description("인증 토큰")
                                 ),
                                 responseFields(
                                         fieldWithPath("code").description("응답 코드"),
