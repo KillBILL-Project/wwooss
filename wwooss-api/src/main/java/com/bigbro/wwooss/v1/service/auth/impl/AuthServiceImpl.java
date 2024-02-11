@@ -205,6 +205,13 @@ public class AuthServiceImpl implements AuthService {
         user.updatePassword(passwordEncoder.encode(randomPW));
     }
 
+    @Override
+    @Transactional
+    public void changePassword(Long userId, String password) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new DataNotFoundException(WwoossResponseCode.NOT_FOUND_DATA, "존재하지 않는 유저입니다."));
+        user.updatePassword(passwordEncoder.encode(password));
+    }
+
     @Transactional
     public TokenResponse register(UserRegistrationRequest userRegistrationRequest) {
 

@@ -3,6 +3,7 @@ package com.bigbro.wwooss.v1.api.auth;
 import com.bigbro.wwooss.v1.annotation.TestController;
 import com.bigbro.wwooss.v1.annotation.WithMockCustomUser;
 import com.bigbro.wwooss.v1.config.DocumentConfig;
+import com.bigbro.wwooss.v1.dto.request.auth.ChangePasswordRequest;
 import com.bigbro.wwooss.v1.dto.request.auth.ResetPasswordRequest;
 import com.bigbro.wwooss.v1.service.auth.AuthService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -65,7 +66,6 @@ class AuthApiTest {
     }
 
     @Test
-    @WithMockCustomUser
     @DisplayName("임시비밀번호 발급")
     void resetPassword() throws Exception {
         ResetPasswordRequest resetPasswordRequest = ResetPasswordRequest.from("dddd@naver.com");
@@ -83,6 +83,38 @@ class AuthApiTest {
                                 DocumentConfig.getDocumentResponse(),
                                 requestFields(
                                         fieldWithPath("email").type(JsonFieldType.STRING).description("이메일")
+                                ),
+                                responseFields(
+                                        fieldWithPath("code").description("응답 코드"),
+                                        fieldWithPath("title").description("응답 코드 별 클라이언트 노출 제목"),
+                                        fieldWithPath("message").description("응답 코드 별 클라이언트 노출 메세지"),
+                                        fieldWithPath("data").description("데이터 없음")
+                                )
+                        )
+                );
+    }
+
+    @Test
+    @WithMockCustomUser
+    @DisplayName("비밀번호 변경")
+    void changePassword() throws Exception {
+        ChangePasswordRequest changePasswordRequest = ChangePasswordRequest.builder()
+                .password("test")
+                .build();
+
+        this.mockMvc.perform(RestDocumentationRequestBuilders.patch("/api/v1/auth/change-password")
+                        .with(csrf().asHeader())
+                        .contextPath("/api")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(changePasswordRequest))
+                )
+                .andExpect(status().isOk())
+                .andDo(document("change-password",
+                                resourceDetails().tags("비밀번호 변경"),
+                                DocumentConfig.getDocumentRequest(),
+                                DocumentConfig.getDocumentResponse(),
+                                requestFields(
+                                        fieldWithPath("password").type(JsonFieldType.STRING).description("변경할 비밀번호")
                                 ),
                                 responseFields(
                                         fieldWithPath("code").description("응답 코드"),

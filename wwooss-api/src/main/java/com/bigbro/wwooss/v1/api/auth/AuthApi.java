@@ -1,9 +1,6 @@
 package com.bigbro.wwooss.v1.api.auth;
 
-import com.bigbro.wwooss.v1.dto.request.auth.ResetPasswordRequest;
-import com.bigbro.wwooss.v1.dto.request.auth.UserExistsRequest;
-import com.bigbro.wwooss.v1.dto.request.auth.UserLoginRequest;
-import com.bigbro.wwooss.v1.dto.request.auth.UserRegistrationRequest;
+import com.bigbro.wwooss.v1.dto.request.auth.*;
 import com.bigbro.wwooss.v1.dto.request.user.UserCredential;
 import com.bigbro.wwooss.v1.dto.response.auth.TokenResponse;
 import com.bigbro.wwooss.v1.response.WwoossResponse;
@@ -12,6 +9,8 @@ import com.bigbro.wwooss.v1.service.auth.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @RequiredArgsConstructor
 @RequestMapping("/v1/auth")
@@ -53,8 +52,14 @@ public class AuthApi {
     }
 
     @PatchMapping("/reset-password")
-    public ResponseEntity<WwoossResponse<Void>> resetPassword(@RequestBody ResetPasswordRequest resetPasswordRequest) {
+    public ResponseEntity<WwoossResponse<Void>> resetPassword(@RequestBody @Valid ResetPasswordRequest resetPasswordRequest) {
         authService.resetPassword(resetPasswordRequest.getEmail());
+        return WwoossResponseUtil.responseOkNoData();
+    }
+
+    @PatchMapping("/change-password")
+    public ResponseEntity<WwoossResponse<Void>> changePassword(@RequestBody @Valid  ChangePasswordRequest changePasswordRequest, UserCredential userCredential) {
+        authService.changePassword(userCredential.getUserId(), changePasswordRequest.getPassword());
         return WwoossResponseUtil.responseOkNoData();
     }
 

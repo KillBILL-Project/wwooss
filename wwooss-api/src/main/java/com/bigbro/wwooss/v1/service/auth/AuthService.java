@@ -50,4 +50,9 @@ public interface AuthService {
       */
      void resetPassword(String email);
 
+     /**
+      * 비밀번호 변경
+      */
+     void changePassword(Long userId, String password);
+
 }
