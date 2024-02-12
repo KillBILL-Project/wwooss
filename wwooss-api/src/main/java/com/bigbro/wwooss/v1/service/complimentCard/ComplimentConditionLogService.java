@@ -9,4 +9,9 @@ public interface ComplimentConditionLogService {
      */
     boolean createLoginLog(long userId);
 
+    /**
+     * 쓰레기 버리기 로그 생성
+     */
+    boolean createThrowTrashLog(long userId);
+
 }

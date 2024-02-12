@@ -3,6 +3,7 @@ package com.bigbro.wwooss.v1.utils;
 import com.bigbro.wwooss.v1.dto.WeekInfo;
 import org.springframework.stereotype.Component;
 
+import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
@@ -89,5 +90,24 @@ public class DateUtil {
 
     public Date convertToDate(LocalDateTime dateToConvert) {
         return java.sql.Timestamp.valueOf(dateToConvert);
+    }
+
+    /**
+     * YYYY-MM-DD 비교
+     */
+    public boolean isEqualDate(LocalDateTime date1, LocalDateTime date2) {
+        String date1Format = date1.format(DateTimeFormatter.ofPattern(YEAR_MONTH_DAY_FORMAT));
+        String date2Format = date2.format(DateTimeFormatter.ofPattern(YEAR_MONTH_DAY_FORMAT));
+        return date1Format.equals(date2Format);
+    }
+
+    /**
+     * 이번주 포함 여부
+     */
+    public boolean isIncludeThisWeek(LocalDateTime week, LocalDateTime targetDate) {
+        int dayOfWeek = week.getDayOfWeek().getValue(); // 1: 월 ~ 7: 일
+        LocalDateTime start = week.minusDays(dayOfWeek - 1);
+        LocalDateTime end = start.plusDays(6);
+        return (targetDate.isAfter(start)) && targetDate.isBefore(end);
     }
 }
