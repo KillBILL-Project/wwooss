@@ -44,7 +44,6 @@ class AuthApiTest {
                         .with(csrf().asHeader())
                         .header("Authorization", "bearer TEST_ACCESS")
                         .contextPath("/api")
-                        .header("Authorization", "bearer TEST_ACCESS")
                         .contentType(MediaType.APPLICATION_JSON)
                 )
                 .andExpect(status().isOk())
