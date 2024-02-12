@@ -8,6 +8,8 @@ import com.bigbro.wwooss.v1.dto.RefundByTrashCategory;
 import com.bigbro.wwooss.v1.dto.request.trash.can.TrashCanContentsRequest;
 import com.bigbro.wwooss.v1.dto.response.trash.EmptyTrashResultResponse;
 import com.bigbro.wwooss.v1.enumType.TrashType;
+import com.bigbro.wwooss.v1.service.complimentCard.ComplimentCardService;
+import com.bigbro.wwooss.v1.service.complimentCard.ComplimentConditionLogService;
 import com.bigbro.wwooss.v1.service.trash.can.TrashCanContentsService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
@@ -41,6 +43,12 @@ class TrashCanContentsApiTest {
 
     @MockBean
     private TrashCanContentsService trashCanContentsService;
+
+    @MockBean
+    private ComplimentCardService complimentCardService;
+
+    @MockBean
+    private ComplimentConditionLogService complimentConditionLogService;;
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
