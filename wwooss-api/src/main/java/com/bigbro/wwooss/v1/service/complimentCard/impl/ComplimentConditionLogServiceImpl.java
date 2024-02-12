@@ -35,7 +35,7 @@ public class ComplimentConditionLogServiceImpl implements ComplimentConditionLog
         // log 기록 없을 시 바로 저장
         if(log.isEmpty()) {
             complimentConditionLogRepository.save(ComplimentConditionLog.of(user, 1L, ComplimentType.LOGIN));
-            return true;
+            return false;
         }
 
         ComplimentConditionLog latestLog = log.get(0);
@@ -49,7 +49,7 @@ public class ComplimentConditionLogServiceImpl implements ComplimentConditionLog
         // 지금 로그인 - 최신 로그인 한 날 하루 이상 차이 시 연속 값 1로 저장
         if (between > 1L) {
             complimentConditionLogRepository.save(ComplimentConditionLog.of(user, 1L, ComplimentType.LOGIN));
-            return true;
+            return false;
         }
 
         // 하루 차이 날때 (전날) => 연속 날짜 up하여 저장
@@ -58,6 +58,6 @@ public class ComplimentConditionLogServiceImpl implements ComplimentConditionLog
         long continuity = todayIsSunday ? 1L : latestLog.getContinuity() + 1;
 
         complimentConditionLogRepository.save(ComplimentConditionLog.of(user, continuity, ComplimentType.LOGIN));
-        return true;
+        return continuity == 3L;
     }
 }

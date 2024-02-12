@@ -24,8 +24,8 @@ public class ComplimentConditionLogApi {
 
     @PostMapping("/login")
     public ResponseEntity<WwoossResponse<Void>> createLoginLog(UserCredential userCredential) {
-        boolean resultLog = complimentConditionLogService.createLoginLog(userCredential.getUserId());
-        if(resultLog) {
+        boolean is3InARow = complimentConditionLogService.createLoginLog(userCredential.getUserId());
+        if(is3InARow) {
             complimentCardService.createComplimentCard(ComplimentCardRequest.of(userCredential.getUserId(), ComplimentType.LOGIN));
         }
         return WwoossResponseUtil.responseCreatedNoData();
