@@ -14,4 +14,9 @@ public interface ComplimentConditionLogService {
      */
     boolean createThrowTrashLog(long userId);
 
+    /**
+     * 리포트 상세 조회 로그
+     */
+    boolean createViewWeeklyLog(long userId);
+
 }

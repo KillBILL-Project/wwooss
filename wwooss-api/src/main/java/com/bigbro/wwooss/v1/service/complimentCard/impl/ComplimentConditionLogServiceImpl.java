@@ -32,6 +32,8 @@ public class ComplimentConditionLogServiceImpl implements ComplimentConditionLog
     private static final Long LOGIN_LOG_COUNT = 3L;
     private static final Long THROW_TRASH_COUNT = 3L;
 
+    private static final Long VIEW_WEEKLY_REPORT_COUNT = 1L;
+
     private static final Long MIN_LOG = 1L;
 
     @Override
@@ -44,6 +46,12 @@ public class ComplimentConditionLogServiceImpl implements ComplimentConditionLog
     @Transactional
     public boolean createThrowTrashLog(long userId) {
         return saveComplimentConditionInACount(userId, ComplimentType.THROW_TRASH, THROW_TRASH_COUNT);
+    }
+
+    @Override
+    @Transactional
+    public boolean createViewWeeklyLog(long userId) {
+        return saveComplimentConditionInACount(userId, ComplimentType.VIEW_WEEKLY_REPORT, VIEW_WEEKLY_REPORT_COUNT);
     }
 
     /**
@@ -91,7 +99,7 @@ public class ComplimentConditionLogServiceImpl implements ComplimentConditionLog
         // log 기록 없을 시 바로 저장
         if(log.isEmpty()) {
             complimentConditionLogRepository.save(ComplimentConditionLog.of(user, MIN_LOG, complimentType));
-            return false;
+            return continuityCondition == 1; // 1회만 쌓여도 스티커 생성 경우 true 아니면 false;
         }
 
         ComplimentConditionLog latestLog = log.get(0);
