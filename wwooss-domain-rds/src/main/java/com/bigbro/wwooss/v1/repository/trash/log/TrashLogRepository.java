@@ -1,5 +1,6 @@
 package com.bigbro.wwooss.v1.repository.trash.log;
 
+import com.bigbro.wwooss.v1.entity.trash.can.TrashCanHistory;
 import com.bigbro.wwooss.v1.entity.trash.log.TrashLog;
 import com.bigbro.wwooss.v1.entity.user.User;
 import com.bigbro.wwooss.v1.repository.trash.log.custom.TrashLogRepositoryCustom;
@@ -14,5 +15,7 @@ public interface TrashLogRepository extends JpaRepository<TrashLog, Long>, Trash
     List<TrashLog> findByUser(User user);
 
     void deleteByUser(User user);
+
+    List<TrashLog> findTrashLogByUserAndTrashCanHistory(User user, TrashCanHistory trashCanHistory);
 
 }

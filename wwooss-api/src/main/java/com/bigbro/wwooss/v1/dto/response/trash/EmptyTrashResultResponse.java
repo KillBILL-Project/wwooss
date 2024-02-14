@@ -14,6 +14,8 @@ import java.util.List;
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 public class EmptyTrashResultResponse {
 
+    private Long trashCanHistoryId;
+
     // 탄소배출량 총합
     private Double totalCarbonSaving;
 
@@ -29,8 +31,10 @@ public class EmptyTrashResultResponse {
     public static EmptyTrashResultResponse of(Double totalCarbonSaving,
                                               List<CarbonSavingByTrashCategory> carbonSavingByTrashCategoryList,
                                               Long totalRefund,
-                                              List<RefundByTrashCategory> refundByTrashCategoryList) {
+                                              List<RefundByTrashCategory> refundByTrashCategoryList,
+                                              Long trashCanHistoryId) {
         return EmptyTrashResultResponse.builder()
+                .trashCanHistoryId(trashCanHistoryId)
                 .totalCarbonSaving(totalCarbonSaving)
                 .carbonSavingByTrashCategoryList(carbonSavingByTrashCategoryList)
                 .totalRefund(totalRefund)

@@ -20,6 +20,8 @@ import com.bigbro.wwooss.v1.dto.WeekInfo;
 import com.bigbro.wwooss.v1.dto.response.report.WeeklyReportListResponse;
 import com.bigbro.wwooss.v1.dto.response.report.WeeklyReportResponse;
 import com.bigbro.wwooss.v1.config.DocumentConfig;
+import com.bigbro.wwooss.v1.service.complimentCard.ComplimentCardService;
+import com.bigbro.wwooss.v1.service.complimentCard.ComplimentConditionLogService;
 import com.bigbro.wwooss.v1.service.report.WeeklyReportService;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -41,6 +43,12 @@ class WeeklyReportApiTest {
 
     @MockBean
     private WeeklyReportService weeklyReportService;
+
+    @MockBean
+    private ComplimentConditionLogService complimentConditionLogService;
+
+    @MockBean
+    private ComplimentCardService complimentCardService;
 
     @Test
     @WithMockCustomUser

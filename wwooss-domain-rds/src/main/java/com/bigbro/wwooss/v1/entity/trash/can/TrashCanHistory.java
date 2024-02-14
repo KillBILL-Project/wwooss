@@ -1,5 +1,7 @@
 package com.bigbro.wwooss.v1.entity.trash.can;
 
+import com.bigbro.wwooss.v1.dto.CarbonSavingByTrashCategory;
+import com.bigbro.wwooss.v1.dto.RefundByTrashCategory;
 import com.bigbro.wwooss.v1.entity.base.BaseEntity;
 import com.bigbro.wwooss.v1.entity.trash.log.TrashLog;
 import com.bigbro.wwooss.v1.entity.user.User;

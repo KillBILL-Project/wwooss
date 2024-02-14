@@ -92,7 +92,7 @@ class TrashCanContentsApiTest {
         List<CarbonSavingByTrashCategory> carbonSavingByTrashCategory = List.of(CarbonSavingByTrashCategory.of(TrashType.CAN, 10.0D));
         List<RefundByTrashCategory> refundByTrashCategory = List.of(RefundByTrashCategory.of(TrashType.CAN, 100L));
         EmptyTrashResultResponse emptyTrashResultResponse = EmptyTrashResultResponse.of(
-                30.0D, carbonSavingByTrashCategory, 100L, refundByTrashCategory);
+                30.0D, carbonSavingByTrashCategory, 100L, refundByTrashCategory, 1L);
 
         given(this.trashCanContentsService.deleteTrashCanContents(1L)).willReturn(emptyTrashResultResponse);
 
@@ -114,6 +114,7 @@ class TrashCanContentsApiTest {
                                         fieldWithPath("code").description("응답 코드"),
                                         fieldWithPath("title").description("응답 코드 별 클라이언트 노출 제목"),
                                         fieldWithPath("message").description("응답 코드 별 클라이언트 노출 메세지"),
+                                        fieldWithPath("data.trashCanHistoryId").description("쓰레기 히스토리 ID"),
                                         fieldWithPath("data.totalCarbonSaving").description("비운 총 탄소 절감량 [gCO2]"),
                                         fieldWithPath("data.carbonSavingByTrashCategoryList[].trashCategoryName").description("쓰레기 종류"),
                                         fieldWithPath("data.carbonSavingByTrashCategoryList[].carbonSaving").description("쓰레기 종류별 총 탄소 절감량 [gCO2]"),

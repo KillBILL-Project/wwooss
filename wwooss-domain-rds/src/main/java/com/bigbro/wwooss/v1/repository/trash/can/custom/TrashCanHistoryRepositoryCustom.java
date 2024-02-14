@@ -7,4 +7,5 @@ import org.springframework.data.domain.Slice;
 
 public interface TrashCanHistoryRepositoryCustom {
     Slice<TrashCanHistory> findTrashCanHistoriesByUserAndDate(User user, String date, Pageable pageable);
+
 }

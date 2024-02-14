@@ -3,8 +3,12 @@ package com.bigbro.wwooss.v1.api.trash.can;
 import com.bigbro.wwooss.v1.annotation.TestController;
 import com.bigbro.wwooss.v1.annotation.WithMockCustomUser;
 import com.bigbro.wwooss.v1.config.DocumentConfig;
+import com.bigbro.wwooss.v1.dto.CarbonSavingByTrashCategory;
+import com.bigbro.wwooss.v1.dto.RefundByTrashCategory;
+import com.bigbro.wwooss.v1.dto.response.trash.EmptyTrashResultResponse;
 import com.bigbro.wwooss.v1.dto.response.trash.TrashCanHistoryListResponse;
 import com.bigbro.wwooss.v1.dto.response.trash.TrashCanHistoryResponse;
+import com.bigbro.wwooss.v1.enumType.TrashType;
 import com.bigbro.wwooss.v1.service.trash.can.TrashCanHistoryService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -94,4 +98,47 @@ class TrashCanHistoryApiTest {
                         )
                 );
     }
+
+    @Test
+    @WithMockCustomUser
+    @DisplayName("히스토리 상세 조회")
+    void findTrashCanHistoryDetail() throws Exception {
+        List<CarbonSavingByTrashCategory> carbonSavingByTrashCategory = List.of(CarbonSavingByTrashCategory.of(TrashType.CAN, 10.0D));
+        List<RefundByTrashCategory> refundByTrashCategory = List.of(RefundByTrashCategory.of(TrashType.CAN, 100L));
+        EmptyTrashResultResponse emptyTrashResultResponse = EmptyTrashResultResponse.of(
+                30.0D, carbonSavingByTrashCategory, 100L, refundByTrashCategory, 1L);
+
+        given(this.trashCanHistoryService.findTrashCanHistoryDetail(any(), any())).willReturn(emptyTrashResultResponse);
+
+        this.mockMvc.perform(RestDocumentationRequestBuilders.get("/api/v1/trash-can-histories/{trash-can-history-id}", 1L)
+                        .with(csrf().asHeader())
+                        .contextPath("/api")
+                        .header("Authorization", "bearer TEST_ACCESS")
+                        .contentType(MediaType.APPLICATION_JSON)
+                )
+                .andExpect(status().isOk())
+                .andDo(document("get-trash-can-history-detail",
+                                resourceDetails().tags("쓰레기통 비우기 상세 조회(히스토리 상세)"),
+                                DocumentConfig.getDocumentRequest(),
+                                DocumentConfig.getDocumentResponse(),
+                                requestHeaders(
+                                        headerWithName("Authorization").description("인증 토큰")
+                                ),
+                                responseFields(
+                                        fieldWithPath("code").description("응답 코드"),
+                                        fieldWithPath("title").description("응답 코드 별 클라이언트 노출 제목"),
+                                        fieldWithPath("message").description("응답 코드 별 클라이언트 노출 메세지"),
+                                        fieldWithPath("data.trashCanHistoryId").description("쓰레기 히스토리 ID"),
+                                        fieldWithPath("data.totalCarbonSaving").description("비운 총 탄소 절감량 [gCO2]"),
+                                        fieldWithPath("data.carbonSavingByTrashCategoryList[].trashCategoryName").description("쓰레기 종류"),
+                                        fieldWithPath("data.carbonSavingByTrashCategoryList[].carbonSaving").description("쓰레기 종류별 총 탄소 절감량 [gCO2]"),
+                                        fieldWithPath("data.totalRefund").description("비운 총 환급금 [원]"),
+                                        fieldWithPath("data.refundByTrashCategoryList[].trashCategoryName").description("쓰레기 종류"),
+                                        fieldWithPath("data.refundByTrashCategoryList[].refund").description("쓰레기 종류별 총 환급금 [원]")
+                                )
+                        )
+                );
+    }
+
+
 }

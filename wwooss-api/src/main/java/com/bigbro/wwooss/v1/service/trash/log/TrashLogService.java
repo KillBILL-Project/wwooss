@@ -33,4 +33,6 @@ public interface TrashLogService {
      * @param date
      */
     TrashLogListResponse getTrashLogList(Long userId, String date, Pageable pageable);
+
+
 }

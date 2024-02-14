@@ -31,4 +31,11 @@ public interface TrashCanHistoryService {
      */
     TrashCanHistoryListResponse findTrashCanHistoryList(Long userId, String date, Pageable pageable);
 
+    /**
+     * 쓰레기통 비우기 디테일 조회
+     * @param userId
+     * @param trashCanHistoryId 쓰레기통 히스토리 ID
+     */
+    EmptyTrashResultResponse findTrashCanHistoryDetail(Long userId, Long trashCanHistoryId);
+
 }

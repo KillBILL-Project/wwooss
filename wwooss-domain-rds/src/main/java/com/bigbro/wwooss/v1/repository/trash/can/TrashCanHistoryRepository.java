@@ -6,10 +6,14 @@ import com.bigbro.wwooss.v1.repository.trash.can.custom.TrashCanHistoryRepositor
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface TrashCanHistoryRepository extends JpaRepository<TrashCanHistory, Long>, TrashCanHistoryRepositoryCustom {
 
     void deleteByUser(User user);
 
     List<TrashCanHistory> findAllByUser(User user);
+
+
+    Optional<TrashCanHistory> findTrashCanHistoryByUserAndTrashCanHistoryId(User user, Long trashCanHistoryId);
 }
