@@ -9,6 +9,8 @@ import com.bigbro.wwooss.v1.dto.response.trash.EmptyTrashResultResponse;
 import com.bigbro.wwooss.v1.dto.response.trash.TrashCanHistoryListResponse;
 import com.bigbro.wwooss.v1.dto.response.trash.TrashCanHistoryResponse;
 import com.bigbro.wwooss.v1.enumType.TrashType;
+import com.bigbro.wwooss.v1.service.complimentCard.ComplimentCardService;
+import com.bigbro.wwooss.v1.service.complimentCard.ComplimentConditionLogService;
 import com.bigbro.wwooss.v1.service.trash.can.TrashCanHistoryService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -44,6 +46,12 @@ class TrashCanHistoryApiTest {
 
     @MockBean
     private TrashCanHistoryService trashCanHistoryService;
+
+    @MockBean
+    private ComplimentCardService complimentCardService;
+
+    @MockBean
+    private ComplimentConditionLogService complimentConditionLogService;
 
     @Test
     @WithMockCustomUser

@@ -34,6 +34,8 @@ public class ComplimentConditionLogServiceImpl implements ComplimentConditionLog
 
     private static final Long VIEW_WEEKLY_REPORT_COUNT = 1L;
 
+    private static final Long VIEW_TRASH_CAN_HISTORY_COUNT = 1L;
+
     private static final Long MIN_LOG = 1L;
 
     @Override
@@ -52,6 +54,11 @@ public class ComplimentConditionLogServiceImpl implements ComplimentConditionLog
     @Transactional
     public boolean createViewWeeklyLog(long userId) {
         return saveComplimentConditionInACount(userId, ComplimentType.VIEW_WEEKLY_REPORT, VIEW_WEEKLY_REPORT_COUNT);
+    }
+
+    @Override
+    public boolean createViewTrashCanHistoryLog(long userId) {
+        return saveComplimentConditionInACount(userId, ComplimentType.CLEAN_TRASH_CAN, VIEW_TRASH_CAN_HISTORY_COUNT);
     }
 
     /**

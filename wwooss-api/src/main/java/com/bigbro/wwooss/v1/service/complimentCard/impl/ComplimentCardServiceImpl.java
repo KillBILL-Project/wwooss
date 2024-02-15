@@ -53,6 +53,7 @@ public class ComplimentCardServiceImpl implements ComplimentCardService {
     private static final int CONTINUITY_LOG_IN_COUNT = 3;
     private static final int CONTINUITY_THROW_TRASH_COUNT = 3;
     private static final int CONTINUITY_VIEW_REPORT_COUNT = 1;
+    private static final int CONTINUITY_VIEW_TRASH_CAN_HISTORY_COUNT = 1;
 
 
     @Override
@@ -123,6 +124,7 @@ public class ComplimentCardServiceImpl implements ComplimentCardService {
         switch (complimentType) {
             case LOGIN -> cardCode = getLoginCardCodeIntegrate(complimentConditionLogs);
             case VIEW_WEEKLY_REPORT -> cardCode = getViewWeeklyReportCardCodeIntegrate(complimentConditionLogs);
+            case CLEAN_TRASH_CAN -> cardCode = getViewTrashCanHistoryCardCodeIntegrate(complimentConditionLogs);
         };
         return cardCode;
     }
@@ -157,12 +159,28 @@ public class ComplimentCardServiceImpl implements ComplimentCardService {
         return cardCode;
     }
 
+    private CardCode getViewTrashCanHistoryCardCodeIntegrate(List<ComplimentConditionLog> complimentConditionLogs) {
+        CardCode cardCode;
+        // 통합 칭찬 스티커 생성
+        if (complimentConditionLogs.size() >= COUNT_30 && complimentConditionLogs.size() < COUNT_100) {
+            cardCode = CardCode.clean_trash_can_30;
+        } else if (complimentConditionLogs.size() >= COUNT_100 && complimentConditionLogs.size() < COUNT_365) {
+            cardCode = CardCode.clean_trash_can_100;
+        } else if(complimentConditionLogs.size() >= COUNT_365) {
+            cardCode = CardCode.clean_trash_can_365;
+        } else {
+            return null;
+        }
+        return cardCode;
+    }
+
     private CardCode getCardCodeWeekly(ComplimentType complimentType) {
         CardCode cardCode = null;
         switch (complimentType) {
             case LOGIN -> cardCode = CardCode.login_03_in_a_low;
             case THROW_TRASH -> cardCode = CardCode.throw_trash_03_week;
             case VIEW_WEEKLY_REPORT -> cardCode = CardCode.view_weekly_report_1_week;
+            case CLEAN_TRASH_CAN -> cardCode = CardCode.clean_trash_can_1_week;
         }
         return cardCode;
     }
@@ -185,6 +203,7 @@ public class ComplimentCardServiceImpl implements ComplimentCardService {
             case LOGIN -> count = CONTINUITY_LOG_IN_COUNT;
             case THROW_TRASH -> count = CONTINUITY_THROW_TRASH_COUNT;
             case VIEW_WEEKLY_REPORT -> count = CONTINUITY_VIEW_REPORT_COUNT;
+            case CLEAN_TRASH_CAN -> count = CONTINUITY_VIEW_TRASH_CAN_HISTORY_COUNT;
         }
         return count;
     }
