@@ -36,6 +36,8 @@ public class ComplimentConditionLogServiceImpl implements ComplimentConditionLog
 
     private static final Long VIEW_TRASH_CAN_HISTORY_COUNT = 1L;
 
+    private static final Long FIND_TRASH_CAN_COUNT = 1L;
+
     private static final Long MIN_LOG = 1L;
 
     @Override
@@ -57,8 +59,15 @@ public class ComplimentConditionLogServiceImpl implements ComplimentConditionLog
     }
 
     @Override
+    @Transactional
     public boolean createViewTrashCanHistoryLog(long userId) {
         return saveComplimentConditionInACount(userId, ComplimentType.CLEAN_TRASH_CAN, VIEW_TRASH_CAN_HISTORY_COUNT);
+    }
+
+    @Override
+    @Transactional
+    public boolean createFindTrashCanLog(long userId) {
+        return saveComplimentConditionInACount(userId, ComplimentType.FIND_TRASH_CAN, FIND_TRASH_CAN_COUNT);
     }
 
     /**

@@ -24,4 +24,9 @@ public interface ComplimentConditionLogService {
      */
     boolean createViewTrashCanHistoryLog(long userId);
 
+    /**
+     * 쓰레기통 찾기 조회 로그
+     */
+    boolean createFindTrashCanLog(long userId);
+
 }

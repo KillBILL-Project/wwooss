@@ -4,6 +4,8 @@ import com.bigbro.wwooss.v1.annotation.TestController;
 import com.bigbro.wwooss.v1.annotation.WithMockCustomUser;
 import com.bigbro.wwooss.v1.config.DocumentConfig;
 import com.bigbro.wwooss.v1.dto.response.trash.TrashCanResponse;
+import com.bigbro.wwooss.v1.service.complimentCard.ComplimentCardService;
+import com.bigbro.wwooss.v1.service.complimentCard.ComplimentConditionLogService;
 import com.bigbro.wwooss.v1.service.es.TrashCanDocumentService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -38,6 +40,12 @@ class TrashCanApiTest {
 
     @MockBean
     private TrashCanDocumentService trashCanDocumentService;
+
+    @MockBean
+    private ComplimentCardService complimentCardService;
+
+    @MockBean
+    private ComplimentConditionLogService complimentConditionLogService;
 
     @Test
     @WithMockCustomUser
