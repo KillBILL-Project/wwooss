@@ -3,6 +3,7 @@ package com.bigbro.wwooss.v1.api.user;
 import com.bigbro.wwooss.v1.annotation.TestController;
 import com.bigbro.wwooss.v1.annotation.WithMockCustomUser;
 import com.bigbro.wwooss.v1.config.DocumentConfig;
+import com.bigbro.wwooss.v1.dto.request.user.UpdateFcmTokenRequest;
 import com.bigbro.wwooss.v1.dto.request.user.UpdatePushConsentRequest;
 import com.bigbro.wwooss.v1.service.user.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -53,6 +54,39 @@ class UserApiTest {
                 )
                 .andExpect(status().isOk())
                 .andDo(document("update-push-consent",
+                                resourceDetails().tags("유저 푸쉬 알림 여부 상태 변경"),
+                                DocumentConfig.getDocumentRequest(),
+                                DocumentConfig.getDocumentResponse(),
+                                requestHeaders(
+                                        headerWithName("Authorization").description("인증 토큰")
+                                ),
+                                responseFields(
+                                        fieldWithPath("code").description("응답 코드"),
+                                        fieldWithPath("title").description("응답 코드 별 클라이언트 노출 제목"),
+                                        fieldWithPath("message").description("응답 코드 별 클라이언트 노출 메세지"),
+                                        fieldWithPath("data").description("응답 데이터 없음")
+                                )
+                        )
+                );
+    }
+
+    @Test
+    @WithMockCustomUser
+    @DisplayName("fcm 토큰 변경")
+    void updateFcmToken() throws Exception {
+        UpdateFcmTokenRequest updaetFcmRequest = UpdateFcmTokenRequest.builder()
+                .fcmToken("FCM TOKEN")
+                .build();
+
+        this.mockMvc.perform(RestDocumentationRequestBuilders.patch("/api/v1/user/fcm-token")
+                        .with(csrf().asHeader())
+                        .header("Authorization", "bearer TEST_ACCESS")
+                        .contextPath("/api")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(updaetFcmRequest))
+                )
+                .andExpect(status().isOk())
+                .andDo(document("update-fcm-token",
                                 resourceDetails().tags("유저 푸쉬 알림 여부 상태 변경"),
                                 DocumentConfig.getDocumentRequest(),
                                 DocumentConfig.getDocumentResponse(),

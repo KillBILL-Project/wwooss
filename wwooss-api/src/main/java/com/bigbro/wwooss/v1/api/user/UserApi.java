@@ -1,5 +1,6 @@
 package com.bigbro.wwooss.v1.api.user;
 
+import com.bigbro.wwooss.v1.dto.request.user.UpdateFcmTokenRequest;
 import com.bigbro.wwooss.v1.dto.request.user.UpdatePushConsentRequest;
 import com.bigbro.wwooss.v1.dto.request.user.UserCredential;
 import com.bigbro.wwooss.v1.dto.response.auth.UserResponse;
@@ -26,6 +27,12 @@ public class UserApi {
     @PatchMapping("/push-consent")
     public ResponseEntity<WwoossResponse<Void>> updatePushConsentStatus(@RequestBody @Valid UpdatePushConsentRequest updatePushConsentRequest, UserCredential userCredential) {
         userService.updatePushConsentStatus(updatePushConsentRequest.isPushConsent(), userCredential.getUserId());
+        return WwoossResponseUtil.responseOkNoData();
+    }
+
+    @PatchMapping("/fcm-token")
+    public ResponseEntity<WwoossResponse<Void>> updateFcmToken(@RequestBody @Valid UpdateFcmTokenRequest updateFcmTokenRequest, UserCredential userCredential) {
+        userService.updateFcmToken(userCredential.getUserId(), updateFcmTokenRequest.getFcmToken());
         return WwoossResponseUtil.responseOkNoData();
     }
 

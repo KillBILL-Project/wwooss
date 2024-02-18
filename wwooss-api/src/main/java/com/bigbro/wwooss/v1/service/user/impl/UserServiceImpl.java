@@ -40,4 +40,11 @@ public class UserServiceImpl implements UserService {
 
         user.updatePushConsent(pushConsent);
     }
+
+    @Override
+    @Transactional
+    public void updateFcmToken(long userId, String fcmToken) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new DataNotFoundException(WwoossResponseCode.NOT_FOUND_DATA, "존재하지 않는 유저입니다."));
+        user.updateFcmToken(fcmToken);
+    }
 }

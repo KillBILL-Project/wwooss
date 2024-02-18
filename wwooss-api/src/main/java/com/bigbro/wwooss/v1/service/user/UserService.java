@@ -16,6 +16,11 @@ public interface UserService {
      * @param pushConsent 동의 여부
      * @param userId 유저 ID
      */
-    public void updatePushConsentStatus(boolean pushConsent, long userId);
+    void updatePushConsentStatus(boolean pushConsent, long userId);
+
+    /**
+     * FCM 토큰 업데이트
+     */
+    void updateFcmToken(long userId, String fcmToken);
 
 }

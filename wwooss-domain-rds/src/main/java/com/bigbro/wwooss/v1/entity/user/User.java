@@ -133,6 +133,10 @@ public class User extends BaseEntity {
         this.pushConsent = pushConsent;
     }
 
+    public void updateFcmToken(String fcm) {
+        this.fcmToken = fcm;
+    }
+
     public void updateRefreshToken(String refreshToken) {
         this.refreshToken = refreshToken;
     }
