@@ -40,7 +40,7 @@ public class Alarm extends BaseEntity {
     private List<Integer> dayOfWeekList;
 
     @Comment("알람 발송 시간")
-    @Column(name = "send_time")
+    @Column(name = "send_hour")
     private Integer sendHour;
 
     @Comment("알람 발송 분")
