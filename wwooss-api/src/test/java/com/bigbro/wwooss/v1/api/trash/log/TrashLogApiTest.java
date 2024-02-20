@@ -70,7 +70,7 @@ class TrashLogApiTest {
                 .trashCategory(trashCategory)
                 .build();
         TrashLog trashLog = TrashLog.of(user, trashInfo);
-        List<TrashLogResponse> trashLogResponseList = List.of(TrashLogResponse.of(trashLog));
+        List<TrashLogResponse> trashLogResponseList = List.of(TrashLogResponse.of(trashLog, "basePath"));
         TrashLogListResponse trashInfoResponseList =
                 TrashLogListResponse.of(false, 10L, trashLogResponseList);
 

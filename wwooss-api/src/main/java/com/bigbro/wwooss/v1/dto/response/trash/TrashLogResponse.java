@@ -21,10 +21,11 @@ public class TrashLogResponse {
 
     private LocalDateTime createdAt;
 
-    public static TrashLogResponse of(TrashLog trashLog) {
+    public static TrashLogResponse of(TrashLog trashLog, String baseImagePath) {
         return TrashLogResponse.builder()
+                .size(trashLog.getTrashInfo().getSize())
                 .trashLogId(trashLog.getTrashLogId())
-                .trashImagePath(trashLog.getTrashInfo().getTrashImagePath())
+                .trashImagePath(baseImagePath + trashLog.getTrashInfo().getTrashImagePath())
                 .trashCategoryName(trashLog.getTrashInfo().getTrashCategory().getTrashType().getName())
                 .createdAt(trashLog.getCreatedAt())
                 .build();

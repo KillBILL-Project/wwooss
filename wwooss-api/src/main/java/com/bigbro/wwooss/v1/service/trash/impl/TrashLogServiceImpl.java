@@ -11,6 +11,7 @@ import com.bigbro.wwooss.v1.repository.trash.log.TrashLogRepository;
 import com.bigbro.wwooss.v1.repository.user.UserRepository;
 import com.bigbro.wwooss.v1.response.WwoossResponseCode;
 import com.bigbro.wwooss.v1.service.trash.log.TrashLogService;
+import com.bigbro.wwooss.v1.utils.ImageUtil;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -28,6 +29,8 @@ public class TrashLogServiceImpl implements TrashLogService {
     private final TrashLogRepository trashLogRepository;
 
     private final UserRepository userRepository;
+
+    private final ImageUtil imageUtil;
 
     @Override
     @Transactional
@@ -48,6 +51,6 @@ public class TrashLogServiceImpl implements TrashLogService {
         User user = userRepository.findById(userId).orElseThrow(() -> new DataNotFoundException(WwoossResponseCode.NOT_FOUND_DATA, "존재하지 않는 유저입니다."));
         Page<TrashLog> trashLogList = trashLogRepository.findByUserAndDate(user, date, pageable);
 
-        return TrashLogListResponse.of(trashLogList.hasNext(), trashLogList.getTotalElements(), trashLogList.getContent().stream().map(TrashLogResponse::of).toList());
+        return TrashLogListResponse.of(trashLogList.hasNext(), trashLogList.getTotalElements(), trashLogList.getContent().stream().map((log) -> TrashLogResponse.of(log, imageUtil.baseTrashImagePath())).toList());
     }
 }
