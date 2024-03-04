@@ -74,7 +74,7 @@ public class WeeklyReportServiceImpl implements WeeklyReportService {
 
     @Transactional(readOnly = true)
     @Override
-    public WeeklyReportDetailResponse getWeeklyReportDetail(long weeklyReportId, long userId) {
+    public WeeklyReportDetailResponse getWeeklyReportDetail(Long weeklyReportId, Long userId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new DataNotFoundException(WwoossResponseCode.NOT_FOUND_DATA, "존재하지 않는 유저입니다."));
         WeeklyReport weeklyReportDetail = weeklyReportRepository.findWeeklyReportByWeeklyReportIdAndUser(weeklyReportId, user).orElseThrow(() -> new DataNotFoundException(WwoossResponseCode.NOT_FOUND_DATA, "존재하지 않는 리프트입니다."));;
 

@@ -26,6 +26,6 @@ public interface WeeklyReportService {
      *
      * @return WeeklyReportDetailResponse 주간 리포트 상세 정보
      */
-    WeeklyReportDetailResponse getWeeklyReportDetail(long weeklyReportId, long userId);
+    WeeklyReportDetailResponse getWeeklyReportDetail(Long weeklyReportId, Long userId);
 
 }

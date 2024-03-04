@@ -17,9 +17,16 @@ import com.bigbro.wwooss.v1.annotation.TestController;
 import com.bigbro.wwooss.v1.annotation.WithMockCustomUser;
 import com.bigbro.wwooss.v1.dto.ComplimentCardIcon;
 import com.bigbro.wwooss.v1.dto.WeekInfo;
+import com.bigbro.wwooss.v1.dto.WeeklyTrashByCategory;
+import com.bigbro.wwooss.v1.dto.response.report.WeeklyReportDetailResponse;
 import com.bigbro.wwooss.v1.dto.response.report.WeeklyReportListResponse;
 import com.bigbro.wwooss.v1.dto.response.report.WeeklyReportResponse;
 import com.bigbro.wwooss.v1.config.DocumentConfig;
+import com.bigbro.wwooss.v1.entity.report.WeeklyReport;
+import com.bigbro.wwooss.v1.entity.user.User;
+import com.bigbro.wwooss.v1.enumType.Gender;
+import com.bigbro.wwooss.v1.enumType.LoginType;
+import com.bigbro.wwooss.v1.enumType.UserRole;
 import com.bigbro.wwooss.v1.service.complimentCard.ComplimentCardService;
 import com.bigbro.wwooss.v1.service.complimentCard.ComplimentConditionLogService;
 import com.bigbro.wwooss.v1.service.report.WeeklyReportService;
@@ -98,6 +105,70 @@ class WeeklyReportApiTest {
                                                 + "일"),
                                         fieldWithPath("data.weeklyReportResponseList[].complimentCardIconList[].complimentCardId").description("칭찬 카드 ID"),
                                         fieldWithPath("data.weeklyReportResponseList[].complimentCardIconList[].cardImage").description("칭찬 카드 이미지")
+                                )
+                        )
+                );
+    }
+
+    @Test
+    @WithMockCustomUser
+    @DisplayName("쓰레기 리포트 상세 조회")
+    void getWeeklyReportDetail() throws Exception {
+        User user = User.builder()
+                .userId(1L)
+                .age(1)
+                .email("wwoosss@")
+                .country("korea")
+                .region("seoul")
+                .loginType(LoginType.EMAIL)
+                .gender(Gender.M)
+                .refreshToken("refresh")
+                .userRole(UserRole.USER)
+                .build();
+        WeeklyReport weeklyReport = WeeklyReport.builder()
+                .weeklyReportId(1L)
+                .attendanceRecord(List.of(1,2))
+                .weeklyTrashCountByCategoryList(List.of(WeeklyTrashByCategory.of("플라슽틱", 1L)))
+                .weeklyCarbonSaving(100D)
+                .weeklyRefund(100L)
+                .weeklyTrashCount(10L)
+                .wowCarbonSaving(30D)
+                .wowRefund(30L)
+                .wowTrashCount(20L)
+                .weeklyDate(LocalDateTime.now())
+                .user(user)
+                .build();
+
+        given(weeklyReportService.getWeeklyReportDetail(any(), any())).willReturn(WeeklyReportDetailResponse.from(weeklyReport));
+
+        this.mockMvc.perform(RestDocumentationRequestBuilders.get("/api/v1/weekly-reports/{weekly-report-id}", 1L)
+                        .with(csrf().asHeader())
+                        .contextPath("/api")
+                        .header("Authorization", "bearer TEST_ACCESS")
+                        .contentType(MediaType.APPLICATION_JSON)
+                )
+                .andExpect(status().isOk())
+                .andDo(document("get-weekly-report-detail",
+                                resourceDetails().tags("주간 리포트 상세 조회"),
+                                DocumentConfig.getDocumentRequest(),
+                                DocumentConfig.getDocumentResponse(),
+                                requestHeaders(
+                                        headerWithName("Authorization").description("인증 토큰")
+                                ),
+                                responseFields(
+                                        fieldWithPath("code").description("응답 코드"),
+                                        fieldWithPath("title").description("응답 코드 별 클라이언트 노출 제목"),
+                                        fieldWithPath("message").description("응답 코드 별 클라이언트 노출 메세지"),
+                                        fieldWithPath("data.weeklyReportId").description("주간 리포트 ID"),
+                                        fieldWithPath("data.attendanceRecord[]").description("출석 요일 [1(월) ~ 7(일)]"),
+                                        fieldWithPath("data.weeklyCarbonSaving").description("주간 탄소 절감량"),
+                                        fieldWithPath("data.weeklyRefund").description("주간 환급금"),
+                                        fieldWithPath("data.weeklyTrashCount").description("주간 버린 쓰레기"),
+                                        fieldWithPath("data.wowCarbonSaving").description("전주 대비 탄소 절감량 증감 [Week On Week]"),
+                                        fieldWithPath("data.wowRefund").description("전주 대비 환불 증감 [Week On Week]"),
+                                        fieldWithPath("data.wowTrashCount").description("전주 대비 버린 쓰레기 수 증감 [Week On Week]"),
+                                        fieldWithPath("data.weeklyTrashCountByCategoryList[].trashCategoryName").description("쓰레기 이름"),
+                                        fieldWithPath("data.weeklyTrashCountByCategoryList[].trashCount").description("쓰레기 수")
                                 )
                         )
                 );
