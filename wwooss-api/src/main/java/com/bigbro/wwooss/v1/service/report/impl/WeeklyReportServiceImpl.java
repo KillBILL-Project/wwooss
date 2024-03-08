@@ -52,24 +52,31 @@ public class WeeklyReportServiceImpl implements WeeklyReportService {
         List<WeeklyReportResponse> weeklyReportResponseList = weeklyReport.getContent().stream().map((report) -> {
             WeekInfo weekInfo = dateUtil.getCurrentWeekOfMonth(dateUtil.convertToDate(report.getWeeklyDate()));
 
-            // 월요일, 일요일 날짜
-            Calendar monday = dateUtil.getDayAtWeekOfMonth(weekInfo.getYear(), weekInfo.getMonth(), weekInfo.getWeekOfMonth(), MONDAY);
-            Calendar sunday = dateUtil.getDayAtWeekOfMonth(weekInfo.getYear(), weekInfo.getMonth(), weekInfo.getWeekOfMonth(), SUNDAY);
+            LocalDateTime fromDate = getDateByReportDate(weekInfo, MONDAY);
+            LocalDateTime toDate = getDateByReportDate(weekInfo, SUNDAY);
 
-            LocalDateTime fromDate = LocalDateTime.of(monday.get(Calendar.YEAR), monday.get(Calendar.MONTH) + 1, monday.get(Calendar.DATE), 0, 0);
-            LocalDateTime toDate = LocalDateTime.of(sunday.get(Calendar.YEAR), sunday.get(Calendar.MONTH) + 1,
-                    sunday.get(Calendar.DATE), 23, 59);
-
-            // 해당 기간 내 칭찬카드 조회
-            List<ComplimentCardResponse> complimentCardList = complimentCardService.getComplimentCardAtDate(user,
-                    fromDate, toDate);
-            List<ComplimentCardIcon> cardIconList = complimentCardList.stream()
-                    .map(card -> ComplimentCardIcon.of(card.getComplimentCardId(), card.getCardImage())).toList();
-
-            return WeeklyReportResponse.of(report.getWeeklyReportId(), weekInfo, fromDate, toDate, cardIconList);
+            return WeeklyReportResponse.of(report.getWeeklyReportId(), weekInfo, fromDate, toDate);
         }).toList();
 
         return WeeklyReportListResponse.of(weeklyReport.hasNext(), weeklyReportResponseList);
+    }
+
+    private LocalDateTime getDateByReportDate(WeekInfo weekInfo, int dayOfWeek) {
+        Calendar calendar = dateUtil.getDayAtWeekOfMonth(weekInfo.getYear(), weekInfo.getMonth(), weekInfo.getWeekOfMonth(), dayOfWeek);
+
+        switch (dayOfWeek) {
+            case MONDAY ->
+            {
+                return LocalDateTime.of(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.DATE), 0, 0);
+            }
+            case SUNDAY ->
+            {
+                return LocalDateTime.of(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.DATE), 23, 59);
+            }
+            default -> {
+                return null;
+            }
+        }
     }
 
     @Transactional(readOnly = true)
@@ -77,7 +84,17 @@ public class WeeklyReportServiceImpl implements WeeklyReportService {
     public WeeklyReportDetailResponse getWeeklyReportDetail(Long weeklyReportId, Long userId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new DataNotFoundException(WwoossResponseCode.NOT_FOUND_DATA, "존재하지 않는 유저입니다."));
         WeeklyReport weeklyReportDetail = weeklyReportRepository.findWeeklyReportByWeeklyReportIdAndUser(weeklyReportId, user).orElseThrow(() -> new DataNotFoundException(WwoossResponseCode.NOT_FOUND_DATA, "존재하지 않는 리프트입니다."));;
+        WeekInfo weekInfo = dateUtil.getCurrentWeekOfMonth(dateUtil.convertToDate(weeklyReportDetail.getWeeklyDate()));
 
-        return WeeklyReportDetailResponse.from(weeklyReportDetail);
+        LocalDateTime fromDate = getDateByReportDate(weekInfo, MONDAY);
+        LocalDateTime toDate = getDateByReportDate(weekInfo, SUNDAY);
+
+        // 해당 기간 내 칭찬카드 조회
+        List<ComplimentCardResponse> complimentCardList = complimentCardService.getComplimentCardAtDate(user,
+                fromDate, toDate);
+        List<ComplimentCardIcon> cardIconList = complimentCardList.stream()
+                .map(card -> ComplimentCardIcon.of(card.getComplimentCardId(), card.getCardImage(), card.getTitle())).toList();
+
+        return WeeklyReportDetailResponse.of(weeklyReportDetail, cardIconList);
     }
 }

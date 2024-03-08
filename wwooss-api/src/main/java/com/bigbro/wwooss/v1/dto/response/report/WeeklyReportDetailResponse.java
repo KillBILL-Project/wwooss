@@ -1,5 +1,6 @@
 package com.bigbro.wwooss.v1.dto.response.report;
 
+import com.bigbro.wwooss.v1.dto.ComplimentCardIcon;
 import com.bigbro.wwooss.v1.dto.WeeklyTrashByCategory;
 import com.bigbro.wwooss.v1.entity.report.WeeklyReport;
 import lombok.Builder;
@@ -38,7 +39,11 @@ public class WeeklyReportDetailResponse {
     // 카테고리별 버린 쓰레기 수
     private List<WeeklyTrashByCategory> weeklyTrashCountByCategoryList;
 
-    public static WeeklyReportDetailResponse from(WeeklyReport weeklyReport) {
+    // 칭찬 카드 이미지
+    private List<ComplimentCardIcon> complimentCardIconList;
+
+
+    public static WeeklyReportDetailResponse of(WeeklyReport weeklyReport, List<ComplimentCardIcon> complimentCardIconList) {
         return WeeklyReportDetailResponse.builder()
                 .weeklyReportId(weeklyReport.getWeeklyReportId())
                 .attendanceRecord(weeklyReport.getAttendanceRecord())
@@ -49,6 +54,7 @@ public class WeeklyReportDetailResponse {
                 .wowCarbonSaving(weeklyReport.getWowCarbonSaving())
                 .wowRefund(weeklyReport.getWowRefund())
                 .wowTrashCount(weeklyReport.getWowTrashCount())
+                .complimentCardIconList(complimentCardIconList)
                 .build();
     }
 }

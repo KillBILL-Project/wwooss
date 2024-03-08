@@ -11,10 +11,14 @@ public class ComplimentCardIcon {
 
     private String cardImage;
 
-    public static ComplimentCardIcon of(Long complimentCardId, String cardImage) {
+    private String title;
+
+
+    public static ComplimentCardIcon of(Long complimentCardId, String cardImage, String title) {
         return ComplimentCardIcon.builder()
                 .complimentCardId(complimentCardId)
                 .cardImage(cardImage)
+                .title(title)
                 .build();
     }
 }

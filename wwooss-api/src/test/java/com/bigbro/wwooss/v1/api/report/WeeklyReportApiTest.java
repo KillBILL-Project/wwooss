@@ -62,9 +62,8 @@ class WeeklyReportApiTest {
     @DisplayName("쓰레기 리포트 목록 가져오기")
     void getWeeklyReportList() throws Exception {
         WeekInfo weekInfo = WeekInfo.of(2024, 4, 1);
-        List<ComplimentCardIcon> cardIcons = List.of(ComplimentCardIcon.of(1L, "image"));
         List<WeeklyReportResponse> weeklyReportResponseList = List.of(WeeklyReportResponse.of(1L, weekInfo,
-                LocalDateTime.now(), LocalDateTime.now(), cardIcons));
+                LocalDateTime.now(), LocalDateTime.now()));
 
         given(weeklyReportService.getWeeklyReport(any(), any(), any())).willReturn(WeeklyReportListResponse.of(false,
                 weeklyReportResponseList));
@@ -102,9 +101,7 @@ class WeeklyReportApiTest {
                                         fieldWithPath("data.weeklyReportResponseList[].weekInfo.weekOfMonth").description("N주차"),
                                         fieldWithPath("data.weeklyReportResponseList[].fromDate").description("N주차 시작일"),
                                         fieldWithPath("data.weeklyReportResponseList[].toDate").description("N주차 마지막 "
-                                                + "일"),
-                                        fieldWithPath("data.weeklyReportResponseList[].complimentCardIconList[].complimentCardId").description("칭찬 카드 ID"),
-                                        fieldWithPath("data.weeklyReportResponseList[].complimentCardIconList[].cardImage").description("칭찬 카드 이미지")
+                                                + "일")
                                 )
                         )
                 );
@@ -138,8 +135,10 @@ class WeeklyReportApiTest {
                 .weeklyDate(LocalDateTime.now())
                 .user(user)
                 .build();
+        List<ComplimentCardIcon> cardIcons = List.of(ComplimentCardIcon.of(1L, "image", "image title"));
 
-        given(weeklyReportService.getWeeklyReportDetail(any(), any())).willReturn(WeeklyReportDetailResponse.from(weeklyReport));
+
+        given(weeklyReportService.getWeeklyReportDetail(any(), any())).willReturn(WeeklyReportDetailResponse.of(weeklyReport, cardIcons));
 
         this.mockMvc.perform(RestDocumentationRequestBuilders.get("/api/v1/weekly-reports/{weekly-report-id}", 1L)
                         .with(csrf().asHeader())
@@ -168,7 +167,10 @@ class WeeklyReportApiTest {
                                         fieldWithPath("data.wowRefund").description("전주 대비 환불 증감 [Week On Week]"),
                                         fieldWithPath("data.wowTrashCount").description("전주 대비 버린 쓰레기 수 증감 [Week On Week]"),
                                         fieldWithPath("data.weeklyTrashCountByCategoryList[].trashCategoryName").description("쓰레기 이름"),
-                                        fieldWithPath("data.weeklyTrashCountByCategoryList[].trashCount").description("쓰레기 수")
+                                        fieldWithPath("data.weeklyTrashCountByCategoryList[].trashCount").description("쓰레기 수"),
+                                        fieldWithPath("data.complimentCardIconList[].complimentCardId").description("칭찬 카드 ID"),
+                                        fieldWithPath("data.complimentCardIconList[].cardImage").description("칭찬 카드 이미지"),
+                                        fieldWithPath("data.complimentCardIconList[].title").description("칭찬 카드 제목")
                                 )
                         )
                 );

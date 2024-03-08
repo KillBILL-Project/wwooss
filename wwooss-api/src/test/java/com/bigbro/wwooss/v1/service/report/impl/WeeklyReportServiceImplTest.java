@@ -90,13 +90,7 @@ public class WeeklyReportServiceImplTest {
             LocalDateTime toDate = LocalDateTime.of(2024, 4, 8, 0,
                     0);
 
-            // 해당 기간 내 칭찬카드 조회
-            List<ComplimentCardResponse> complimentCardList = complimentCardService.getComplimentCardAtDate(user,
-                    fromDate, toDate);
-            List<ComplimentCardIcon> cardIconList = complimentCardList.stream()
-                    .map(card -> ComplimentCardIcon.of(card.getComplimentCardId(), card.getCardImage())).toList();
-
-            return WeeklyReportResponse.of(report.getWeeklyReportId(), weekInfo, fromDate, toDate, cardIconList);
+            return WeeklyReportResponse.of(report.getWeeklyReportId(), weekInfo, fromDate, toDate);
         }).toList();
 
         assertThat(userRepository).isNotNull();
