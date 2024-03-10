@@ -2,6 +2,8 @@ package com.bigbro.wwooss.v1.scheduler;
 
 import com.bigbro.wwooss.v1.job.AlarmJobConfig;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.JobParameters;
@@ -36,7 +38,7 @@ public class NotificationScheduler {
         log.info("#########매분 알람 발송##########");
 
         JobParameters jobParameters = new JobParametersBuilder()
-                .addString("date", LocalDateTime.now().toString())
+                .addString("date", LocalDateTime.now().atZone(ZoneId.of("Asia/Seoul")).toString())
                 .toJobParameters();
 
         jobLauncher.run(alarmJobConfig.alarmJob(), jobParameters);
