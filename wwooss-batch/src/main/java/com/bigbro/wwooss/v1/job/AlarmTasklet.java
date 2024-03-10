@@ -40,16 +40,16 @@ public class AlarmTasklet implements Tasklet, StepExecutionListener {
         String date = contribution.getStepExecution().getJobParameters().getParameters().get("date").toString();
         LocalDateTime parseDate = parse(date, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
         int dayOfWeek = parseDate.getDayOfWeek().getValue();
+        log.info("######### param date ########## {}", date);
+        log.info("######### parseDate ########## {}", parseDate);
 
         List<Alarm> alarmList = alarmRepository.findAlarmAtTime(parseDate.getHour(), parseDate.getMinute(),
                 parseDate.getDayOfWeek().getValue());
 
-        log.info("######### 발송될 알람 시간별 목록 크기 ########## {}", alarmList.size());
-
         List<Alarm> sendAlarmList = alarmList.stream()
                 .filter((alarm) -> alarm.getDayOfWeekList().contains(dayOfWeek)).toList();
 
-        log.info("######### 발송될 알람 요일별 목록 크기 ########## {}", alarmList.size());
+        log.info("######### 발송될 알람 목록 크기 ########## {}", sendAlarmList.size());
 
         if (!sendAlarmList.isEmpty()) {
             notificationService.sendMany(buildRequestNotification(sendAlarmList));
