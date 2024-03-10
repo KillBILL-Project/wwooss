@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.StepContribution;
 import org.springframework.batch.core.StepExecution;
@@ -23,6 +24,7 @@ import org.springframework.stereotype.Component;
 
 @RequiredArgsConstructor
 @Component
+@Slf4j
 public class AlarmTasklet implements Tasklet, StepExecutionListener {
 
     private final AlarmRepository alarmRepository;
@@ -42,8 +44,12 @@ public class AlarmTasklet implements Tasklet, StepExecutionListener {
         List<Alarm> alarmList = alarmRepository.findAlarmAtTime(parseDate.getHour(), parseDate.getMinute(),
                 parseDate.getDayOfWeek().getValue());
 
+        log.info("######### 발송될 알람 시간별 목록 크기 ########## {}", alarmList.size());
+
         List<Alarm> sendAlarmList = alarmList.stream()
                 .filter((alarm) -> alarm.getDayOfWeekList().contains(dayOfWeek)).toList();
+
+        log.info("######### 발송될 알람 요일별 목록 크기 ########## {}", alarmList.size());
 
         if (!sendAlarmList.isEmpty()) {
             notificationService.sendMany(buildRequestNotification(sendAlarmList));
