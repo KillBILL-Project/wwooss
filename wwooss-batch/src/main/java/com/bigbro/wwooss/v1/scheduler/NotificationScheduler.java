@@ -37,9 +37,8 @@ public class NotificationScheduler {
     public void weeklyReportSchedule() throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException {
 
         log.info("#########매분 알람 발송##########");
-
         JobParameters jobParameters = new JobParametersBuilder()
-                .addString("date", LocalDateTime.now().atZone(ZoneId.of("Asia/Seoul")).toString())
+                .addString("date", LocalDateTime.now().toString())
                 .toJobParameters();
 
         jobLauncher.run(alarmJobConfig.alarmJob(), jobParameters);

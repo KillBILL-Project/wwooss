@@ -8,4 +8,4 @@ ENV SPRING_PROFILES_ACTIVE=$SPRING_PROFILES_ACTIVE
 
 COPY ${JAR_FILE} wwooss-api-app.jar
 
-ENTRYPOINT ["java", "-jar", "-Djava.security.egd=file:/dev/./urandom", "/wwooss-api-app.jar"]
+ENTRYPOINT ["java", "-Duser.timezone=Asia/Seoul", "-jar", "-Djava.security.egd=file:/dev/./urandom", "/wwooss-api-app.jar"]

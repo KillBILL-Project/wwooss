@@ -1,14 +1,14 @@
 package com.bigbro.wwooss.v1.job;
 
 import static com.bigbro.wwooss.v1.enumType.NotificationTemplateCode.WWOOSS_ALARM;
-import static java.time.ZonedDateTime.parse;
+import static java.time.LocalDateTime.parse;
 
 import com.bigbro.wwooss.v1.dto.request.notification.NotificationSendRequest;
 import com.bigbro.wwooss.v1.entity.alarm.Alarm;
 import com.bigbro.wwooss.v1.entity.user.User;
 import com.bigbro.wwooss.v1.repository.alarm.AlarmRepository;
 import com.bigbro.wwooss.v1.service.notification.NotificationService;
-import java.time.ZonedDateTime;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -38,11 +38,9 @@ public class AlarmTasklet implements Tasklet, StepExecutionListener {
     @Override
     public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
         String date = contribution.getStepExecution().getJobParameters().getParameters().get("date").toString();
-        ZonedDateTime parseDate = parse(date, DateTimeFormatter.ISO_ZONED_DATE_TIME);
+        LocalDateTime parseDate = parse(date, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
         int dayOfWeek = parseDate.getDayOfWeek().getValue();
-        log.info("######### param date ########## {}", date);
-        log.info("######### getHour ########## {}", parseDate.getHour());
-        log.info("######### getMinute ########## {}", parseDate.getMinute());
+        log.info("######### parseDate ########## {}", parseDate);
 
         List<Alarm> alarmList = alarmRepository.findAlarmAtTime(parseDate.getHour(), parseDate.getMinute(),
                 parseDate.getDayOfWeek().getValue());
