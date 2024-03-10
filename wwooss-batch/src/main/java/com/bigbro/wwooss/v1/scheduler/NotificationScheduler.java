@@ -30,18 +30,17 @@ public class NotificationScheduler {
      * 알람 스캐줄러
      * 매분 저장된 알람에 맞춰 알림 발송
      */
-    // TODO 알림 발송  완료시 오픈
-//    @Scheduled(cron = "0 * * * * ?", zone = "Asia/Seoul")
-//    public void weeklyReportSchedule() throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException {
-//
-//        log.info("매분 알람 발송");
-//
-//        JobParameters jobParameters = new JobParametersBuilder()
-//                .addString("date", LocalDateTime.now().toString())
-//                .toJobParameters();
-//
-//        jobLauncher.run(alarmJobConfig.alarmJob(), jobParameters);
-//
-//    }
+    @Scheduled(cron = "0 * * * * ?", zone = "Asia/Seoul")
+    public void weeklyReportSchedule() throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException {
+
+        log.info("#########매분 알람 발송##########");
+
+        JobParameters jobParameters = new JobParametersBuilder()
+                .addString("date", LocalDateTime.now().toString())
+                .toJobParameters();
+
+        jobLauncher.run(alarmJobConfig.alarmJob(), jobParameters);
+
+    }
 
 }
