@@ -3,6 +3,7 @@ package com.bigbro.wwooss.v1.scheduler;
 import com.bigbro.wwooss.v1.job.AlarmJobConfig;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.ZonedDateTime;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,9 +37,8 @@ public class NotificationScheduler {
     public void weeklyReportSchedule() throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException {
 
         log.info("#########매분 알람 발송##########");
-
         JobParameters jobParameters = new JobParametersBuilder()
-                .addString("date", LocalDateTime.now().atZone(ZoneId.of("Asia/Seoul")).toString())
+                .addString("date", LocalDateTime.now().atZone(ZoneId.of("Asia/Seoul")).toLocalDateTime().toString())
                 .toJobParameters();
 
         jobLauncher.run(alarmJobConfig.alarmJob(), jobParameters);
