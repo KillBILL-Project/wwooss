@@ -37,8 +37,13 @@ public class NotificationScheduler {
     public void weeklyReportSchedule() throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException {
 
         log.info("#########매분 알람 발송##########");
+        LocalDateTime localDateTime = LocalDateTime.now();
+        ZoneId newYorkZone = ZoneId.of("Asia/Seoul");
+        ZonedDateTime seoulTime = ZonedDateTime.of(localDateTime, newYorkZone);
+        LocalDateTime seoulLocalDateTime = seoulTime.toLocalDateTime();
+
         JobParameters jobParameters = new JobParametersBuilder()
-                .addString("date", LocalDateTime.now().atZone(ZoneId.of("Asia/Seoul")).toString())
+                .addString("date", seoulLocalDateTime.toString())
                 .toJobParameters();
 
         jobLauncher.run(alarmJobConfig.alarmJob(), jobParameters);
