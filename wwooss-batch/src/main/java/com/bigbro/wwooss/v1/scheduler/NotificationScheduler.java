@@ -38,7 +38,7 @@ public class NotificationScheduler {
 
         log.info("#########매분 알람 발송##########");
         JobParameters jobParameters = new JobParametersBuilder()
-                .addString("date", LocalDateTime.now().atZone(ZoneId.of("Asia/Seoul")).toLocalDateTime().toString())
+                .addString("date", LocalDateTime.now().atZone(ZoneId.of("Asia/Seoul")).toString())
                 .toJobParameters();
 
         jobLauncher.run(alarmJobConfig.alarmJob(), jobParameters);
