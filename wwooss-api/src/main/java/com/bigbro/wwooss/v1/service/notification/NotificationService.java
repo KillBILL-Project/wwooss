@@ -1,6 +1,9 @@
 package com.bigbro.wwooss.v1.service.notification;
 
 import com.bigbro.wwooss.v1.dto.request.notification.NotificationSendRequest;
+import com.bigbro.wwooss.v1.dto.response.notification.NotificationListResponse;
+
+import org.springframework.data.domain.Pageable;
 
 public interface NotificationService {
 
@@ -17,5 +20,11 @@ public interface NotificationService {
      * 모든 target에게 발송
      */
     void sendMany(NotificationSendRequest notificationSendRequest);
+
+    /**
+     * 푸시 알림 목록 조회
+     * @param userId
+     */
+    NotificationListResponse getNotificationList(Long userId, Pageable pageable);
 
 }

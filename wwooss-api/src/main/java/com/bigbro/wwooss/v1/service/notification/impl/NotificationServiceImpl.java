@@ -1,19 +1,28 @@
 package com.bigbro.wwooss.v1.service.notification.impl;
 
 import com.bigbro.wwooss.v1.dto.request.notification.NotificationSendRequest;
+import com.bigbro.wwooss.v1.dto.response.notification.NotificationListResponse;
+import com.bigbro.wwooss.v1.dto.response.notification.NotificationResponse;
 import com.bigbro.wwooss.v1.entity.notification.Notification;
 import com.bigbro.wwooss.v1.entity.notification.NotificationTemplate;
 import com.bigbro.wwooss.v1.entity.user.User;
+import com.bigbro.wwooss.v1.exception.DataNotFoundException;
 import com.bigbro.wwooss.v1.repository.notification.NotificationRepository;
 import com.bigbro.wwooss.v1.repository.notification.NotificationTemplateRepository;
+import com.bigbro.wwooss.v1.repository.user.UserRepository;
+import com.bigbro.wwooss.v1.response.WwoossResponseCode;
 import com.bigbro.wwooss.v1.service.notification.FirebaseService;
 import com.bigbro.wwooss.v1.service.notification.NotificationService;
 import com.google.firebase.messaging.FirebaseMessagingException;
+
+import org.springframework.data.domain.Pageable;
 import java.util.List;
 import java.util.Objects;
+
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,6 +37,8 @@ public class NotificationServiceImpl implements NotificationService {
     private final NotificationTemplateRepository notificationTemplateRepository;
 
     private final FirebaseService firebaseService;
+
+    private final UserRepository userRepository;
 
     @Override
     @Transactional
@@ -91,5 +102,15 @@ public class NotificationServiceImpl implements NotificationService {
                             notificationTemplate.getTemplateCode())).toList();
             notificationRepository.saveAll(failList);
         }
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public NotificationListResponse getNotificationList(Long userId, Pageable pageable) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new DataNotFoundException(WwoossResponseCode.NOT_FOUND_DATA, "존재하지 않는 유저입니다."));
+        Slice<Notification> findNotificationList = notificationRepository.findByUserAndIsShow(user, true, pageable);
+        List<NotificationResponse> notificationResponses = findNotificationList.getContent().stream().map(NotificationResponse::from).toList();
+
+        return NotificationListResponse.of(findNotificationList.hasNext(), notificationResponses);
     }
 }
