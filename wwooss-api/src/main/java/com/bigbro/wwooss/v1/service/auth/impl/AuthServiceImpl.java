@@ -58,6 +58,7 @@ import java.security.SecureRandom;
 import java.security.spec.RSAPublicKeySpec;
 import java.time.LocalDateTime;
 import java.util.Base64;
+import java.util.List;
 import java.util.Objects;
 
 import static com.bigbro.wwooss.v1.response.WwoossResponseCode.INVALID_TOKEN;
@@ -214,6 +215,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Transactional
     public TokenResponse register(UserRegistrationRequest userRegistrationRequest) {
+        List<User> all = userRepository.findAll();
 
         String encodedPassword = null;
         String socialId = null;
