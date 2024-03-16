@@ -113,10 +113,6 @@ gcp:
 aws:
   cloud-front:
       path: ENC(qWQGO1g00ajfjWhHOTLaEByBilWWF/UNW2tEUl1HKf18OQn0EyZ9xQYvS8JI8GiT)
-logging:
-  level:
-    com:
-      example: DEBUG
 
 ---
 
