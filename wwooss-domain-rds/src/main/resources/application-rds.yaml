@@ -91,19 +91,17 @@ spring:
     activate:
       on-profile: prod
   datasource:
-      driver-class-name: com.mysql.cj.jdbc.Driver
-      url: "jdbc:mysql://wwooss-prod-rdb.cebnfiprwctq.ap-northeast-2.rds.amazonaws.com:3306/wwooss"
-      username: root
-      password: ENC(aEeX8DtoW8JxcgBVcsxQdHQaGG62p2Kj)
-      hikari:
-        auto-commit: false
-        maximum-pool-size: 10
-        max-lifetime: 580000
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: "jdbc:mysql://wwooss-prod-rdb.cebnfiprwctq.ap-northeast-2.rds.amazonaws.com:3306"
+    username: root
+    password: ENC(aEeX8DtoW8JxcgBVcsxQdHQaGG62p2Kj)
+    hikari:
+      auto-commit: false
+      maximum-pool-size: 10
+      max-lifetime: 580000
   jpa:
     database-platform: org.hibernate.dialect.MySQL8Dialect
     show-sql: true
-    hibernate:
-      ddl-auto: update
     properties:
       hibernate:
         format_sql: true

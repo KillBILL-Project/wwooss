@@ -9,9 +9,9 @@
         <property name="LOG_PATH" value="/var/lib/wwooss-api" />
     </springProfile>
 
-    <springProfile name="prod">
-        <property name="LOG_PATH" value="/var/lib/wwooss-api" />
-    </springProfile>
+<!--    <springProfile name="prod">-->
+<!--        <property name="LOG_PATH" value="/var/lib/wwooss-api" />-->
+<!--    </springProfile>-->
 
     <springProfile name="local">
         <!-- Console Appender -->
