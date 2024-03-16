@@ -110,7 +110,5 @@ spring:
         highlight_sql: true
 logging:
   level:
-    org:
-      hibernate:
-        sql: debug
-        type.descriptor.sql: trace
+    com:
+      example: DEBUG
