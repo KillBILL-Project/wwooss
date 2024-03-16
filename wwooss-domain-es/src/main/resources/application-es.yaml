@@ -35,4 +35,4 @@ spring:
     activate:
       on-profile: prod
   elasticsearch:
-    uris: "localhost:9200"
+    uris: "ec2-3-38-150-8.ap-northeast-2.compute.amazonaws.com:9200"
