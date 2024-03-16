@@ -213,6 +213,7 @@ public class AuthServiceImpl implements AuthService {
         user.updatePassword(passwordEncoder.encode(password));
     }
 
+    @Override
     @Transactional
     public TokenResponse register(UserRegistrationRequest userRegistrationRequest) {
         List<User> all = userRepository.findAll();
