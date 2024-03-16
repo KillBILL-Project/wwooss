@@ -92,7 +92,7 @@ spring:
       on-profile: prod
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: "jdbc:mysql://wwooss-prod-rdb.cebnfiprwctq.ap-northeast-2.rds.amazonaws.com:3306/wwooss"
+    url: "jdbc:mysql://wwooss-prod-db.cebnfiprwctq.ap-northeast-2.rds.amazonaws.com:3306/wwooss"
     username: root
     password: ENC(aEeX8DtoW8JxcgBVcsxQdHQaGG62p2Kj)
     hikari:
