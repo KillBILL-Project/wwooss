@@ -6,6 +6,7 @@ import com.bigbro.wwooss.v1.config.DocumentConfig;
 import com.bigbro.wwooss.v1.dto.request.auth.ChangePasswordRequest;
 import com.bigbro.wwooss.v1.dto.request.auth.ResetPasswordRequest;
 import com.bigbro.wwooss.v1.service.auth.AuthService;
+import com.bigbro.wwooss.v1.service.notification.NotificationService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -33,6 +34,9 @@ class AuthApiTest {
 
     @MockBean
     private AuthService authService;
+
+    @MockBean
+    private NotificationService notificationService;
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
