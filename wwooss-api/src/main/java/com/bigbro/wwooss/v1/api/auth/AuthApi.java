@@ -1,11 +1,13 @@
 package com.bigbro.wwooss.v1.api.auth;
 
 import com.bigbro.wwooss.v1.dto.request.auth.*;
+import com.bigbro.wwooss.v1.dto.request.notification.NotificationSendRequest;
 import com.bigbro.wwooss.v1.dto.request.user.UserCredential;
 import com.bigbro.wwooss.v1.dto.response.auth.TokenResponse;
 import com.bigbro.wwooss.v1.response.WwoossResponse;
 import com.bigbro.wwooss.v1.response.WwoossResponseUtil;
 import com.bigbro.wwooss.v1.service.auth.AuthService;
+import com.bigbro.wwooss.v1.service.notification.NotificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +20,8 @@ import javax.validation.Valid;
 public class AuthApi {
 
     private final AuthService authService;
+
+    private final NotificationService notificationService;
 
     @PostMapping("/login")
     public ResponseEntity<WwoossResponse<TokenResponse>> login(@RequestBody UserLoginRequest userLoginRequest) {

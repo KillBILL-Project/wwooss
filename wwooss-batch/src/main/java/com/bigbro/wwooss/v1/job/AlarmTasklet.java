@@ -1,16 +1,19 @@
 package com.bigbro.wwooss.v1.job;
 
-import static com.bigbro.wwooss.v1.enumType.NotificationTemplateCode.WWOOSS_ALARM;
+import static com.bigbro.wwooss.v1.enumType.NotificationTemplateCode.*;
 import static java.time.LocalDateTime.parse;
 
 import com.bigbro.wwooss.v1.dto.request.notification.NotificationSendRequest;
 import com.bigbro.wwooss.v1.entity.alarm.Alarm;
 import com.bigbro.wwooss.v1.entity.user.User;
+import com.bigbro.wwooss.v1.enumType.NotificationTemplateCode;
 import com.bigbro.wwooss.v1.repository.alarm.AlarmRepository;
 import com.bigbro.wwooss.v1.service.notification.NotificationService;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Random;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.ExitStatus;
@@ -58,7 +61,10 @@ public class AlarmTasklet implements Tasklet, StepExecutionListener {
 
     private NotificationSendRequest buildRequestNotification(List<Alarm> alarmList) {
         List<User> targets = alarmList.stream().map(Alarm::getUser).toList();
-        return NotificationSendRequest.of(targets, WWOOSS_ALARM);
+        List<NotificationTemplateCode> wwoossAlarm = List.of(WWOOSS_ALARM, WWOOSS_ALARM_2, WWOOSS_ALARM_3, WWOOSS_ALARM_4);
+        Random random = new Random();
+        random.setSeed(System.currentTimeMillis());
+        return NotificationSendRequest.of(targets, wwoossAlarm.get(random.nextInt(4)));
     }
 
     @Override

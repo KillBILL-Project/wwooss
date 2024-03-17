@@ -15,4 +15,5 @@ public class UserRegistrationRequest {
     private String region;
     private boolean pushConsent;
     private String socialToken;
+    private String fcmToken;
 }

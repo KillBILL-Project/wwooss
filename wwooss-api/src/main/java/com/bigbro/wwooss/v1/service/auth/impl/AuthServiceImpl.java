@@ -4,10 +4,12 @@ import com.bigbro.wwooss.v1.dto.SendEmail;
 import com.bigbro.wwooss.v1.dto.request.auth.UserExistsRequest;
 import com.bigbro.wwooss.v1.dto.request.auth.UserLoginRequest;
 import com.bigbro.wwooss.v1.dto.request.auth.UserRegistrationRequest;
+import com.bigbro.wwooss.v1.dto.request.notification.NotificationSendRequest;
 import com.bigbro.wwooss.v1.dto.response.auth.TokenResponse;
 import com.bigbro.wwooss.v1.entity.user.User;
 import com.bigbro.wwooss.v1.entity.user.WithdrawalUser;
 import com.bigbro.wwooss.v1.enumType.LoginType;
+import com.bigbro.wwooss.v1.enumType.NotificationTemplateCode;
 import com.bigbro.wwooss.v1.enumType.SendEmailType;
 import com.bigbro.wwooss.v1.exception.CustomGlobalException;
 import com.bigbro.wwooss.v1.exception.DataNotFoundException;
@@ -27,6 +29,7 @@ import com.bigbro.wwooss.v1.security.TokenInfo;
 import com.bigbro.wwooss.v1.security.TokenProvider;
 import com.bigbro.wwooss.v1.service.auth.AuthService;
 import com.bigbro.wwooss.v1.service.email.EmailService;
+import com.bigbro.wwooss.v1.service.notification.NotificationService;
 import com.bigbro.wwooss.v1.utils.WwoossUtil;
 import com.google.gson.*;
 import io.jsonwebtoken.Claims;
@@ -97,6 +100,8 @@ public class AuthServiceImpl implements AuthService {
     private final WeeklyReportRepository weeklyReportRepository;
 
     private final EmailService emailService;
+
+    private final NotificationService notificationService;
 
     private final WwoossUtil wwoossUtil;
 
@@ -216,8 +221,6 @@ public class AuthServiceImpl implements AuthService {
     @Override
     @Transactional
     public TokenResponse register(UserRegistrationRequest userRegistrationRequest) {
-        List<User> all = userRepository.findAll();
-
         String encodedPassword = null;
         String socialId = null;
         if (LoginType.EMAIL.equals(userRegistrationRequest.getLoginType())) {
@@ -236,6 +239,7 @@ public class AuthServiceImpl implements AuthService {
                 userRegistrationRequest.getGender(),
                 userRegistrationRequest.getCountry(),
                 userRegistrationRequest.getRegion(),
+                userRegistrationRequest.getFcmToken(),
                 socialId
         );
         User registeredUser = userRepository.save(user);
@@ -244,6 +248,7 @@ public class AuthServiceImpl implements AuthService {
         String refreshToken = tokenProvider.generateToken(registeredUser, "refresh");
         user.updateRefreshToken(refreshToken);
 
+        notificationService.sendOne(NotificationSendRequest.of(List.of(user), NotificationTemplateCode.WWOOSS_SIGN_UP));
 
         return TokenResponse.builder()
                 .accessToken(accessToken)

@@ -116,6 +116,7 @@ public class User extends BaseEntity {
                                 int age, Gender gender,
                                 String country,
                                 String region,
+                              String fcmToken,
                               String socialId) {
         return User.builder()
                 .email(email)
@@ -126,6 +127,7 @@ public class User extends BaseEntity {
                 .country(country)
                 .region(region)
                 .socialId(socialId)
+                .fcmToken(fcmToken)
                 .build();
     }
 
