@@ -248,7 +248,9 @@ public class AuthServiceImpl implements AuthService {
         String refreshToken = tokenProvider.generateToken(registeredUser, "refresh");
         user.updateRefreshToken(refreshToken);
 
-        notificationService.sendOne(NotificationSendRequest.of(List.of(user), NotificationTemplateCode.WWOOSS_SIGN_UP));
+        if(Objects.nonNull(user.getFcmToken())) {
+            notificationService.sendOne(NotificationSendRequest.of(List.of(user), NotificationTemplateCode.WWOOSS_SIGN_UP));
+        }
 
         return TokenResponse.builder()
                 .accessToken(accessToken)
