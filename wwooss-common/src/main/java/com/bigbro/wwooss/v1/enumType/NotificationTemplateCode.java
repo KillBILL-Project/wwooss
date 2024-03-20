@@ -5,5 +5,6 @@ public enum NotificationTemplateCode {
     WWOOSS_ALARM,
     WWOOSS_ALARM_2,
     WWOOSS_ALARM_3,
-    WWOOSS_ALARM_4
+    WWOOSS_ALARM_4,
+    THROW_TRASH_COMPLIMENT_CARD
 }

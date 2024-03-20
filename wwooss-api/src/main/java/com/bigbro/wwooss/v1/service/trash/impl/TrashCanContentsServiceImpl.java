@@ -38,12 +38,13 @@ public class TrashCanContentsServiceImpl implements TrashCanContentsService {
 
     @Override
     @Transactional
-    public void createTrashCanContents(TrashCanContentsRequest trashCanContentsRequest, Long userId) {
+    public User createTrashCanContents(TrashCanContentsRequest trashCanContentsRequest, Long userId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new DataNotFoundException(WwoossResponseCode.NOT_FOUND_DATA, "존재하지 않는 유저입니다."));
         TrashInfo trashInfo = trashInfoRepository.findById(trashCanContentsRequest.getTrashInfoId()).orElseThrow(() -> new DataNotFoundException(WwoossResponseCode.NOT_FOUND_DATA, "존재하지 않는 쓰레기 정보 입니다."));
 
         trashCanContentsRepository.save(TrashCanContents.of(trashInfo, user));
         trashLogService.createTrashLog(user, trashInfo);
+        return user;
     }
 
     @Override
