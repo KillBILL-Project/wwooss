@@ -29,7 +29,7 @@ public class TrashCanApi {
     @GetMapping
     ResponseEntity<WwoossResponse<List<TrashCanResponse>>> getTrashCanAround(@RequestParam("lat") Double lat,
                                                                              @RequestParam("lng") Double lng,
-                                                                             @RequestParam("distance") Integer distance,
+                                                                             @RequestParam("distance") Double distance,
                                                                              @RequestParam(value = "trashType", required = false) String trashType,
                                                                              UserCredential userCredential) {
         boolean isCreateFindComplimentCard = complimentConditionLogService.createFindTrashCanLog(userCredential.getUserId());

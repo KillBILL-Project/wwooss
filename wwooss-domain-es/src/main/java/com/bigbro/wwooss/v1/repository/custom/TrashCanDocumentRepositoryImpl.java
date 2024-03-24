@@ -35,7 +35,7 @@ import static com.bigbro.wwooss.v1.response.WwoossResponseCode.DOCUMENT_BULK_INS
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 public class TrashCanDocumentRepositoryImpl implements TrashCanDocumentRepositoryCustom {
 
-    private static final int DEFAULT_DISTANCE = 50;
+    private static final Double DEFAULT_DISTANCE = 50D;
 
     private final RestHighLevelClient highLevelClient;
 
@@ -77,7 +77,7 @@ public class TrashCanDocumentRepositoryImpl implements TrashCanDocumentRepositor
     }
 
     @Override
-    public List<TrashCanDocument> findByGeoLocationAndTrashType(Double lat, Double lng, Integer distance, @Nullable String trashType) {
+    public List<TrashCanDocument> findByGeoLocationAndTrashType(Double lat, Double lng, Double distance, @Nullable String trashType) {
         if(Objects.isNull(distance)) {
             distance = DEFAULT_DISTANCE;
         }

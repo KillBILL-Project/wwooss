@@ -8,5 +8,5 @@ import java.util.List;
 public interface TrashCanDocumentRepositoryCustom {
     void saveTrashCan(List<TrashCanInfo> trashCanInfoList);
 
-    List<TrashCanDocument> findByGeoLocationAndTrashType(Double lat, Double lng, Integer distance, String trashType);
+    List<TrashCanDocument> findByGeoLocationAndTrashType(Double lat, Double lng, Double distance, String trashType);
 }
