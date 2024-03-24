@@ -34,6 +34,11 @@ public class TrashCanContentsApi {
 
     private final NotificationService notificationService;
 
+    @GetMapping("/total-count")
+    public ResponseEntity<WwoossResponse<Long>> getTrashCanContentsCount(UserCredential userCredential) {
+        return WwoossResponseUtil.responseOkAddData(trashCanContentsService.getTrashCanContentsCount(userCredential.getUserId()));
+    }
+
     @PostMapping
     public ResponseEntity<WwoossResponse<Void>> createTrashCanContents(@RequestBody @Valid TrashCanContentsRequest trashCanContentsRequest, UserCredential userCredential) {
         User user = trashCanContentsService.createTrashCanContents(trashCanContentsRequest, userCredential.getUserId());

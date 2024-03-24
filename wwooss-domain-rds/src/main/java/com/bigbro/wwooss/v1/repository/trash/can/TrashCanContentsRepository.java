@@ -12,4 +12,6 @@ public interface TrashCanContentsRepository extends JpaRepository<TrashCanConten
 
     void deleteByUser(User user);
 
+    Long countByUser(User user);
+
 }

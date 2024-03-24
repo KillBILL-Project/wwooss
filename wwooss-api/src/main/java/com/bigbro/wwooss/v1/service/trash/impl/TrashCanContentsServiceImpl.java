@@ -64,4 +64,11 @@ public class TrashCanContentsServiceImpl implements TrashCanContentsService {
         return emptyTrashResultResponse;
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public Long getTrashCanContentsCount(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new DataNotFoundException(WwoossResponseCode.NOT_FOUND_DATA, "존재하지 않는 유저입니다."));
+        return trashCanContentsRepository.countByUser(user);
+    }
+
 }

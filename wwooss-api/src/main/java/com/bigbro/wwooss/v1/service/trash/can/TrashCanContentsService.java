@@ -20,4 +20,9 @@ public interface TrashCanContentsService {
      * @param userId
      */
     EmptyTrashResultResponse deleteTrashCanContents(Long userId);
+
+    /**
+     * 쓰레기통 내용물 갯수
+     */
+    Long getTrashCanContentsCount(Long userId);
 }

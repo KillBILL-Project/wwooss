@@ -10,6 +10,7 @@ import com.bigbro.wwooss.v1.dto.response.trash.EmptyTrashResultResponse;
 import com.bigbro.wwooss.v1.enumType.TrashType;
 import com.bigbro.wwooss.v1.service.complimentCard.ComplimentCardService;
 import com.bigbro.wwooss.v1.service.complimentCard.ComplimentConditionLogService;
+import com.bigbro.wwooss.v1.service.notification.NotificationService;
 import com.bigbro.wwooss.v1.service.trash.can.TrashCanContentsService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
@@ -25,6 +26,7 @@ import java.util.List;
 
 import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.document;
 import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.resourceDetails;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
@@ -50,7 +52,40 @@ class TrashCanContentsApiTest {
     @MockBean
     private ComplimentConditionLogService complimentConditionLogService;;
 
+    @MockBean
+    private NotificationService notificationService;;
+
     private final ObjectMapper objectMapper = new ObjectMapper();
+
+    @Test
+    @WithMockCustomUser
+    @DisplayName("쓰레기통 내용물 양 가져오기")
+    void getTrashCanContentsCount() throws Exception {
+        given(this.trashCanContentsService.getTrashCanContentsCount(any())).willReturn(20L);
+
+        this.mockMvc.perform(RestDocumentationRequestBuilders.get("/api/v1/trash-can-contents/total-count")
+                        .with(csrf().asHeader())
+                        .header("Authorization", "bearer TEST_ACCESS")
+                        .contextPath("/api")
+                        .contentType(MediaType.APPLICATION_JSON)
+                )
+                .andExpect(status().isOk())
+                .andDo(document("get-trash-can-contents-count",
+                                resourceDetails().tags("쓰레기통 내용물 갯수 가져오기"),
+                                DocumentConfig.getDocumentRequest(),
+                                DocumentConfig.getDocumentResponse(),
+                                requestHeaders(
+                                        headerWithName("Authorization").description("인증 토큰")
+                                ),
+                                responseFields(
+                                        fieldWithPath("code").description("응답 코드"),
+                                        fieldWithPath("title").description("응답 코드 별 클라이언트 노출 제목"),
+                                        fieldWithPath("message").description("응답 코드 별 클라이언트 노출 메세지"),
+                                        fieldWithPath("data").description("쓰레기통 내용물 갯수")
+                                )
+                        )
+                );
+    }
 
     @Test
     @WithMockCustomUser
