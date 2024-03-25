@@ -2,9 +2,12 @@ package com.bigbro.wwooss.v1.dto.request.auth;
 
 import com.bigbro.wwooss.v1.enumType.Gender;
 import com.bigbro.wwooss.v1.enumType.LoginType;
-import lombok.Getter;
+import lombok.*;
 
+@AllArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @Getter
+@Builder
 public class UserRegistrationRequest {
     private String email;
     private String password;
