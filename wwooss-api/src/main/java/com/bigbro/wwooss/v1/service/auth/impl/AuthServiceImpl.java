@@ -240,6 +240,7 @@ public class AuthServiceImpl implements AuthService {
                 userRegistrationRequest.getCountry(),
                 userRegistrationRequest.getRegion(),
                 userRegistrationRequest.getFcmToken(),
+                userRegistrationRequest.isPushConsent(),
                 socialId
         );
         User registeredUser = userRepository.save(user);

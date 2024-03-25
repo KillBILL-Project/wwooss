@@ -117,6 +117,7 @@ public class User extends BaseEntity {
                                 String country,
                                 String region,
                               String fcmToken,
+                              boolean pushConsent,
                               String socialId) {
         return User.builder()
                 .email(email)
@@ -128,6 +129,7 @@ public class User extends BaseEntity {
                 .region(region)
                 .socialId(socialId)
                 .fcmToken(fcmToken)
+                .pushConsent(pushConsent)
                 .build();
     }
 
