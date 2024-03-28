@@ -46,7 +46,7 @@ public class TokenProvider implements InitializingBean {
                 .claim("userRole", user.getUserRole())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(expiration)
-                .signWith(key, SignatureAlgorithm.HS512)
+                .signWith(key, SignatureAlgorithm.HS384)
                 .compact();
     }
 
