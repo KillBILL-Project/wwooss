@@ -1,5 +1,6 @@
 package com.bigbro.wwooss.v1.service.auth.impl;
 
+import com.bigbro.wwooss.v1.dto.ParsedToken;
 import com.bigbro.wwooss.v1.dto.SendEmail;
 import com.bigbro.wwooss.v1.dto.request.auth.UserExistsRequest;
 import com.bigbro.wwooss.v1.dto.request.auth.UserLoginRequest;
@@ -13,6 +14,7 @@ import com.bigbro.wwooss.v1.enumType.NotificationTemplateCode;
 import com.bigbro.wwooss.v1.enumType.SendEmailType;
 import com.bigbro.wwooss.v1.exception.CustomGlobalException;
 import com.bigbro.wwooss.v1.exception.DataNotFoundException;
+import com.bigbro.wwooss.v1.exception.DuplicationException;
 import com.bigbro.wwooss.v1.exception.IncorrectDataException;
 import com.bigbro.wwooss.v1.repository.alarm.AlarmRepository;
 import com.bigbro.wwooss.v1.repository.complimentCard.ComplimentCardRepository;
@@ -63,6 +65,7 @@ import java.time.LocalDateTime;
 import java.util.Base64;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import static com.bigbro.wwooss.v1.response.WwoossResponseCode.INVALID_TOKEN;
 
@@ -122,13 +125,13 @@ public class AuthServiceImpl implements AuthService {
                 throw new DataNotFoundException(WwoossResponseCode.NOT_FOUND_DATA, "비밀번호가 일치하지 않습니다.");
             }
         } else if (userLoginType == LoginType.GOOGLE) {
-            String socialId = parseGoogleToken(authCode);
-            user = userRepository.findUserBySocialIdAndLoginType(socialId, userLoginType).orElseThrow(() ->
+            ParsedToken parsedToken = parseGoogleToken(authCode);
+            user = userRepository.findUserBySocialIdAndLoginType(parsedToken.getSocialId(), userLoginType).orElseThrow(() ->
                     new DataNotFoundException(WwoossResponseCode.NOT_FOUND_DATA, "일치하는 유저정보가 없습니다."));
 
         } else if (userLoginType == LoginType.APPLE) {
-            String socialId = parseAppleToken(authCode);
-            user = userRepository.findUserBySocialIdAndLoginType(socialId, userLoginType).orElseThrow(() ->
+            ParsedToken parseAppleToken = parseAppleToken(authCode);
+            user = userRepository.findUserBySocialIdAndLoginType(parseAppleToken.getSocialId(), userLoginType).orElseThrow(() ->
                     new DataNotFoundException(WwoossResponseCode.NOT_FOUND_DATA, "일치하는 유저정보가 없습니다."));
         } else {
             throw new CustomGlobalException(WwoossResponseCode.FORBIDDEN, "올바른 로그인 방식이 아닙니다.");
@@ -222,17 +225,24 @@ public class AuthServiceImpl implements AuthService {
     @Transactional
     public TokenResponse register(UserRegistrationRequest userRegistrationRequest) {
         String encodedPassword = null;
+        String email;
         String socialId = null;
+
         if (LoginType.EMAIL.equals(userRegistrationRequest.getLoginType())) {
             encodedPassword = passwordEncoder.encode(userRegistrationRequest.getPassword());
+            email = userRegistrationRequest.getEmail();
         } else if(LoginType.APPLE.equals(userRegistrationRequest.getLoginType())){
-            socialId = parseAppleToken(userRegistrationRequest.getSocialToken());
+            ParsedToken parsedAppleToken = parseAppleToken(userRegistrationRequest.getSocialToken());
+            email = parsedAppleToken.getEmail();
+            socialId = parsedAppleToken.getSocialId();
         } else {
-            socialId = parseGoogleToken(userRegistrationRequest.getSocialToken());
+            ParsedToken parsedGoogleToken = parseGoogleToken(userRegistrationRequest.getSocialToken());
+            email = parsedGoogleToken.getEmail();
+            socialId = parsedGoogleToken.getSocialId();
         }
 
         User user = User.of(
-                userRegistrationRequest.getEmail(),
+                email,
                 encodedPassword,
                 userRegistrationRequest.getLoginType(),
                 userRegistrationRequest.getAge(),
@@ -243,6 +253,10 @@ public class AuthServiceImpl implements AuthService {
                 userRegistrationRequest.isPushConsent(),
                 socialId
         );
+        if(isDuplication(user)) {
+            throw new DuplicationException(WwoossResponseCode.DUPLICATION_RESOURCE, "이미 가입된 유저 정보입니다.");
+        }
+
         User registeredUser = userRepository.save(user);
 
         String accessToken = tokenProvider.generateToken(registeredUser, "access");
@@ -262,7 +276,7 @@ public class AuthServiceImpl implements AuthService {
     /**
      * google identity token parsing
      */
-    public String parseGoogleToken(String identityToken) {
+    public ParsedToken parseGoogleToken(String identityToken) {
         StringBuilder result = new StringBuilder();
 
         try {
@@ -283,14 +297,26 @@ public class AuthServiceImpl implements AuthService {
         JsonObject data = (JsonObject) JsonParser.parseString(result.toString());
 
         // 쌍따움표 제거 : ""abc""이와 같이 리턴됨
-        String removedDoubleQuotes = data.get("user_id").toString().substring(1, data.get("user_id").toString().length() - 1);
-        return GOOGLE_ID_PREFIX + removedDoubleQuotes;
+        String userId = data.get("user_id").toString().substring(1, data.get("user_id").toString().length() - 1);
+        String email = data.get("email").toString().substring(1, data.get("email").toString().length() - 1);
+
+        return ParsedToken.of(email, GOOGLE_ID_PREFIX + userId);
+    }
+
+    private boolean isDuplication(User user) {
+        if(Objects.nonNull(user.getSocialId())) {
+            User socialUser = userRepository.findUserBySocialIdAndLoginType(user.getSocialId(), user.getLoginType()).orElse(null);
+            return Objects.nonNull(socialUser);
+        }
+
+        User emailUser = userRepository.findUserByEmailAndLoginType(user.getEmail(), user.getLoginType()).orElse(null);
+        return Objects.nonNull(emailUser);
     }
 
     /**
      * apple identity token parsing
      */
-    private String parseAppleToken(String identityToken) {
+    private ParsedToken parseAppleToken(String identityToken) {
        String iosPublicKey = iosPublicKey();
         JsonObject availableObject = getAvailableObject(iosPublicKey, identityToken);
 
@@ -303,8 +329,9 @@ public class AuthServiceImpl implements AuthService {
 
         JsonObject userInfoObject = (JsonObject) JsonParser.parseString(new Gson().toJson(userInfo));
         JsonElement appleAlg = userInfoObject.get("sub");
+        JsonElement email = userInfoObject.get("email");
 
-        return IOS_ID_PREFIX + appleAlg.getAsString();
+        return ParsedToken.of(email.getAsString(), IOS_ID_PREFIX + appleAlg.getAsString());
     }
 
     private JsonObject getAvailableObject(String publicKey, String identityToken) {
