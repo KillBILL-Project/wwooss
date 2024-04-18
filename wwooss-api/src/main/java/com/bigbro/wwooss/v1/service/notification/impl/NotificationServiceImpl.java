@@ -114,7 +114,7 @@ public class NotificationServiceImpl implements NotificationService {
         User user = userRepository.findById(userId).orElseThrow(() -> new DataNotFoundException(WwoossResponseCode.NOT_FOUND_DATA, "존재하지 않는 유저입니다."));
         Slice<Notification> findNotificationList = notificationRepository.findByUserAndIsShow(user, true, pageable);
 
-        Map<String, ArrayList<NotificationResponse>> notificationByDate = new HashMap<>();
+        Map<String, ArrayList<NotificationResponse>> notificationByDate = new LinkedHashMap<>();
         findNotificationList.getContent().forEach((notification) -> {
             String formattedDate = notification.getCreatedAt().format(DateTimeFormatter.ofPattern(YEAR_MONTH_DAY_FORMAT));
             ArrayList<NotificationResponse> notificationResponse = notificationByDate.get(formattedDate);
