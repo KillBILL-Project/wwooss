@@ -1,6 +1,7 @@
 package com.bigbro.wwooss.v1.service.notification.impl;
 
 import com.bigbro.wwooss.v1.dto.request.notification.NotificationSendRequest;
+import com.bigbro.wwooss.v1.dto.response.notification.NotificationByDate;
 import com.bigbro.wwooss.v1.dto.response.notification.NotificationListResponse;
 import com.bigbro.wwooss.v1.dto.response.notification.NotificationResponse;
 import com.bigbro.wwooss.v1.entity.notification.Notification;
@@ -16,8 +17,9 @@ import com.bigbro.wwooss.v1.service.notification.NotificationService;
 import com.google.firebase.messaging.FirebaseMessagingException;
 
 import org.springframework.data.domain.Pageable;
-import java.util.List;
-import java.util.Objects;
+
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +27,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import static com.bigbro.wwooss.v1.utils.DateUtil.YEAR_MONTH_DAY_FORMAT;
 
 @Service
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
@@ -109,8 +113,29 @@ public class NotificationServiceImpl implements NotificationService {
     public NotificationListResponse getNotificationList(Long userId, Pageable pageable) {
         User user = userRepository.findById(userId).orElseThrow(() -> new DataNotFoundException(WwoossResponseCode.NOT_FOUND_DATA, "존재하지 않는 유저입니다."));
         Slice<Notification> findNotificationList = notificationRepository.findByUserAndIsShow(user, true, pageable);
-        List<NotificationResponse> notificationResponses = findNotificationList.getContent().stream().map(NotificationResponse::from).toList();
 
-        return NotificationListResponse.of(findNotificationList.hasNext(), notificationResponses);
+        Map<String, ArrayList<NotificationResponse>> notificationByDate = new HashMap<>();
+        findNotificationList.getContent().forEach((notification) -> {
+            String formattedDate = notification.getCreatedAt().format(DateTimeFormatter.ofPattern(YEAR_MONTH_DAY_FORMAT));
+            ArrayList<NotificationResponse> notificationResponse = notificationByDate.get(formattedDate);
+            NotificationResponse response = NotificationResponse.from(notification);
+
+            if(Objects.isNull(notificationResponse)) {
+                ArrayList<NotificationResponse> init = new ArrayList<>();
+                init.add(response);
+                notificationByDate.put(formattedDate, init);
+            } else {
+                notificationResponse.add(response);
+                notificationByDate.put(formattedDate, notificationResponse);
+            }
+
+        });
+
+        List<NotificationByDate> responses = new ArrayList<>();
+        notificationByDate.forEach((key, value) -> {
+            responses.add(NotificationByDate.of(key, value));
+        });
+
+        return NotificationListResponse.of(findNotificationList.hasNext(), responses);
     }
 }

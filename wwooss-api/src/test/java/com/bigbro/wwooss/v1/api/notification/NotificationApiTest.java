@@ -3,6 +3,7 @@ package com.bigbro.wwooss.v1.api.notification;
 import com.bigbro.wwooss.v1.annotation.TestController;
 import com.bigbro.wwooss.v1.annotation.WithMockCustomUser;
 import com.bigbro.wwooss.v1.config.DocumentConfig;
+import com.bigbro.wwooss.v1.dto.response.notification.NotificationByDate;
 import com.bigbro.wwooss.v1.dto.response.notification.NotificationListResponse;
 import com.bigbro.wwooss.v1.dto.response.notification.NotificationResponse;
 import com.bigbro.wwooss.v1.repository.user.UserRepository;
@@ -17,6 +18,7 @@ import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.document;
@@ -49,6 +51,7 @@ class NotificationApiTest {
     @WithMockCustomUser
     @DisplayName("알림 목록 조회")
     void getNotificationList() throws Exception {
+        List<NotificationByDate> responses = new ArrayList<>();
         List<NotificationResponse> notificationResponses = List.of(NotificationResponse.builder()
                 .notificationId(1L)
                 .title("알림 제목")
@@ -56,7 +59,8 @@ class NotificationApiTest {
                 .deepLink("deep link")
                 .createdAt(LocalDateTime.now())
                 .build());
-        NotificationListResponse notificationListResponse = NotificationListResponse.of(false, notificationResponses);
+        responses.add(NotificationByDate.of("2024-04-17", notificationResponses));
+        NotificationListResponse notificationListResponse = NotificationListResponse.of(false, responses);
 
         given(this.notificationService.getNotificationList(any(), any())).willReturn(notificationListResponse);
 
@@ -87,11 +91,12 @@ class NotificationApiTest {
                                         fieldWithPath("title").description("응답 코드 별 클라이언트 노출 제목"),
                                         fieldWithPath("message").description("응답 코드 별 클라이언트 노출 메세지"),
                                         fieldWithPath("data.hasNext").description("다음 페이지 존재"),
-                                        fieldWithPath("data.notificationResponses[].notificationId").description("알림 ID"),
-                                        fieldWithPath("data.notificationResponses[].title").description("알림 제목"),
-                                        fieldWithPath("data.notificationResponses[].message").description("알림 내용"),
-                                        fieldWithPath("data.notificationResponses[].deepLink").description("딥링크 추후 필요할 수도 있움. 지금 사용X"),
-                                        fieldWithPath("data.notificationResponses[].createdAt").description("알림 생성 날짜")
+                                        fieldWithPath("data.notificationByDates[].date").description("알림 날짜"),
+                                        fieldWithPath("data.notificationByDates[].notificationResponses[].notificationId").description("알림 ID"),
+                                        fieldWithPath("data.notificationByDates[].notificationResponses[].title").description("알림 제목"),
+                                        fieldWithPath("data.notificationByDates[].notificationResponses[].message").description("알림 내용"),
+                                        fieldWithPath("data.notificationByDates[].notificationResponses[].deepLink").description("딥링크 추후 필요할 수도 있움. 지금 사용X"),
+                                        fieldWithPath("data.notificationByDates[].notificationResponses[].createdAt").description("알림 생성 날짜")
                                 )
                         )
                 );

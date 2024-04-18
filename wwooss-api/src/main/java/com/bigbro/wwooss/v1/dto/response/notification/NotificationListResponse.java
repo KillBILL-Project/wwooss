@@ -11,12 +11,12 @@ public class NotificationListResponse {
 
     Boolean hasNext;
 
-    List<NotificationResponse> notificationResponses;
+    List<NotificationByDate> notificationByDates;
 
-    public static NotificationListResponse of(Boolean hasNext, List<NotificationResponse> notificationResponses) {
+    public static NotificationListResponse of(Boolean hasNext, List<NotificationByDate> notificationByDates) {
        return NotificationListResponse.builder()
                .hasNext(hasNext)
-               .notificationResponses(notificationResponses)
+               .notificationByDates(notificationByDates)
                .build();
     }
 }
