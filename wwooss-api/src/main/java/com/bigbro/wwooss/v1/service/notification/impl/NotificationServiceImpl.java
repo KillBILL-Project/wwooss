@@ -7,6 +7,7 @@ import com.bigbro.wwooss.v1.dto.response.notification.NotificationResponse;
 import com.bigbro.wwooss.v1.entity.notification.Notification;
 import com.bigbro.wwooss.v1.entity.notification.NotificationTemplate;
 import com.bigbro.wwooss.v1.entity.user.User;
+import com.bigbro.wwooss.v1.enumType.NotificationTemplateCode;
 import com.bigbro.wwooss.v1.exception.DataNotFoundException;
 import com.bigbro.wwooss.v1.repository.notification.NotificationRepository;
 import com.bigbro.wwooss.v1.repository.notification.NotificationTemplateRepository;
@@ -43,6 +44,7 @@ public class NotificationServiceImpl implements NotificationService {
     private final FirebaseService firebaseService;
 
     private final UserRepository userRepository;
+
 
     @Override
     @Transactional
@@ -137,5 +139,11 @@ public class NotificationServiceImpl implements NotificationService {
         });
 
         return NotificationListResponse.of(findNotificationList.hasNext(), responses);
+    }
+
+    @Override
+    @Transactional
+    public void testPush(Long userId) {
+        this.sendOne(NotificationSendRequest.of(List.of(userRepository.findById(userId).orElseThrow()), NotificationTemplateCode.WWOOSS_ALARM));
     }
 }

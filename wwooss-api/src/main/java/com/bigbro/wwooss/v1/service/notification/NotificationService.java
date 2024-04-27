@@ -27,4 +27,7 @@ public interface NotificationService {
      */
     NotificationListResponse getNotificationList(Long userId, Pageable pageable);
 
+
+    void testPush(Long userId);
+
 }
