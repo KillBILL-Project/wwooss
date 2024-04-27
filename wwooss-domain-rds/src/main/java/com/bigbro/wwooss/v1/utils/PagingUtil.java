@@ -32,11 +32,13 @@ public class PagingUtil {
 
     public static  <T> Page<T> getPage(JPAQuery<T> query, Pageable pageable) {
         final int pageSize = pageable.getPageSize();
+        final int totalSize = query.fetch().size();
+
         List<T> content = query
-                .offset(pageable. getOffset())
-                .limit(pageSize + 1)
+                .offset(pageable.getOffset())
+                .limit(pageSize)
                 .fetch();
 
-        return PageableExecutionUtils.getPage(content, pageable, () -> query.fetch().size());
+        return PageableExecutionUtils.getPage(content, pageable, () -> totalSize);
     }
 }
