@@ -55,6 +55,7 @@ public class TrashCanDocumentServiceImpl implements TrashCanDocumentService {
                     trashCan.getLocation().getLat(),
                     trashCan.getLocation().getLon(),
                     trashCan.getAddress(),
+                    trashCan.getPlaceName(),
                     trashTypeList);
         }).toList();
     }
