@@ -63,16 +63,12 @@ public class NotificationServiceImpl implements NotificationService {
 
 
         try {
-            log.info("=========sendOne init=========");
             // 단일 발송 이기 때문에 무조건 첫번째만
             firebaseService.sendOne(notificationTemplate, notificationSendRequest.getVariableMap(),
                     notificationSendRequest.getTargets().get(0).getFcmToken());
-            log.info("=========sendOne end=========");
 
-            log.info("=========sendOne save========= : {} , template : {}", notificationSendRequest, notificationTemplate);
             notificationRepository.save(Notification.of(notificationSendRequest.getTargets().get(0)
             ,notificationTemplate, true));
-            log.info("=========sendOne save end=========");
         } catch (FirebaseMessagingException fe) {
             log.error(fe.getMessage(), fe);
             notificationRepository.save(Notification.failOf(notificationSendRequest.getTargets().get(0),
