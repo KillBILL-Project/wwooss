@@ -93,7 +93,7 @@ public class WeeklyReportServiceImpl implements WeeklyReportService {
         List<ComplimentCardResponse> complimentCardList = complimentCardService.getComplimentCardAtDate(user,
                 fromDate, toDate);
         List<ComplimentCardIcon> cardIconList = complimentCardList.stream()
-                .map(card -> ComplimentCardIcon.of(card.getComplimentCardId(), card.getCardImage(), card.getTitle())).toList();
+                .map(card -> ComplimentCardIcon.of(card.getComplimentCardId(), card.getCardImage(), card.getTitle(), card.getContents())).toList();
 
         return WeeklyReportDetailResponse.of(weeklyReportDetail, cardIconList);
     }

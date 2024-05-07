@@ -135,7 +135,7 @@ class WeeklyReportApiTest {
                 .weeklyDate(LocalDateTime.now())
                 .user(user)
                 .build();
-        List<ComplimentCardIcon> cardIcons = List.of(ComplimentCardIcon.of(1L, "image", "image title"));
+        List<ComplimentCardIcon> cardIcons = List.of(ComplimentCardIcon.of(1L, "image", "image title", "icon contents"));
 
 
         given(weeklyReportService.getWeeklyReportDetail(any(), any())).willReturn(WeeklyReportDetailResponse.of(weeklyReport, cardIcons));

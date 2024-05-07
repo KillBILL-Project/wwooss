@@ -13,12 +13,15 @@ public class ComplimentCardIcon {
 
     private String title;
 
+    private String contents;
 
-    public static ComplimentCardIcon of(Long complimentCardId, String cardImage, String title) {
+
+    public static ComplimentCardIcon of(Long complimentCardId, String cardImage, String title, String contents) {
         return ComplimentCardIcon.builder()
                 .complimentCardId(complimentCardId)
                 .cardImage(cardImage)
                 .title(title)
+                .contents(contents)
                 .build();
     }
 }
