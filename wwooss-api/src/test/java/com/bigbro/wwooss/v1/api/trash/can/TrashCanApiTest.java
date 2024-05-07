@@ -52,7 +52,7 @@ class TrashCanApiTest {
     @DisplayName("쓰레기통 위치 검색")
     void createTrashCanContents() throws Exception {
         List<TrashCanResponse> responses = List.of(TrashCanResponse.of(
-                1L, 37.53519607656067D, 126.82551415214544D, "강서구 개화산역", "개화산", List.of("PLASTIC", "CAN")));
+                1L, 37.53519607656067D, 126.82551415214544D, "강서구 개화산역", "개화산", List.of("PLASTIC", "CAN"), List.of("Image")));
 
         given(trashCanDocumentService.findTrashCanByGeoLocation(any(), any(), any(), any())).willReturn(responses);
 
@@ -89,7 +89,8 @@ class TrashCanApiTest {
                                         fieldWithPath("data[].lng").description("경도"),
                                         fieldWithPath("data[].address").description("주소"),
                                         fieldWithPath("data[].placeName").description("지역명"),
-                                        fieldWithPath("data[].trashType[]").description("쓰레기통 타입")
+                                        fieldWithPath("data[].trashType[]").description("쓰레기통 타입"),
+                                        fieldWithPath("data[].trashImages[]").description("쓰레기 타입 이미지")
                                 )
                         )
                 );

@@ -6,6 +6,7 @@ import com.bigbro.wwooss.v1.dto.response.trash.TrashCanResponse;
 import com.bigbro.wwooss.v1.repository.TrashCanDocumentRepository;
 import com.bigbro.wwooss.v1.service.es.TrashCanDocumentService;
 import com.bigbro.wwooss.v1.service.trash.can.TrashCanService;
+import com.bigbro.wwooss.v1.utils.ImageUtil;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -23,6 +24,8 @@ public class TrashCanDocumentServiceImpl implements TrashCanDocumentService {
     private final TrashCanService trashCanService;
 
     private final TrashCanDocumentRepository trashCanDocumentRepository;
+
+    private final ImageUtil imageUtil;
 
     @Override
     @Transactional
@@ -51,12 +54,23 @@ public class TrashCanDocumentServiceImpl implements TrashCanDocumentService {
             String trashTypeListString = trashCan.getTrashType();
             List<String> trashTypeList = Arrays.asList(trashTypeListString.split(","));
 
+            List<String> trashImagePath = trashTypeList.stream().map((trash) -> switch (trash) {
+                case "PAPER" -> imageUtil.baseTrashImagePath() + "name=small_paper.png";
+                case "CAN" -> imageUtil.baseTrashImagePath() + "name=small_can.png";
+                case "PLASTIC", "PET" -> imageUtil.baseTrashImagePath() + "name=small_plastic.png";
+                case "GLASS" -> imageUtil.baseTrashImagePath() + "name=small_glass.png";
+                case "VINYL" -> imageUtil.baseTrashImagePath() + "name=small_vinyl.png";
+                case "COMMON" -> imageUtil.baseTrashImagePath() + "name=small_common.png";
+                default -> imageUtil.baseTrashImagePath() + "name=small_common.png";
+            }).toList();
+
             return TrashCanResponse.of(trashCan.getId(),
                     trashCan.getLocation().getLat(),
                     trashCan.getLocation().getLon(),
                     trashCan.getAddress(),
                     trashCan.getPlaceName(),
-                    trashTypeList);
+                    trashTypeList,
+                    trashImagePath);
         }).toList();
     }
 
