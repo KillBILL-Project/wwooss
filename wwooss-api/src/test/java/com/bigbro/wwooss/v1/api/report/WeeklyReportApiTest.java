@@ -170,7 +170,8 @@ class WeeklyReportApiTest {
                                         fieldWithPath("data.weeklyTrashCountByCategoryList[].trashCount").description("쓰레기 수"),
                                         fieldWithPath("data.complimentCardIconList[].complimentCardId").description("칭찬 카드 ID"),
                                         fieldWithPath("data.complimentCardIconList[].cardImage").description("칭찬 카드 이미지"),
-                                        fieldWithPath("data.complimentCardIconList[].title").description("칭찬 카드 제목")
+                                        fieldWithPath("data.complimentCardIconList[].title").description("칭찬 카드 제목"),
+                                        fieldWithPath("data.complimentCardIconList[].contents").description("칭찬 카드 내용")
                                 )
                         )
                 );
