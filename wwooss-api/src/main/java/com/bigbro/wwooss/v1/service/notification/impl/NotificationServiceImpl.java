@@ -50,7 +50,7 @@ public class NotificationServiceImpl implements NotificationService {
     @Transactional
     public void sendOne(NotificationSendRequest notificationSendRequest) {
         if (notificationSendRequest.isEmptyTargets()) {
-            log.error("notification no target test");
+            log.error("notification no target");
             return;
         }
 
