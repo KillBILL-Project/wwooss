@@ -64,8 +64,10 @@ public class NotificationServiceImpl implements NotificationService {
 
         try {
             // 단일 발송 이기 때문에 무조건 첫번째만
-            firebaseService.sendOne(notificationTemplate, notificationSendRequest.getVariableMap(),
-                    notificationSendRequest.getTargets().get(0).getFcmToken());
+            if(notificationSendRequest.getTargets().get(0).isPushConsent()) {
+                firebaseService.sendOne(notificationTemplate, notificationSendRequest.getVariableMap(),
+                        notificationSendRequest.getTargets().get(0).getFcmToken());
+            }
 
             notificationRepository.save(Notification.of(notificationSendRequest.getTargets().get(0)
             ,notificationTemplate, true));
@@ -94,7 +96,7 @@ public class NotificationServiceImpl implements NotificationService {
 
         try {
             firebaseService.sendMany(notificationTemplate, notificationSendRequest.getVariableMap(),
-                    notificationSendRequest.getTargets().stream().map(User::getFcmToken).toList());
+                    notificationSendRequest.getTargets().stream().filter(User::isPushConsent).map(User::getFcmToken).toList());
 
             List<Notification> sendList = notificationSendRequest.getTargets().stream()
                     .map((user) -> Notification.of(user, notificationTemplate, true)).toList();
