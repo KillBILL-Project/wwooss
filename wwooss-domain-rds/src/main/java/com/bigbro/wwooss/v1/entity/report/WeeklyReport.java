@@ -34,7 +34,7 @@ public class WeeklyReport {
     private List<Integer> attendanceRecord = new ArrayList<>();
 
     @Comment("주간 카테고리별 쓰레기 ")
-    @Column(name = "weekly_trash_count_by_category")
+    @Column(name = "weekly_trash_count_by_category", length = 500)
     @Convert(converter = WeeklyTrashListConverter.class)
     @Builder.Default
     private List<WeeklyTrashByCategory> weeklyTrashCountByCategoryList = new ArrayList<>();
