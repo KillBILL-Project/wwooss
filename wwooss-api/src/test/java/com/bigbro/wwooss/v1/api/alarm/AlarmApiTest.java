@@ -143,7 +143,7 @@ public class AlarmApiTest {
     @DisplayName("알람 on/off")
     void switchAlarm() throws Exception {
         AlarmOnOffRequest alarmOnOffRequest = AlarmOnOffRequest.builder()
-                .isOn(true)
+                .on(true)
                 .build();
 
         this.mockMvc.perform(RestDocumentationRequestBuilders.patch("/api/v1/alarm/{alarm-id}/on-off", 1L)
