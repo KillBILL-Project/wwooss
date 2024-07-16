@@ -14,5 +14,5 @@ import lombok.NoArgsConstructor;
 public class AlarmOnOffRequest {
 
     @NotNull(message = "on/off 값은 필수 입니다.")
-    private boolean isOn;
+    private boolean on;
 }
