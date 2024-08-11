@@ -14,7 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
@@ -25,6 +25,7 @@ public class UserServiceImpl implements UserService {
     private final TokenProvider tokenProvider;
 
     @Override
+    @Transactional(readOnly = true)
     public UserResponse getUserInfo() {
         String token = (String) SecurityContextHolder.getContext().getAuthentication().getCredentials();
         TokenInfo tokenInfo = tokenProvider.getTokenInfo(token);

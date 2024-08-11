@@ -1,4 +1,4 @@
-package com.bigbro.wwooss.v1.entity.wallet;
+package com.bigbro.wwooss.v1.entity.token;
 
 import com.bigbro.wwooss.v1.enumType.IssueType;
 import lombok.AccessLevel;
@@ -10,25 +10,21 @@ import org.hibernate.annotations.Comment;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "token")
+@Table(name = "token_template")
 @SuperBuilder
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Token {
+public class TokenTemplate {
 
     @Id
-    @Column(name = "token_id")
+    @Column(name = "token_temolate_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long tokenId;
+    private Long tokenTemplateId;
 
     @Comment("발급유형")
     @Column(name = "issue_type")
     @Enumerated(value = EnumType.STRING)
     private IssueType issueType;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "wallet_id")
-    private Wallet wallet;
 
     @Comment("토큰 값")
     @Column(name = "value")

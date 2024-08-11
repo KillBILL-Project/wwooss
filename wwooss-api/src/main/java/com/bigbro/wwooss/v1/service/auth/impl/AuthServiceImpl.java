@@ -32,6 +32,7 @@ import com.bigbro.wwooss.v1.security.TokenProvider;
 import com.bigbro.wwooss.v1.service.auth.AuthService;
 import com.bigbro.wwooss.v1.service.email.EmailService;
 import com.bigbro.wwooss.v1.service.notification.NotificationService;
+import com.bigbro.wwooss.v1.service.wallet.WalletService;
 import com.bigbro.wwooss.v1.utils.WwoossUtil;
 import com.google.gson.*;
 import io.jsonwebtoken.Claims;
@@ -105,6 +106,8 @@ public class AuthServiceImpl implements AuthService {
     private final EmailService emailService;
 
     private final NotificationService notificationService;
+
+    private final WalletService walletService;
 
     private final WwoossUtil wwoossUtil;
 
@@ -258,6 +261,7 @@ public class AuthServiceImpl implements AuthService {
         }
 
         User registeredUser = userRepository.save(user);
+        walletService.createWallet(registeredUser);
 
         String accessToken = tokenProvider.generateToken(registeredUser, "access");
         String refreshToken = tokenProvider.generateToken(registeredUser, "refresh");
