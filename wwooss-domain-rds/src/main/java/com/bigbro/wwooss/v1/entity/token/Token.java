@@ -33,6 +33,6 @@ public class Token {
 
     @Comment("토큰 값")
     @Column(name = "value")
-    private String value;
+    private Double value;
 
 }

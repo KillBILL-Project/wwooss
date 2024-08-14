@@ -30,7 +30,7 @@ public class QuizHistory {
     @Comment("퀴즈 풀이 상태")
     @Column(name = "status")
     @Enumerated(value = EnumType.STRING)
-    private QuizStatusType Status;
+    private QuizStatusType status;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")

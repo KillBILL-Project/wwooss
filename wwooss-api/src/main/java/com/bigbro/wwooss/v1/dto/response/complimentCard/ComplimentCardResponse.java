@@ -1,6 +1,5 @@
 package com.bigbro.wwooss.v1.dto.response.complimentCard;
 
-import com.bigbro.wwooss.v1.entity.complimentCard.ComplimentCard;
 import com.bigbro.wwooss.v1.entity.complimentCard.ComplimentCardMeta;
 import com.bigbro.wwooss.v1.enumType.CardType;
 import lombok.Builder;

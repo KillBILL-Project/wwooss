@@ -1,5 +1,6 @@
 package com.bigbro.wwooss.v1.entity.quiz;
 
+import com.bigbro.wwooss.v1.entity.token.Token;
 import com.bigbro.wwooss.v1.enumType.QuizType;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -28,18 +29,26 @@ public class Quiz {
     @Column(name = "open")
     private boolean open;
 
-    @Comment("정답률")
-    @Column(name = "correct_rate")
-    private Double correctRate;
-
     @Comment("퀴즈 정답")
     @Column(name = "answer")
     private String answer;
+
+    @Comment("퀴즈 질문")
+    @Column(name = "question")
+    private String question;
+
+    @Comment("quiz 이미지")
+    @Column(name = "quiz_image_path")
+    private String quizImagePath;
 
     @Comment("퀴즈 타입")
     @Column(name = "type")
     @Enumerated(EnumType.STRING)
     private QuizType type;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "token_id")
+    private Token token;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "quiz")
     @Builder.Default
