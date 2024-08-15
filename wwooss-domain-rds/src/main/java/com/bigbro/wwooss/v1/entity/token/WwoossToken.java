@@ -35,4 +35,11 @@ public class WwoossToken {
     @Column(name = "value")
     private Double value;
 
+    public static WwoossToken of(IssueType issueType, Wallet wallet) {
+        return WwoossToken.builder()
+                .wallet(wallet)
+                .issueType(issueType)
+                .value(issueType.getValue())
+                .build();
+    }
 }
