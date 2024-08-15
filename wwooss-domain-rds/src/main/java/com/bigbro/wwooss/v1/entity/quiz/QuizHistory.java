@@ -39,4 +39,8 @@ public class QuizHistory {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "quiz_id")
     private Quiz quiz;
+
+    public void updateQuizStatus(QuizStatusType status) {
+        this.status = status;
+    }
 }

@@ -6,6 +6,7 @@ import com.bigbro.wwooss.v1.config.DocumentConfig;
 import com.bigbro.wwooss.v1.dto.option.OptionResponse;
 import com.bigbro.wwooss.v1.dto.response.quiz.QuizResponse;
 import com.bigbro.wwooss.v1.entity.quiz.Quiz;
+import com.bigbro.wwooss.v1.enumType.QuizStatusType;
 import com.bigbro.wwooss.v1.enumType.QuizType;
 import com.bigbro.wwooss.v1.service.quiz.QuizService;
 import org.junit.jupiter.api.DisplayName;
@@ -87,6 +88,38 @@ class QuizApiTest {
                                         fieldWithPath("data.imagePath").description("퀴즈 이미지"),
                                         fieldWithPath("data.options[].optionId").description("선택지 ID"),
                                         fieldWithPath("data.options[].value").description("선택지 값")
+                                )
+                        )
+                );
+    }
+
+    @Test
+    @WithMockCustomUser
+    @DisplayName("퀴즈 풀기")
+    void solveQuiz() throws Exception {
+        // given
+        given(this.quizService.solveQuiz(any(), any(), any())).willReturn(QuizStatusType.PASS);
+
+        this.mockMvc.perform(RestDocumentationRequestBuilders.patch("/api/v1/quiz/{quiz-id}", 1L)
+                        .with(csrf().asHeader())
+                        .header("Authorization", "bearer TEST_ACCESS")
+                        .contextPath("/api")
+                        .param("answer", "1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                )
+                .andExpect(status().isOk())
+                .andDo(document("solve-quiz",
+                                resourceDetails().tags("Quiz 풀기"),
+                                DocumentConfig.getDocumentRequest(),
+                                DocumentConfig.getDocumentResponse(),
+                                requestHeaders(
+                                        headerWithName("Authorization").description("인증 토큰")
+                                ),
+                                responseFields(
+                                        fieldWithPath("code").description("응답 코드"),
+                                        fieldWithPath("title").description("응답 코드 별 클라이언트 노출 제목"),
+                                        fieldWithPath("message").description("응답 코드 별 클라이언트 노출 메세지"),
+                                        fieldWithPath("data").description("Result - PASS/FAIL")
                                 )
                         )
                 );
