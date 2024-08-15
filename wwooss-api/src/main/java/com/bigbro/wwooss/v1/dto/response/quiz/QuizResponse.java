@@ -22,6 +22,7 @@ public class QuizResponse {
         return QuizResponse.builder()
                 .quizId(quiz.getQuizId())
                 .question(quiz.getQuestion())
+                .quizType(quiz.getType())
                 .correctRate(correctRate)
                 .imagePath(imagePath)
                 .options(options)

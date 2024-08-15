@@ -42,14 +42,14 @@ public class Quiz extends BaseEntity  {
     @Column(name = "quiz_image_path")
     private String quizImagePath;
 
+    @Comment("토큰 값")
+    @Column(name = "token_value")
+    private Double tokenValue;
+
     @Comment("퀴즈 타입")
     @Column(name = "type")
     @Enumerated(EnumType.STRING)
     private QuizType type;
-
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "token_id")
-    private Token token;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "quiz")
     @Builder.Default
