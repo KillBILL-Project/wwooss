@@ -20,7 +20,7 @@ public class WalletApi {
     private final WalletService walletService;
 
     @GetMapping("/wwooss-token")
-    public ResponseEntity<WwoossResponse<Double>> getTotalTokenByType(UserCredential userCredential, @RequestParam("issue-type") IssueType issueType) {
+    public ResponseEntity<WwoossResponse<Double>> getTotalTokenByType(UserCredential userCredential, @RequestParam(value = "issue-type", required = false) IssueType issueType) {
         return WwoossResponseUtil.responseOkAddData(walletService.getTotalTokenValueByType(userCredential.getUserId(), issueType));
     }
 }

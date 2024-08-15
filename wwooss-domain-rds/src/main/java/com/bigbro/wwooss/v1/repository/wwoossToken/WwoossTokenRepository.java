@@ -10,4 +10,5 @@ import java.util.List;
 public interface WwoossTokenRepository extends JpaRepository<WwoossToken, Long> {
 
     List<WwoossToken> findWwoossTokenByWalletAndIssueType(Wallet wallet, IssueType issueType);
+    List<WwoossToken> findWwoossTokenByWallet(Wallet wallet);
 }

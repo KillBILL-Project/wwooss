@@ -3,11 +3,6 @@ package com.bigbro.wwooss.v1.api.wallet;
 import com.bigbro.wwooss.v1.annotation.TestController;
 import com.bigbro.wwooss.v1.annotation.WithMockCustomUser;
 import com.bigbro.wwooss.v1.config.DocumentConfig;
-import com.bigbro.wwooss.v1.dto.response.quizHistory.QuizHistoryInfo;
-import com.bigbro.wwooss.v1.dto.response.quizHistory.QuizHistoryListResponse;
-import com.bigbro.wwooss.v1.entity.quiz.Quiz;
-import com.bigbro.wwooss.v1.entity.quiz.QuizHistory;
-import com.bigbro.wwooss.v1.enumType.QuizStatusType;
 import com.bigbro.wwooss.v1.repository.user.UserRepository;
 import com.bigbro.wwooss.v1.service.wallet.WalletService;
 import org.junit.jupiter.api.DisplayName;
@@ -18,9 +13,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.test.web.servlet.MockMvc;
-
-import java.time.LocalDateTime;
-import java.util.List;
 
 import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.document;
 import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.resourceDetails;
@@ -71,7 +63,7 @@ class WalletApiTest {
                                 DocumentConfig.getDocumentRequest(),
                                 DocumentConfig.getDocumentResponse(),
                                 requestParameters(
-                                        parameterWithName("issue-type").description("QUIZ ( QUIZ 외 추가될 예정 )")
+                                        parameterWithName("issue-type").description("QUIZ ( QUIZ 외 추가될 예정 ), null일 경우 모든 타입 합").optional()
                                 ),
                                 requestHeaders(
                                         headerWithName("Authorization").description("인증 토큰")
