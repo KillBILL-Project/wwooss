@@ -9,6 +9,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface QuizHistoryRepository extends JpaRepository<QuizHistory, Long> {
 
-    Slice<QuizHistory> findQuizHistoryByUser(User user, Pageable pageable);
+    Slice<QuizHistory> findQuizHistoryByUserOrderByCreatedAtDesc(User user, Pageable pageable);
     QuizHistory findQuizHistoryByUserAndQuiz(User user, Quiz quiz);
 }

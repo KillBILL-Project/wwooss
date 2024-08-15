@@ -20,6 +20,7 @@ import org.springframework.http.MediaType;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.document;
@@ -66,6 +67,7 @@ class QuizHistoryApiTest {
                 .quizHistoryId(1L)
                 .quiz(quiz)
                 .status(QuizStatusType.PASS)
+                .createdAt(LocalDateTime.now())
                 .build();
         QuizHistoryInfo quizHistoryInfo = QuizHistoryInfo.of(quizHistory);
         QuizHistoryListResponse quizHistoryListResponse = QuizHistoryListResponse.of(false, List.of(quizHistoryInfo));

@@ -22,6 +22,7 @@ public class QuizHistoryInfo {
                 .quizId(quizHistory.getQuiz().getQuizId())
                 .status(quizHistory.getStatus())
                 .tokenValue(quizHistory.getQuiz().getToken().getValue())
+                .createdAt(quizHistory.getCreatedAt())
                 .build();
     }
 }

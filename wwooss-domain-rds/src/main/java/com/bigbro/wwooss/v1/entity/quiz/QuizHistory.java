@@ -1,26 +1,22 @@
 package com.bigbro.wwooss.v1.entity.quiz;
 
-import com.bigbro.wwooss.v1.entity.token.Token;
+import com.bigbro.wwooss.v1.entity.base.BaseEntity;
 import com.bigbro.wwooss.v1.entity.user.User;
-import com.bigbro.wwooss.v1.enumType.NotificationTemplateCode;
 import com.bigbro.wwooss.v1.enumType.QuizStatusType;
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.Comment;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Table(name = "quiz_history")
 @SuperBuilder
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class QuizHistory {
+public class QuizHistory extends BaseEntity {
 
     @Id
     @Column(name = "quiz_history_id")

@@ -1,5 +1,6 @@
 package com.bigbro.wwooss.v1.entity.quiz;
 
+import com.bigbro.wwooss.v1.entity.base.BaseEntity;
 import com.bigbro.wwooss.v1.entity.token.Token;
 import com.bigbro.wwooss.v1.enumType.QuizType;
 import lombok.AccessLevel;
@@ -18,7 +19,7 @@ import java.util.List;
 @SuperBuilder
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Quiz {
+public class Quiz extends BaseEntity  {
 
     @Id
     @Column(name = "quiz_id")

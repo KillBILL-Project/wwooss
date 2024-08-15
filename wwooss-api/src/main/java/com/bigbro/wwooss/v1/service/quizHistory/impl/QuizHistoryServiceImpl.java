@@ -30,7 +30,7 @@ public class QuizHistoryServiceImpl implements QuizHistoryService {
     @Transactional(readOnly = true)
     public QuizHistoryListResponse getQuizHistoryList(Long userId, Pageable pageable) {
         User user = userRepository.findById(userId).orElseThrow(() -> new DataNotFoundException(WwoossResponseCode.NOT_FOUND_DATA, "존재하지 않는 유저입니다."));
-        Slice<QuizHistory> quizHistoryList = quizHistoryRepository.findQuizHistoryByUser(user, pageable);
+        Slice<QuizHistory> quizHistoryList = quizHistoryRepository.findQuizHistoryByUserOrderByCreatedAtDesc(user, pageable);
 
         List<QuizHistoryInfo> quizHistoryInfoList = quizHistoryList.getContent().stream().map(QuizHistoryInfo::of).toList();
         return QuizHistoryListResponse.of(quizHistoryList.hasNext(), quizHistoryInfoList);

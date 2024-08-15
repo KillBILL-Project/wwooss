@@ -1,5 +1,6 @@
 package com.bigbro.wwooss.v1.entity.quiz;
 
+import com.bigbro.wwooss.v1.entity.base.BaseEntity;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,7 +14,7 @@ import javax.persistence.*;
 @SuperBuilder
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class QuizOption {
+public class QuizOption extends BaseEntity  {
 
     @Id
     @Column(name = "option_id")
