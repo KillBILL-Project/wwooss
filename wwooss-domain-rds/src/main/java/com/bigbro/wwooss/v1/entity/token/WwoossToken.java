@@ -11,16 +11,16 @@ import org.hibernate.annotations.Comment;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "token")
+@Table(name = "wwooss_token")
 @SuperBuilder
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Token {
+public class WwoossToken {
 
     @Id
-    @Column(name = "token_id")
+    @Column(name = "wwooss_token_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long tokenId;
+    private Long wwoossTokenId;
 
     @Comment("발급유형")
     @Column(name = "issue_type")

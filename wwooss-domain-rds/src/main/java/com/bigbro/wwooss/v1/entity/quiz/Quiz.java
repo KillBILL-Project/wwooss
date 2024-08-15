@@ -1,7 +1,6 @@
 package com.bigbro.wwooss.v1.entity.quiz;
 
 import com.bigbro.wwooss.v1.entity.base.BaseEntity;
-import com.bigbro.wwooss.v1.entity.token.Token;
 import com.bigbro.wwooss.v1.enumType.QuizType;
 import lombok.AccessLevel;
 import lombok.Builder;

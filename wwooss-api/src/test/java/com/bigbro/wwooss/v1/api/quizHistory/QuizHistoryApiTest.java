@@ -7,7 +7,6 @@ import com.bigbro.wwooss.v1.dto.response.quizHistory.QuizHistoryInfo;
 import com.bigbro.wwooss.v1.dto.response.quizHistory.QuizHistoryListResponse;
 import com.bigbro.wwooss.v1.entity.quiz.Quiz;
 import com.bigbro.wwooss.v1.entity.quiz.QuizHistory;
-import com.bigbro.wwooss.v1.entity.token.Token;
 import com.bigbro.wwooss.v1.enumType.QuizStatusType;
 import com.bigbro.wwooss.v1.repository.user.UserRepository;
 import com.bigbro.wwooss.v1.service.quizHistory.QuizHistoryService;
@@ -55,10 +54,6 @@ class QuizHistoryApiTest {
     void getQuizHistoryList() throws Exception {
 
         // given
-        Token token = Token.builder()
-                .tokenId(1L)
-                .value(1.0D)
-                .build();
         Quiz quiz = Quiz.builder()
                 .quizId(1L)
                 .tokenValue(1.0D)

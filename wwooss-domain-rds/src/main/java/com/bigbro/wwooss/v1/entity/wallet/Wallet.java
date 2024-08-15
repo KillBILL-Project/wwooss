@@ -1,6 +1,6 @@
 package com.bigbro.wwooss.v1.entity.wallet;
 
-import com.bigbro.wwooss.v1.entity.token.Token;
+import com.bigbro.wwooss.v1.entity.token.WwoossToken;
 import com.bigbro.wwooss.v1.entity.user.User;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -30,7 +30,7 @@ public class Wallet {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "wallet")
     @Builder.Default
-    private List<Token> tokenList = new ArrayList<>();
+    private List<WwoossToken> wwoossTokenList = new ArrayList<>();
 
 
     public static Wallet from(User user) {
