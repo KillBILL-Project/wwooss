@@ -12,6 +12,8 @@ public class ImageUtil {
     private final String COMPLIMENT_CARD_PATH = "compliment_card";
     private final String TRASH_PATH = "trash";
 
+    private final String QUIZ_PATH = "quiz";
+
     private final String WWOOSS_LOGO = "logo";
 
     public String baseComplimentCardImagePath() {
@@ -20,6 +22,10 @@ public class ImageUtil {
 
     public String baseTrashImagePath() {
         return imageBase + TRASH_PATH + "/";
+    }
+
+    public String baseQuizImagePath() {
+        return imageBase + QUIZ_PATH + "/";
     }
 
     public String wwoossBlackLogo() {return imageBase + WWOOSS_LOGO + "/" + "black_logo.png";}

@@ -77,7 +77,6 @@ class QuizHistoryApiTest {
                         .contextPath("/api")
                         .param("size", "10")
                         .param("page", "0")
-                        .param("direction", "DESC")
                         .contentType(MediaType.APPLICATION_JSON)
                 )
                 .andExpect(status().isOk())
@@ -96,13 +95,12 @@ class QuizHistoryApiTest {
                                         fieldWithPath("code").description("응답 코드"),
                                         fieldWithPath("title").description("응답 코드 별 클라이언트 노출 제목"),
                                         fieldWithPath("message").description("응답 코드 별 클라이언트 노출 메세지"),
-                                        fieldWithPath("data.hasNext").description("다음 페이지 존재"),
-                                        fieldWithPath("data.quizHistoryListResponse.hasNext").description("다음 페이지 여부"),
-                                        fieldWithPath("data.quizHistoryListResponse.quizHistoryInfoList[].quizHistoryId").description("Quiz History ID"),
-                                        fieldWithPath("data.quizHistoryListResponse.quizHistoryInfoList[].quizId").description("Quiz ID"),
-                                        fieldWithPath("data.quizHistoryListResponse.quizHistoryInfoList[].status").description("Quiz Status - [UNSOLVED/PASS/FAIL/ISSUED]"),
-                                        fieldWithPath("data.quizHistoryListResponse.quizHistoryInfoList[].tokenValue").description("토큰 값"),
-                                        fieldWithPath("data.quizHistoryListResponse.quizHistoryInfoList[].createdAt").description("생성 날짜")
+                                        fieldWithPath("data.hasNext").description("다음 페이지 여부"),
+                                        fieldWithPath("data.quizHistoryInfoList[].quizHistoryId").description("Quiz History ID"),
+                                        fieldWithPath("data.quizHistoryInfoList[].quizId").description("Quiz ID"),
+                                        fieldWithPath("data.quizHistoryInfoList[].status").description("Quiz Status - [UNSOLVED - 안푼문제], [PASS - 정답], [FAIL - 실패], [ISSUED - 토큰 발급 완료]]"),
+                                        fieldWithPath("data.quizHistoryInfoList[].tokenValue").description("토큰 값"),
+                                        fieldWithPath("data.quizHistoryInfoList[].createdAt").description("생성 날짜")
                                 )
                         )
                 );

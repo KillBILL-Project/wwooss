@@ -8,8 +8,8 @@ import java.util.List;
 @Builder
 @Getter
 public class QuizHistoryListResponse {
-    private Boolean hasNext;
 
+    private Boolean hasNext;
 
     private List<QuizHistoryInfo> quizHistoryInfoList;
 
