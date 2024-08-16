@@ -24,7 +24,7 @@ public class QuizResponse {
                 .question(quiz.getQuestion())
                 .quizType(quiz.getType())
                 .correctRate(correctRate)
-                .imagePath(imagePath)
+                .imagePath(imagePath + quiz.getQuizImagePath())
                 .options(options)
                 .build();
     }
