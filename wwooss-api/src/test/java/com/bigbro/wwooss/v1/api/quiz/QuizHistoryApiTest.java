@@ -61,7 +61,7 @@ class QuizApiTest {
                 .optionId(2L)
                 .build());
 
-        given(this.quizService.findQuiz(any())).willReturn(QuizResponse.of(quiz, 45D, "image", options));
+        given(this.quizService.findQuiz(any())).willReturn(QuizResponse.of(quiz, 45L, "image", options));
 
         this.mockMvc.perform(RestDocumentationRequestBuilders.get("/api/v1/quiz/{quiz-id}", 1L)
                         .with(csrf().asHeader())

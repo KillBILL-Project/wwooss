@@ -12,6 +12,7 @@ import com.bigbro.wwooss.v1.repository.quiz.QuizRepository;
 import com.bigbro.wwooss.v1.repository.quizHistory.QuizHistoryRepository;
 import com.bigbro.wwooss.v1.repository.user.UserRepository;
 import com.bigbro.wwooss.v1.response.WwoossResponseCode;
+import com.bigbro.wwooss.v1.service.RedisService;
 import com.bigbro.wwooss.v1.service.quiz.QuizService;
 import com.bigbro.wwooss.v1.utils.ImageUtil;
 import lombok.AccessLevel;
@@ -31,6 +32,8 @@ public class QuizServiceImpl implements QuizService {
 
     private final UserRepository userRepository;
 
+    private final RedisService redisService;
+
     private final ImageUtil imageUtil;
 
     @Override
@@ -40,7 +43,12 @@ public class QuizServiceImpl implements QuizService {
         List<QuizOption> quizOptionList = quiz.getQuizOptionList();
         List<OptionResponse> options = quizOptionList.stream().map(OptionResponse::from).toList();
 
-        return QuizResponse.of(quiz, 1.0D, imageUtil.baseQuizImagePath(), options);
+        Long quizCorrectRate = redisService.getQuizCorrectRate(quizId);
+        if(quizCorrectRate == -1) {
+            quizCorrectRate = createDefaultCorrectRate();
+        }
+
+        return QuizResponse.of(quiz, quizCorrectRate, imageUtil.baseQuizImagePath(), options);
     }
 
     @Override
@@ -55,6 +63,17 @@ public class QuizServiceImpl implements QuizService {
         QuizStatusType result = isPass ? QuizStatusType.PASS : QuizStatusType.FAIL;
         quizHistory.updateQuizStatus(result);
 
+        // quiz correct rate update
+        redisService.updateQuizCorrectRate(quizId, isPass);
+
         return result;
+    }
+
+    private Long createDefaultCorrectRate() {
+        Long correctCnt = quizHistoryRepository.countQuizHistoryByStatus(QuizStatusType.PASS);
+        Long totalCnt = quizHistoryRepository.countQuizHistoryByStatusOrStatus(QuizStatusType.PASS, QuizStatusType.FAIL);
+        redisService.createDefaultQuizCorrectRate(totalCnt, correctCnt);
+
+        return (correctCnt * 100) / totalCnt;
     }
 }
