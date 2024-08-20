@@ -15,6 +15,7 @@ spring:
     import:
       - application-rds.yaml
       - application-es.yaml
+      - application-redis.yaml
   mail:
     host: ENC(z3tvDgt/YAjyPkKQM0CCxZa3IkK99lwr)
     port: 587
@@ -51,6 +52,7 @@ spring:
     import:
       - application-rds.yaml
       - application-es.yaml
+      - application-redis.yaml
   mail:
     host: ENC(vXkNpYTZWDakGdn9+ORj/Qpe8vlvjDIF)
     port: 587
@@ -87,6 +89,7 @@ spring:
     import:
       - application-rds.yaml
       - application-es.yaml
+      - application-redis.yaml
   mail:
     host: ENC(HzbajL3yXiEh2GBzGApbmkAzJ1rjagyx)
     port: 587
@@ -123,4 +126,5 @@ spring:
     import:
       - application-rds.yaml
       - application-es.yaml
+      - application-redis.yaml
 
