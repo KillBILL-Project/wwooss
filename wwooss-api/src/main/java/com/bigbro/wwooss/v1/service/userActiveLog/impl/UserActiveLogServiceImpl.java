@@ -34,8 +34,9 @@ public class UserActiveLogServiceImpl implements UserActiveLogService {
 
     @Override
     @Transactional
-    public void verifiedLog(Long logId) {
+    public UserActiveLogResponse verifiedLog(Long logId) {
         UserActiveLog userActiveLog = userActiveLogRepository.findById(logId).orElseThrow(() -> new DataNotFoundException(WwoossResponseCode.NOT_FOUND_DATA, "존재하지 않는 활동 로그입니다."));
         userActiveLog.updateVerified(true);
+        return UserActiveLogResponse.from(userActiveLog);
     }
 }

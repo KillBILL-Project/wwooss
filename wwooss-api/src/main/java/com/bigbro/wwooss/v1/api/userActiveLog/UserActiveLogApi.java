@@ -28,8 +28,7 @@ public class UserActiveLogApi {
     }
 
     @PatchMapping("/{user-active-log-id}")
-    public ResponseEntity<WwoossResponse<Void>> verifiedLog(@PathVariable("user-active-log-id") Long userActiveLogId) {
-        userActiveLogService.verifiedLog(userActiveLogId);
-        return WwoossResponseUtil.responseOkNoData();
+    public ResponseEntity<WwoossResponse<UserActiveLogResponse>> verifiedLog(@PathVariable("user-active-log-id") Long userActiveLogId) {
+        return WwoossResponseUtil.responseOkAddData(userActiveLogService.verifiedLog(userActiveLogId));
     }
 }

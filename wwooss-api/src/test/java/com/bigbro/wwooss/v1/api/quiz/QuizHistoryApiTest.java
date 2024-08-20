@@ -28,6 +28,8 @@ import static org.springframework.restdocs.headers.HeaderDocumentation.headerWit
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -112,6 +114,9 @@ class QuizApiTest {
                                 resourceDetails().tags("Quiz 풀기"),
                                 DocumentConfig.getDocumentRequest(),
                                 DocumentConfig.getDocumentResponse(),
+                                requestParameters(
+                                        parameterWithName("answer").description("option에 제공됐던 벨류")
+                                ),
                                 requestHeaders(
                                         headerWithName("Authorization").description("인증 토큰")
                                 ),

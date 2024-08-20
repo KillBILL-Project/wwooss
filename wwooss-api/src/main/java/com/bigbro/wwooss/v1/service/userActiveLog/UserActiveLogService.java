@@ -7,5 +7,5 @@ public interface UserActiveLogService {
 
     UserActiveLogResponse recordActiveLog(ActiveLogType activeLogType, Long userId);
 
-    void verifiedLog(Long logId);
+    UserActiveLogResponse verifiedLog(Long logId);
 }

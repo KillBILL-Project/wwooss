@@ -92,6 +92,12 @@ class UserActiveLogApiTest {
     @DisplayName("유저 활동 인증")
     void verifiedLog() throws Exception {
 
+        given(this.userActiveLogService.verifiedLog(any())).willReturn(UserActiveLogResponse.from(UserActiveLog.builder()
+                .userActiveLogId(1L)
+                .value(100D)
+                .contents("퀴즈 활동")
+                .build()));
+
         this.mockMvc.perform(RestDocumentationRequestBuilders.patch("/api/v1/user-active-log/{user-active-log-id}", 1L)
                         .with(csrf().asHeader())
                         .header("Authorization", "bearer TEST_ACCESS")
@@ -110,7 +116,9 @@ class UserActiveLogApiTest {
                                         fieldWithPath("code").description("응답 코드"),
                                         fieldWithPath("title").description("응답 코드 별 클라이언트 노출 제목"),
                                         fieldWithPath("message").description("응답 코드 별 클라이언트 노출 메세지"),
-                                        fieldWithPath("data").description("응답 데이터 없음")
+                                        fieldWithPath("data.userActiveLogId").description("유저 활동 로그 ID"),
+                                        fieldWithPath("data.value").description("활동 value"),
+                                        fieldWithPath("data.contents").description("활동 내용")
                                 )
                         )
                 );
