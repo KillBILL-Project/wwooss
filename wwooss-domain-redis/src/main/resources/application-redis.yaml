@@ -19,7 +19,7 @@ spring:
     activate:
       on-profile: develop
   redis:
-    host: wwooss_redis
+    host: redis
     port: 6379
 
 
