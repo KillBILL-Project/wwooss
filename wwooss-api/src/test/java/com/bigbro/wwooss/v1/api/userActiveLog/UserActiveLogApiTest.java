@@ -4,7 +4,6 @@ import com.bigbro.wwooss.v1.annotation.TestController;
 import com.bigbro.wwooss.v1.annotation.WithMockCustomUser;
 import com.bigbro.wwooss.v1.config.DocumentConfig;
 import com.bigbro.wwooss.v1.dto.request.userActiveLog.RecordLogRequest;
-import com.bigbro.wwooss.v1.dto.response.quiz.QuizResponse;
 import com.bigbro.wwooss.v1.dto.response.userActiveLog.UserActiveLogResponse;
 import com.bigbro.wwooss.v1.entity.userActiveLog.UserActiveLog;
 import com.bigbro.wwooss.v1.enumType.ActiveLogType;
@@ -42,6 +41,66 @@ class UserActiveLogApiTest {
     private UserActiveLogService userActiveLogService;
 
     private final ObjectMapper objectMapper = new ObjectMapper();
+
+    @Test
+    @WithMockCustomUser
+    @DisplayName("유저 활동 로그 벨류 총합")
+    void getActiveLogTotalValue() throws Exception {
+        given(userActiveLogService.getActiveLogTotalValue(any())).willReturn(10.5D);
+
+        this.mockMvc.perform(RestDocumentationRequestBuilders.get("/api/v1/user-active-log")
+                        .with(csrf().asHeader())
+                        .contextPath("/api")
+                        .header("Authorization", "bearer TEST_ACCESS")
+                        .contentType(MediaType.APPLICATION_JSON)
+                )
+                .andExpect(status().isOk())
+                .andDo(document("get-user-active-log",
+                                resourceDetails().tags("유저 활동 로그 벨류 총합"),
+                                DocumentConfig.getDocumentRequest(),
+                                DocumentConfig.getDocumentResponse(),
+                                requestHeaders(
+                                        headerWithName("Authorization").description("인증 토큰")
+                                ),
+                                responseFields(
+                                        fieldWithPath("code").description("응답 코드"),
+                                        fieldWithPath("title").description("응답 코드 별 클라이언트 노출 제목"),
+                                        fieldWithPath("message").description("응답 코드 별 클라이언트 노출 메세지"),
+                                        fieldWithPath("data").description("활동 로그 벨류 총합")
+                                )
+                        )
+                );
+    }
+
+    @Test
+    @WithMockCustomUser
+    @DisplayName("인증된 유저 활동 로그 벨류 총합")
+    void getVerifiedLogTotalValue() throws Exception {
+        given(userActiveLogService.getVerifiedLogTotalValue(any())).willReturn(10.5D);
+
+        this.mockMvc.perform(RestDocumentationRequestBuilders.get("/api/v1/user-active-log/verified")
+                        .with(csrf().asHeader())
+                        .contextPath("/api")
+                        .header("Authorization", "bearer TEST_ACCESS")
+                        .contentType(MediaType.APPLICATION_JSON)
+                )
+                .andExpect(status().isOk())
+                .andDo(document("get-verified-user-active-log",
+                                resourceDetails().tags("인증된 유저 활동 로그 벨류 총합"),
+                                DocumentConfig.getDocumentRequest(),
+                                DocumentConfig.getDocumentResponse(),
+                                requestHeaders(
+                                        headerWithName("Authorization").description("인증 토큰")
+                                ),
+                                responseFields(
+                                        fieldWithPath("code").description("응답 코드"),
+                                        fieldWithPath("title").description("응답 코드 별 클라이언트 노출 제목"),
+                                        fieldWithPath("message").description("응답 코드 별 클라이언트 노출 메세지"),
+                                        fieldWithPath("data").description("인증된 활동 로그 벨류 총합")
+                                )
+                        )
+                );
+    }
 
     @Test
     @WithMockCustomUser
@@ -98,7 +157,7 @@ class UserActiveLogApiTest {
                 .contents("퀴즈 활동")
                 .build()));
 
-        this.mockMvc.perform(RestDocumentationRequestBuilders.patch("/api/v1/user-active-log/{user-active-log-id}", 1L)
+        this.mockMvc.perform(RestDocumentationRequestBuilders.patch("/api/v1/user-active-log/{user-active-log-id}/verified", 1L)
                         .with(csrf().asHeader())
                         .header("Authorization", "bearer TEST_ACCESS")
                         .contextPath("/api")

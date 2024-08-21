@@ -19,6 +19,16 @@ public class UserActiveLogApi {
 
     private final UserActiveLogService userActiveLogService;
 
+    @GetMapping
+    public ResponseEntity<WwoossResponse<Double>> getActiveLogTotalValue(UserCredential userCredential) {
+        return WwoossResponseUtil.responseOkAddData(userActiveLogService.getActiveLogTotalValue(userCredential.getUserId()));
+    }
+
+    @GetMapping("/verified")
+    public ResponseEntity<WwoossResponse<Double>> getVerifiedLogTotalValue(UserCredential userCredential) {
+        return WwoossResponseUtil.responseOkAddData(userActiveLogService.getVerifiedLogTotalValue(userCredential.getUserId()));
+    }
+
     @PostMapping
     public ResponseEntity<WwoossResponse<UserActiveLogResponse>> recordLog(@Valid @RequestBody RecordLogRequest recordLogRequest
             , UserCredential userCredential) {
@@ -27,7 +37,7 @@ public class UserActiveLogApi {
                 userCredential.getUserId()));
     }
 
-    @PatchMapping("/{user-active-log-id}")
+    @PatchMapping("/{user-active-log-id}/verified")
     public ResponseEntity<WwoossResponse<UserActiveLogResponse>> verifiedLog(@PathVariable("user-active-log-id") Long userActiveLogId) {
         return WwoossResponseUtil.responseOkAddData(userActiveLogService.verifiedLog(userActiveLogId));
     }
