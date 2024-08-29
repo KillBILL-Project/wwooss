@@ -78,10 +78,10 @@ public class QuizServiceImpl implements QuizService {
     public Quiz saveQuiz(QuizDBResultProperty properties) {
         String answer = properties.getAnswer().getRich_text().get(0).getPlain_text();
         String question = properties.getQuestion().getRich_text().get(0).getPlain_text();
-        String imagePath = properties.getImage().getFiles().get(0).getFile().getUrl();
+        String imagePath = properties.getImage().getRich_text().get(0).getPlain_text();
         String quizType = properties.getType().getSelect().getName();
 
-        return quizRepository.save(Quiz.from(answer, question, "https://wwooss-dev.s3.ap-northeast-2.amazonaws.com/quiz/quizImage.png",
+        return quizRepository.save(Quiz.from(answer, question, imagePath,
                 IssueType.QUIZ.getValue(), QuizType.valueOf(quizType), false));
     }
 
