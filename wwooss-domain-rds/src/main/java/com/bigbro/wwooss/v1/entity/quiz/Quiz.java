@@ -52,9 +52,21 @@ public class Quiz extends BaseEntity  {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "quiz")
     @Builder.Default
-    private List<QuizHistory> quizHistoryList = new ArrayList<>();
-
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "quiz")
-    @Builder.Default
     private List<QuizOption> quizOptionList = new ArrayList<>();
+
+    public void updateOpenStatus(boolean open) {
+        this.open = open;
+    }
+
+    public static Quiz from(String answer, String question, String quizImagePath,
+                            Double tokenValue, QuizType quizType, Boolean open) {
+        return Quiz.builder()
+                .open(open)
+                .answer(answer)
+                .question(question)
+                .quizImagePath(quizImagePath)
+                .tokenValue(tokenValue)
+                .type(quizType)
+                .build();
+    }
 }

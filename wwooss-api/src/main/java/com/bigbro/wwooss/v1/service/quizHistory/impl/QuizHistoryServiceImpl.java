@@ -2,8 +2,10 @@ package com.bigbro.wwooss.v1.service.quizHistory.impl;
 
 import com.bigbro.wwooss.v1.dto.response.quizHistory.QuizHistoryInfo;
 import com.bigbro.wwooss.v1.dto.response.quizHistory.QuizHistoryListResponse;
+import com.bigbro.wwooss.v1.entity.quiz.Quiz;
 import com.bigbro.wwooss.v1.entity.quiz.QuizHistory;
 import com.bigbro.wwooss.v1.entity.user.User;
+import com.bigbro.wwooss.v1.enumType.QuizStatusType;
 import com.bigbro.wwooss.v1.exception.DataNotFoundException;
 import com.bigbro.wwooss.v1.repository.quizHistory.QuizHistoryRepository;
 import com.bigbro.wwooss.v1.repository.user.UserRepository;
@@ -16,6 +18,7 @@ import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -34,5 +37,15 @@ public class QuizHistoryServiceImpl implements QuizHistoryService {
 
         List<QuizHistoryInfo> quizHistoryInfoList = quizHistoryList.getContent().stream().map(QuizHistoryInfo::of).toList();
         return QuizHistoryListResponse.of(quizHistoryList.hasNext(), quizHistoryInfoList);
+    }
+
+    @Override
+    @Transactional
+    public void createQuizHistoryAllUser(Quiz quiz) {
+        List<User> allUser = userRepository.findAll();
+        List<QuizHistory> quizHistoryList = new ArrayList<>();
+
+        allUser.forEach((user) -> quizHistoryList.add(QuizHistory.of(user, quiz, QuizStatusType.UNSOLVED)));
+        quizHistoryRepository.saveAll(quizHistoryList);
     }
 }

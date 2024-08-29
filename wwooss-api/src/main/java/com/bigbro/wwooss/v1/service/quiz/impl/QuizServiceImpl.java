@@ -1,12 +1,16 @@
 package com.bigbro.wwooss.v1.service.quiz.impl;
 
 import com.bigbro.wwooss.v1.dto.option.OptionResponse;
+import com.bigbro.wwooss.v1.dto.response.notion.QuizDBResultProperty;
+import com.bigbro.wwooss.v1.dto.response.notion.QuizDBRichText;
 import com.bigbro.wwooss.v1.dto.response.quiz.QuizResponse;
 import com.bigbro.wwooss.v1.entity.quiz.Quiz;
 import com.bigbro.wwooss.v1.entity.quiz.QuizHistory;
 import com.bigbro.wwooss.v1.entity.quiz.QuizOption;
 import com.bigbro.wwooss.v1.entity.user.User;
+import com.bigbro.wwooss.v1.enumType.IssueType;
 import com.bigbro.wwooss.v1.enumType.QuizStatusType;
+import com.bigbro.wwooss.v1.enumType.QuizType;
 import com.bigbro.wwooss.v1.exception.DataNotFoundException;
 import com.bigbro.wwooss.v1.repository.quiz.QuizRepository;
 import com.bigbro.wwooss.v1.repository.quizHistory.QuizHistoryRepository;
@@ -67,6 +71,24 @@ public class QuizServiceImpl implements QuizService {
         redisService.updateQuizCorrectRate(quizId, isPass);
 
         return result;
+    }
+
+    @Override
+    @Transactional
+    public Quiz saveQuiz(QuizDBResultProperty properties) {
+        String answer = properties.getAnswer().getRich_text().get(0).getPlain_text();
+        String question = properties.getQuestion().getRich_text().get(0).getPlain_text();
+        String imagePath = properties.getImage().getFiles().get(0).getFile().getUrl();
+        String quizType = properties.getType().getSelect().getName();
+
+        return quizRepository.save(Quiz.from(answer, question, "https://wwooss-dev.s3.ap-northeast-2.amazonaws.com/quiz/quizImage.png",
+                IssueType.QUIZ.getValue(), QuizType.valueOf(quizType), false));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Quiz findNewQuiz() {
+        return quizRepository.findOneByOpenFalseOrderByCreatedAtAsc();
     }
 
     private Long createDefaultCorrectRate() {

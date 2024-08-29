@@ -8,10 +8,7 @@ import com.bigbro.wwooss.v1.response.WwoossResponseUtil;
 import com.bigbro.wwooss.v1.service.wwoossToken.WwoossTokenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -27,4 +24,5 @@ public class WwoossTokenApi {
         wwoossTokenService.issueWwoossToken(userCredential.getUserId(), issueTokenRequest.getIssueType());
         return WwoossResponseUtil.responseCreatedNoData();
     }
+
 }

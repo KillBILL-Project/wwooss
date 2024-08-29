@@ -39,4 +39,12 @@ public class QuizHistory extends BaseEntity {
     public void updateQuizStatus(QuizStatusType status) {
         this.status = status;
     }
+
+    public static QuizHistory of(User user, Quiz quiz, QuizStatusType status) {
+        return QuizHistory.builder()
+                .user(user)
+                .quiz(quiz)
+                .status(status)
+                .build();
+    }
 }

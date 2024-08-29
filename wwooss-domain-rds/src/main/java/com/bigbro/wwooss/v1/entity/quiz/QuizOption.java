@@ -29,4 +29,10 @@ public class QuizOption extends BaseEntity  {
     @JoinColumn(name = "quiz_id")
     private Quiz quiz;
 
+    public static QuizOption of(Quiz quiz, String value) {
+        return QuizOption.builder()
+                .quiz(quiz)
+                .value(value)
+                .build();
+    }
 }
