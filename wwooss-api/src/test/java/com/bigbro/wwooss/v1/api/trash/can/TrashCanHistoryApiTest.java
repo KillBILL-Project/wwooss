@@ -148,5 +148,34 @@ class TrashCanHistoryApiTest {
                 );
     }
 
+    @Test
+    @WithMockCustomUser
+    @DisplayName("총 환급금 조회")
+    void findTotalRefund() throws Exception {
+
+        this.mockMvc.perform(RestDocumentationRequestBuilders.get("/api/v1/trash-can-histories/total-refund")
+                        .with(csrf().asHeader())
+                        .contextPath("/api")
+                        .header("Authorization", "bearer TEST_ACCESS")
+                        .contentType(MediaType.APPLICATION_JSON)
+                )
+                .andExpect(status().isOk())
+                .andDo(document("get-total-refund",
+                                resourceDetails().tags("쓰레기통 비우기에 따른 총 환급금 조회"),
+                                DocumentConfig.getDocumentRequest(),
+                                DocumentConfig.getDocumentResponse(),
+                                requestHeaders(
+                                        headerWithName("Authorization").description("인증 토큰")
+                                ),
+                                responseFields(
+                                        fieldWithPath("code").description("응답 코드"),
+                                        fieldWithPath("title").description("응답 코드 별 클라이언트 노출 제목"),
+                                        fieldWithPath("message").description("응답 코드 별 클라이언트 노출 메세지"),
+                                        fieldWithPath("data").description("환급금 총액")
+                                )
+                        )
+                );
+    }
+
 
 }

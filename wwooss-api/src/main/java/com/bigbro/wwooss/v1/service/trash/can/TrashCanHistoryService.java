@@ -38,4 +38,9 @@ public interface TrashCanHistoryService {
      */
     EmptyTrashResultResponse findTrashCanHistoryDetail(Long userId, Long trashCanHistoryId);
 
+    /**
+     * 쓰레기통 비우기에 따른 총 반환금
+     */
+    Long findTotalRefund(Long userId);
+
 }

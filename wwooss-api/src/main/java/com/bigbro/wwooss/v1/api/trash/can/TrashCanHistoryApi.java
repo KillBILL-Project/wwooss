@@ -44,4 +44,8 @@ public class TrashCanHistoryApi {
         return WwoossResponseUtil.responseOkAddData(trashCanHistoryService.findTrashCanHistoryDetail(userCredential.getUserId(), trashCanHistoryId));
     }
 
+    @GetMapping("/total-refund")
+    public ResponseEntity<WwoossResponse<Long>> findTotalRefund(UserCredential userCredential) {
+        return WwoossResponseUtil.responseOkAddData(trashCanHistoryService.findTotalRefund(userCredential.getUserId()));
+    }
 }

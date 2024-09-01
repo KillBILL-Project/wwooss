@@ -23,6 +23,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -112,5 +113,15 @@ public class TrashCanHistoryServiceImpl implements TrashCanHistoryService {
         TrashOutput trashOutput = getTrashOutput(trashInfoList);
 
         return getEmptyTrashResultResponse(trashOutput, trashCanHistory.getTrashCanHistoryId());
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Long findTotalRefund(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new DataNotFoundException(WwoossResponseCode.NOT_FOUND_DATA, "존재하지 않는 유저입니다."));
+        List<TrashCanHistory> trashCanHistories = trashCanHistoryRepository.findAllByUser(user);
+        return trashCanHistories.stream()
+                .map(TrashCanHistory::getRefund)
+                .reduce(0L, Long::sum);
     }
 }
