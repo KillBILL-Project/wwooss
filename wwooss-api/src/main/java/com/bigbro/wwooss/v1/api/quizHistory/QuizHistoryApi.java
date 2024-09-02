@@ -9,9 +9,7 @@ import com.bigbro.wwooss.v1.service.quizHistory.QuizHistoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/v1/quiz-history")
@@ -24,5 +22,11 @@ public class QuizHistoryApi {
     public ResponseEntity<WwoossResponse<QuizHistoryListResponse>> getQuizHistory(Pageable pageable,
                                                                                   UserCredential userCredential) {
         return WwoossResponseUtil.responseOkAddData(quizHistoryService.getQuizHistoryList(userCredential.getUserId(), pageable));
+    }
+
+    @PatchMapping("/{quiz-history-id}/issued-status")
+    public ResponseEntity<WwoossResponse<Void>> updateStatusToIssued(@PathVariable("quiz-history-id") Long quizHistoryId) {
+        quizHistoryService.updateStatusToIssued(quizHistoryId);
+        return WwoossResponseUtil.responseOkNoData();
     }
 }

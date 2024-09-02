@@ -14,5 +14,15 @@ public interface QuizHistoryService {
      */
     QuizHistoryListResponse getQuizHistoryList(Long userId, Pageable pageable);
 
+    /**
+     * 배치에 의한 모든 유저 퀴즈 생성
+     * @param quiz
+     */
     void createQuizHistoryAllUser(Quiz quiz);
+
+    /**
+     *  quiz 발급된 상태로 변경
+     * @param quizHistoryId
+     */
+    void updateStatusToIssued(Long quizHistoryId);
 }

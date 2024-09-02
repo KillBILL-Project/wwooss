@@ -102,4 +102,32 @@ class QuizHistoryApiTest {
                         )
                 );
     }
+
+    @Test
+    @WithMockCustomUser
+    @DisplayName("발급 상태로 변경")
+    void updateQuizHistoryStatus() throws Exception {
+        this.mockMvc.perform(RestDocumentationRequestBuilders.patch("/api/v1/quiz-history/{quiz-history-id}/issued-status", 1L)
+                        .with(csrf().asHeader())
+                        .header("Authorization", "bearer TEST_ACCESS")
+                        .contextPath("/api")
+                        .contentType(MediaType.APPLICATION_JSON)
+                )
+                .andExpect(status().isOk())
+                .andDo(document("update-quiz-history-status",
+                                resourceDetails().tags("발급 상태로 변경"),
+                                DocumentConfig.getDocumentRequest(),
+                                DocumentConfig.getDocumentResponse(),
+                                requestHeaders(
+                                        headerWithName("Authorization").description("인증 토큰")
+                                ),
+                                responseFields(
+                                        fieldWithPath("code").description("응답 코드"),
+                                        fieldWithPath("title").description("응답 코드 별 클라이언트 노출 제목"),
+                                        fieldWithPath("message").description("응답 코드 별 클라이언트 노출 메세지"),
+                                        fieldWithPath("data").description("응답 데이터 없음")
+                                )
+                        )
+                );
+    }
 }

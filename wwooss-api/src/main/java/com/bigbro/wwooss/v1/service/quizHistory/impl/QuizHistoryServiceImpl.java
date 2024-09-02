@@ -48,4 +48,13 @@ public class QuizHistoryServiceImpl implements QuizHistoryService {
         allUser.forEach((user) -> quizHistoryList.add(QuizHistory.of(user, quiz, QuizStatusType.UNSOLVED)));
         quizHistoryRepository.saveAll(quizHistoryList);
     }
+
+    @Override
+    @Transactional
+    public void updateStatusToIssued(Long quizHistoryId) {
+        QuizHistory quizHistory = quizHistoryRepository.findQuizHistoryByQuizHistoryId(quizHistoryId)
+                .orElseThrow(() -> new DataNotFoundException(WwoossResponseCode.NOT_FOUND_DATA, "존재하지 않는 퀴즈기록입니다.."));
+
+        quizHistory.updateQuizStatus(QuizStatusType.ISSUED);
+    }
 }

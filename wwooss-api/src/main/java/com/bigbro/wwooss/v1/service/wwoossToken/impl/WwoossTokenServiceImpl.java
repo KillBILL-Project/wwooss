@@ -1,10 +1,12 @@
 package com.bigbro.wwooss.v1.service.wwoossToken.impl;
 
+import com.bigbro.wwooss.v1.dto.response.wwoossToken.IssuedWwoossToken;
 import com.bigbro.wwooss.v1.entity.token.WwoossToken;
 import com.bigbro.wwooss.v1.entity.user.User;
 import com.bigbro.wwooss.v1.entity.wallet.Wallet;
 import com.bigbro.wwooss.v1.enumType.IssueType;
 import com.bigbro.wwooss.v1.exception.DataNotFoundException;
+import com.bigbro.wwooss.v1.repository.quizHistory.QuizHistoryRepository;
 import com.bigbro.wwooss.v1.repository.user.UserRepository;
 import com.bigbro.wwooss.v1.repository.wallet.WalletRepository;
 import com.bigbro.wwooss.v1.repository.wwoossToken.WwoossTokenRepository;
@@ -28,11 +30,13 @@ public class WwoossTokenServiceImpl implements WwoossTokenService {
 
     @Override
     @Transactional
-    public void issueWwoossToken(Long userId, IssueType issueType) {
+    public IssuedWwoossToken issueWwoossToken(Long userId, IssueType issueType) {
         User user = userRepository.findById(userId).orElseThrow(() -> new DataNotFoundException(WwoossResponseCode.NOT_FOUND_DATA, "유저를 찾을 수 없습니다."));
         Wallet wallet = walletRepository.findByUser(user).orElseThrow(() -> new DataNotFoundException(WwoossResponseCode.NOT_FOUND_DATA, "유저를 찾을 수 없습니다."));
 
         WwoossToken wwoossToken = WwoossToken.of(issueType, wallet);
-        wwoossTokenRepository.save(wwoossToken);
+        WwoossToken savedToken = wwoossTokenRepository.save(wwoossToken);
+        return IssuedWwoossToken.from(savedToken);
     }
+
 }

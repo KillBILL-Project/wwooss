@@ -4,6 +4,7 @@ import com.bigbro.wwooss.v1.annotation.TestController;
 import com.bigbro.wwooss.v1.annotation.WithMockCustomUser;
 import com.bigbro.wwooss.v1.config.DocumentConfig;
 import com.bigbro.wwooss.v1.dto.request.wwoossToken.IssueTokenRequest;
+import com.bigbro.wwooss.v1.dto.response.wwoossToken.IssuedWwoossToken;
 import com.bigbro.wwooss.v1.enumType.IssueType;
 import com.bigbro.wwooss.v1.service.wwoossToken.WwoossTokenService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -19,6 +20,8 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.document;
 import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.resourceDetails;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
@@ -48,6 +51,12 @@ class WwoossTokenApiTest {
         IssueTokenRequest issueTokenRequest = IssueTokenRequest.builder()
                 .issueType(IssueType.QUIZ)
                 .build();
+        IssuedWwoossToken issuedWwoossToken = IssuedWwoossToken.builder()
+                .wwoossTokenId(1L)
+                .issueType(IssueType.QUIZ)
+                .value(10D)
+                .build();
+        given(this.wwoossTokenService.issueWwoossToken(any(), any())).willReturn(issuedWwoossToken);
 
         this.mockMvc.perform(RestDocumentationRequestBuilders.post("/api/v1/wwooss-token")
                         .with(csrf().asHeader())
@@ -71,7 +80,9 @@ class WwoossTokenApiTest {
                                         fieldWithPath("code").description("응답 코드"),
                                         fieldWithPath("title").description("응답 코드 별 클라이언트 노출 제목"),
                                         fieldWithPath("message").description("응답 코드 별 클라이언트 노출 메세지"),
-                                        fieldWithPath("data").description("응답 데이터 없음")
+                                        fieldWithPath("data.wwoossTokenId").description("발급된 토크 ID"),
+                                        fieldWithPath("data.issueType").description("발급된 토큰 유형"),
+                                        fieldWithPath("data.value").description("발급된 토큰 값")
                                 )
                         )
                 );

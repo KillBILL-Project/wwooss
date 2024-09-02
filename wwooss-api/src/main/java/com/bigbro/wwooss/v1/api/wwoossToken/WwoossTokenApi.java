@@ -3,6 +3,7 @@ package com.bigbro.wwooss.v1.api.wwoossToken;
 
 import com.bigbro.wwooss.v1.dto.request.user.UserCredential;
 import com.bigbro.wwooss.v1.dto.request.wwoossToken.IssueTokenRequest;
+import com.bigbro.wwooss.v1.dto.response.wwoossToken.IssuedWwoossToken;
 import com.bigbro.wwooss.v1.response.WwoossResponse;
 import com.bigbro.wwooss.v1.response.WwoossResponseUtil;
 import com.bigbro.wwooss.v1.service.wwoossToken.WwoossTokenService;
@@ -20,9 +21,8 @@ public class WwoossTokenApi {
     private final WwoossTokenService wwoossTokenService;
 
     @PostMapping
-    public ResponseEntity<WwoossResponse<Void>> issueToken(UserCredential userCredential, @Valid @RequestBody IssueTokenRequest issueTokenRequest) {
-        wwoossTokenService.issueWwoossToken(userCredential.getUserId(), issueTokenRequest.getIssueType());
-        return WwoossResponseUtil.responseCreatedNoData();
+    public ResponseEntity<WwoossResponse<IssuedWwoossToken>> issueToken(UserCredential userCredential, @Valid @RequestBody IssueTokenRequest issueTokenRequest) {
+        return WwoossResponseUtil.responseCreatedAddData(wwoossTokenService.issueWwoossToken(userCredential.getUserId(), issueTokenRequest.getIssueType()));
     }
 
 }
