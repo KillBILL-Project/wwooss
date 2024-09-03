@@ -130,7 +130,7 @@ aws:
       path: ENC(qWQGO1g00ajfjWhHOTLaEByBilWWF/UNW2tEUl1HKf18OQn0EyZ9xQYvS8JI8GiT)
 notion:
   key: ENC(nVX+ECdBE/UplvrsVbfOytaFD8mRpZ4TpHzTlj8nHfqax4lBG+xXA4FAZoVw4Tm9dGM9jPeNOaPlguc2+QShTg==)
-  database-id: ENC(Ck3p/cYtMcIlww7Vq3g34PixpW8mJdZmtYlMrqc2g7KpFbgX5suE3qrxdP7rgPvk)
+  database-id: ENC(rIntZPan64ruMKnCwpN2nmBDYI382kCNObFbzSd7zDsVHaB7kNSSzenkJhCF1mar)
   database-query-url: https://api.notion.com/v1/databases/{database-id}/query
   database-update-url: https://api.notion.com/v1/pages/{page-id}
   version: 2022-06-28
