@@ -30,5 +30,5 @@ spring:
     activate:
       on-profile: prod
   redis:
-    host: wwooss_redis
+    host: ec2-3-38-150-8.ap-northeast-2.compute.amazonaws.com
     port: 6379
