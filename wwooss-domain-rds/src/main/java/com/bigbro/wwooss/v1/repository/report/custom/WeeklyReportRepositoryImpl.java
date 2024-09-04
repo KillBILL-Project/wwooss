@@ -45,7 +45,7 @@ public class WeeklyReportRepositoryImpl implements WeeklyReportRepositoryCustom 
 
     private BooleanExpression searchLastWeekReport() {
         LocalDate today = LocalDate.now();
-        LocalDate lastWeekDate = today.minusDays(14); // 예) 20일 리포트를 27일에 생성하기 때문에 이 전 데이터는 14일 전인 6일 데이터
+        LocalDate lastWeekDate = today.minusDays(7);
 
         return weeklyReport.weeklyDate.between(lastWeekDate.atStartOfDay(), lastWeekDate.atTime(LocalTime.MAX));
     }
