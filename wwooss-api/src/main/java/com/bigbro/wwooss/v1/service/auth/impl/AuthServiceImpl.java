@@ -291,7 +291,9 @@ public class AuthServiceImpl implements AuthService {
 
     private void addQuiz(User registeredUser) {
         Quiz latestQuiz = quizService.findLatestQuiz();
-        quizHistoryService.addQuizToNewUser(latestQuiz, registeredUser);
+        if(Objects.nonNull(latestQuiz)) {
+            quizHistoryService.addQuizToNewUser(latestQuiz, registeredUser);
+        }
     }
 
     /**

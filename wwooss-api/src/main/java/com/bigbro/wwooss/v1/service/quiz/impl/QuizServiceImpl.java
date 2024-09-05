@@ -88,13 +88,13 @@ public class QuizServiceImpl implements QuizService {
     @Override
     @Transactional(readOnly = true)
     public Quiz findNewQuiz() {
-        return quizRepository.findOneByOpenFalseOrderByCreatedAtAsc();
+        return quizRepository.findFirstByOpenFalseOrderByCreatedAtAsc();
     }
 
     @Override
     @Transactional(readOnly = true)
     public Quiz findLatestQuiz() {
-        return quizRepository.findOneByOpenTrueOrderByCreatedAtDesc();
+        return quizRepository.findFirstByOpenTrueOrderByCreatedAtDesc();
     }
 
     private Long createDefaultCorrectRate() {
