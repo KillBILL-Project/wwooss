@@ -2,6 +2,7 @@ package com.bigbro.wwooss.v1.service.quizHistory;
 
 import com.bigbro.wwooss.v1.dto.response.quizHistory.QuizHistoryListResponse;
 import com.bigbro.wwooss.v1.entity.quiz.Quiz;
+import com.bigbro.wwooss.v1.entity.user.User;
 import org.springframework.data.domain.Pageable;
 
 public interface QuizHistoryService {
@@ -25,4 +26,9 @@ public interface QuizHistoryService {
      * @param quizHistoryId
      */
     void updateStatusToIssued(Long quizHistoryId);
+
+    /**
+     * 신규 가입자 최신 퀴즈 넣어주기
+     */
+    void addQuizToNewUser(Quiz quiz, User user);
 }

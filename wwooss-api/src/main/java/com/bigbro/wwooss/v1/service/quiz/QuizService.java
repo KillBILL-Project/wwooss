@@ -14,4 +14,6 @@ public interface QuizService {
     Quiz saveQuiz(QuizDBResultProperty properties);
 
     Quiz findNewQuiz();
+
+    Quiz findLatestQuiz();
 }

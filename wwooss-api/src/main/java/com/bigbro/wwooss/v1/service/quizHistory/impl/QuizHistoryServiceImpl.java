@@ -57,4 +57,10 @@ public class QuizHistoryServiceImpl implements QuizHistoryService {
 
         quizHistory.updateQuizStatus(QuizStatusType.ISSUED);
     }
+
+    @Override
+    @Transactional
+    public void addQuizToNewUser(Quiz quiz, User user) {
+        quizHistoryRepository.save(QuizHistory.of(user, quiz, QuizStatusType.UNSOLVED));
+    }
 }

@@ -91,6 +91,12 @@ public class QuizServiceImpl implements QuizService {
         return quizRepository.findOneByOpenFalseOrderByCreatedAtAsc();
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public Quiz findLatestQuiz() {
+        return quizRepository.findOneByOpenTrueOrderByCreatedAtDesc();
+    }
+
     private Long createDefaultCorrectRate() {
         Long correctCnt = quizHistoryRepository.countQuizHistoryByStatus(QuizStatusType.PASS);
         Long totalCnt = quizHistoryRepository.countQuizHistoryByStatusOrStatus(QuizStatusType.PASS, QuizStatusType.FAIL);

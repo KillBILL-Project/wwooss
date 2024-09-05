@@ -7,6 +7,7 @@ import com.bigbro.wwooss.v1.dto.request.auth.UserLoginRequest;
 import com.bigbro.wwooss.v1.dto.request.auth.UserRegistrationRequest;
 import com.bigbro.wwooss.v1.dto.request.notification.NotificationSendRequest;
 import com.bigbro.wwooss.v1.dto.response.auth.TokenResponse;
+import com.bigbro.wwooss.v1.entity.quiz.Quiz;
 import com.bigbro.wwooss.v1.entity.user.User;
 import com.bigbro.wwooss.v1.entity.user.WithdrawalUser;
 import com.bigbro.wwooss.v1.enumType.LoginType;
@@ -32,6 +33,8 @@ import com.bigbro.wwooss.v1.security.TokenProvider;
 import com.bigbro.wwooss.v1.service.auth.AuthService;
 import com.bigbro.wwooss.v1.service.email.EmailService;
 import com.bigbro.wwooss.v1.service.notification.NotificationService;
+import com.bigbro.wwooss.v1.service.quiz.QuizService;
+import com.bigbro.wwooss.v1.service.quizHistory.QuizHistoryService;
 import com.bigbro.wwooss.v1.service.wallet.WalletService;
 import com.bigbro.wwooss.v1.utils.WwoossUtil;
 import com.google.gson.*;
@@ -108,6 +111,10 @@ public class AuthServiceImpl implements AuthService {
     private final NotificationService notificationService;
 
     private final WalletService walletService;
+
+    private final QuizService quizService;
+
+    private final QuizHistoryService quizHistoryService;
 
     private final WwoossUtil wwoossUtil;
 
@@ -261,7 +268,12 @@ public class AuthServiceImpl implements AuthService {
         }
 
         User registeredUser = userRepository.save(user);
+
+        // 지갑 생성
         walletService.createWallet(registeredUser);
+        // 오픈된 퀴즈 중 가장 최신 퀴즈
+        addQuiz(registeredUser);
+
 
         String accessToken = tokenProvider.generateToken(registeredUser, "access");
         String refreshToken = tokenProvider.generateToken(registeredUser, "refresh");
@@ -275,6 +287,11 @@ public class AuthServiceImpl implements AuthService {
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
                 .build();
+    }
+
+    private void addQuiz(User registeredUser) {
+        Quiz latestQuiz = quizService.findLatestQuiz();
+        quizHistoryService.addQuizToNewUser(latestQuiz, registeredUser);
     }
 
     /**
