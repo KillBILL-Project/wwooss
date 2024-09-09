@@ -165,7 +165,7 @@ public class WeeklyReportJobConfig {
         long changedRefund = weeklyRefund - lastWeekReport.getWeeklyRefund();
 
         long lastTrashCount = lastWeekReport.getWeeklyTrashCount();
-        long changedTrashCountPercent =((weeklyTrashCount - lastTrashCount) / lastTrashCount) * 100;
+        long changedTrashCountPercent =((weeklyTrashCount - lastTrashCount) * 100) / lastTrashCount;
 
         return WowReport.of(changedCarbonSaving, changedRefund, changedTrashCountPercent);
     }
