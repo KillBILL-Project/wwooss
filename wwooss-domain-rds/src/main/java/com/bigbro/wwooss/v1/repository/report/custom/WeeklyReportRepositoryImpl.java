@@ -45,7 +45,7 @@ public class WeeklyReportRepositoryImpl implements WeeklyReportRepositoryCustom 
 
     private BooleanExpression searchLastWeekReport() {
         LocalDate today = LocalDate.now();
-        LocalDate lastWeekDate = today.minusDays(7);
+        LocalDate lastWeekDate = today.minusDays(14);
 
         return weeklyReport.weeklyDate.between(lastWeekDate.atStartOfDay(), lastWeekDate.atTime(LocalTime.MAX));
     }

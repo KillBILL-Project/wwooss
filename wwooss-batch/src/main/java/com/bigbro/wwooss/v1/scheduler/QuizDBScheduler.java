@@ -36,6 +36,7 @@ public class QuizDBScheduler {
     @Scheduled(cron = "0 0 2 * * 0", zone = "Asia/Seoul")
 //    @Scheduled(cron = "0 15 20 * * *", zone = "Asia/Seoul")
     public void weeklyNotionQuizSchedule() throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException {
+        log.info("매주 일요일 새벽 2시 노션 퀴즈 디비");
 
         JobParameters jobParameters = new JobParametersBuilder()
                 .addString("date", LocalDateTime.now().toString())
@@ -49,8 +50,9 @@ public class QuizDBScheduler {
      * 매일 신규 유저별 퀴즈 생성
      * 매일 새벽 12시 5분 마다
      */
-//    @Scheduled(cron = "0 5 12 * * *", zone = "Asia/Seoul")
+    @Scheduled(cron = "0 5 12 * * *", zone = "Asia/Seoul")
     public void dailyCreateQuizSchedule() throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException {
+        log.info("매일 새벽 12시 5분 퀴즈 생성");
 
         JobParameters jobParameters = new JobParametersBuilder()
                 .addString("date", LocalDateTime.now().toString())
