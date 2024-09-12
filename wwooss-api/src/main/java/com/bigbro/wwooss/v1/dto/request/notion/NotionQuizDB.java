@@ -1,6 +1,7 @@
 package com.bigbro.wwooss.v1.dto.request.notion;
 
 import com.bigbro.wwooss.v1.dto.response.notion.QuizDBResultProperty;
+import com.bigbro.wwooss.v1.enumType.IssueType;
 import com.bigbro.wwooss.v1.enumType.QuizType;
 import lombok.Builder;
 
@@ -17,7 +18,7 @@ public class NotionQuizDB {
         return NotionQuizDB.builder()
                 .answer(property.getAnswer().getRich_text().get(0).getPlain_text())
                 .question(property.getQuestion().getRich_text().get(0).getPlain_text())
-                .tokenValue(Double.parseDouble(property.getTokenValue().getRich_text().get(0).getPlain_text()))
+                .tokenValue(IssueType.QUIZ.getValue())
                 .quizType(QuizType.valueOf(property.getType().getSelect().getName()))
                 .build();
     }
