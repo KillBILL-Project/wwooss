@@ -16,5 +16,5 @@ public class QuizDBResultProperty {
     private QuizDBPropertyOptions options;
     private QuizDBPropertyTextType image;
     private QuizDBPropertyAnswer answer;
-    private QuizDBPropertyTextType tokenValue;
+//    private QuizDBPropertyTextType tokenValue;
 }
