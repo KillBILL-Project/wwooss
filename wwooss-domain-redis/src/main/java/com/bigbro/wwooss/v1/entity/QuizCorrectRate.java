@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Getter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
+import org.springframework.data.redis.core.index.Indexed;
 
 @Getter
 @Builder
@@ -11,6 +12,7 @@ import org.springframework.data.redis.core.RedisHash;
 public class QuizCorrectRate {
 
     @Id
+    @Indexed
     private Long quizId;
     private Long totalCount;
     private Long correctCount;
@@ -22,8 +24,9 @@ public class QuizCorrectRate {
         this.correctRate = correctRate;
     }
 
-    public static QuizCorrectRate of(Long totalCount, Long correctCount, Long correctRate) {
+    public static QuizCorrectRate of(Long totalCount, Long correctCount, Long correctRate, Long quizId) {
         return QuizCorrectRate.builder()
+                .quizId(quizId)
                 .totalCount(totalCount)
                 .correctCount(correctCount)
                 .correctRate(correctRate)

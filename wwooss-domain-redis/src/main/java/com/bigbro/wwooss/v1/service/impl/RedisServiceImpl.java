@@ -48,9 +48,10 @@ public class RedisServiceImpl implements RedisService {
     }
 
     @Override
-    public void createDefaultQuizCorrectRate(Long totalCount, Long correctCount) {
+    public void createDefaultQuizCorrectRate(Long totalCount, Long correctCount, Long quizId) {
         try {
-            QuizCorrectRate quizCorrectRate = QuizCorrectRate.of(totalCount, correctCount, (correctCount * 100) / totalCount);
+            long correctRate = totalCount == 0 ? 0 : ((correctCount * 100) / totalCount);
+            QuizCorrectRate quizCorrectRate = QuizCorrectRate.of(totalCount, correctCount, correctRate, quizId);
             redisRepository.save(quizCorrectRate);
         } catch (Exception e) {
             log.error("create Quiz Correct Rate : {}", e.getMessage(), e);

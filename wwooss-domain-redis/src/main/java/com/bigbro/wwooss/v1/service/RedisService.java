@@ -10,5 +10,5 @@ public interface RedisService {
 
     void updateQuizCorrectRate(Long quizId, Boolean isPass);
 
-    void createDefaultQuizCorrectRate(Long totalCount, Long correctCount);
+    void createDefaultQuizCorrectRate(Long totalCount, Long correctCount, Long quizId);
 }

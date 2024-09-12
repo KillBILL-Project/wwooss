@@ -49,7 +49,7 @@ public class QuizServiceImpl implements QuizService {
 
         Long quizCorrectRate = redisService.getQuizCorrectRate(quizId);
         if(quizCorrectRate == -1) {
-            quizCorrectRate = createDefaultCorrectRate();
+            quizCorrectRate = createDefaultCorrectRate(quizId);
         }
 
         return QuizResponse.of(quiz, quizCorrectRate, imageUtil.baseQuizImagePath(), options);
@@ -97,11 +97,11 @@ public class QuizServiceImpl implements QuizService {
         return quizRepository.findFirstByOpenTrueOrderByCreatedAtDesc();
     }
 
-    private Long createDefaultCorrectRate() {
+    private Long createDefaultCorrectRate(Long quizId) {
         Long correctCnt = quizHistoryRepository.countQuizHistoryByStatus(QuizStatusType.PASS);
         Long totalCnt = quizHistoryRepository.countQuizHistoryByStatusOrStatus(QuizStatusType.PASS, QuizStatusType.FAIL);
-        redisService.createDefaultQuizCorrectRate(totalCnt, correctCnt);
+        redisService.createDefaultQuizCorrectRate(totalCnt, correctCnt, quizId);
 
-        return (correctCnt * 100) / totalCnt;
+        return totalCnt == 0 ? 0 : ((correctCnt * 100) / totalCnt);
     }
 }
