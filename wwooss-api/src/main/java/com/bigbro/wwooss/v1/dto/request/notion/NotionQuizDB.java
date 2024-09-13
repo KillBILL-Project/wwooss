@@ -10,7 +10,7 @@ public class NotionQuizDB {
     private String answer;
     private String question;
     private String quizImagePath;
-    private Double tokenValue;
+    private Long tokenValue;
     private QuizType quizType;
 
 

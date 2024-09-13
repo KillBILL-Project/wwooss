@@ -7,16 +7,16 @@ import lombok.Getter;
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public enum IssueType {
-    QUIZ(5D),
-    LOGIN(3D),
-    INVITE(50D),
-    ALARM(10D),
-    CLEAN_TRASH(2D),
-    CHECK_REPORT(10D),
-    RECORD_RECYCLE(1D),
-    AUTH_RECYCLE(10D),
-    COMPLIMENT_CARD(5D),
-    SIGN_UP(100D);
+    QUIZ(5L),
+    LOGIN(3L),
+    INVITE(50L),
+    ALARM(10L),
+    CLEAN_TRASH(2L),
+    CHECK_REPORT(10L),
+    RECORD_RECYCLE(1L),
+    AUTH_RECYCLE(10L),
+    COMPLIMENT_CARD(5L),
+    SIGN_UP(100L);
 
-    private final Double value;
+    private final Long value;
 }

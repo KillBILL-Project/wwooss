@@ -12,7 +12,7 @@ import lombok.Getter;
 public class IssuedWwoossToken {
     private Long wwoossTokenId;
     private IssueType issueType;
-    private Double value;
+    private Long value;
 
     public static IssuedWwoossToken from(WwoossToken wwoossToken) {
         return IssuedWwoossToken.builder()

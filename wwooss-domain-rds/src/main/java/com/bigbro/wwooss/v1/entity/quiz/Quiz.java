@@ -43,7 +43,7 @@ public class Quiz extends BaseEntity  {
 
     @Comment("토큰 값")
     @Column(name = "token_value")
-    private Double tokenValue;
+    private Long tokenValue;
 
     @Comment("퀴즈 타입")
     @Column(name = "type")
@@ -59,7 +59,7 @@ public class Quiz extends BaseEntity  {
     }
 
     public static Quiz from(String answer, String question, String quizImagePath,
-                            Double tokenValue, QuizType quizType, Boolean open) {
+                            Long tokenValue, QuizType quizType, Boolean open) {
         return Quiz.builder()
                 .open(open)
                 .answer(answer)

@@ -46,7 +46,7 @@ class WalletApiTest {
     @DisplayName("Wwooss Token type별 총합 조회")
     void getQuizHistoryList() throws Exception {
         // given
-        given(this.walletService.getTotalTokenValueByType(any(), any())).willReturn(10D);
+        given(this.walletService.getTotalTokenValueByType(any(), any())).willReturn(10L);
 
         this.mockMvc.perform(RestDocumentationRequestBuilders.get("/api/v1/wallet/wwooss-token")
                         .with(csrf().asHeader())

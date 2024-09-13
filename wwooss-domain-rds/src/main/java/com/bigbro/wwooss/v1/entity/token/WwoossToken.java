@@ -33,7 +33,7 @@ public class WwoossToken {
 
     @Comment("토큰 값")
     @Column(name = "value")
-    private Double value;
+    private Long value;
 
     public static WwoossToken of(IssueType issueType, Wallet wallet) {
         return WwoossToken.builder()

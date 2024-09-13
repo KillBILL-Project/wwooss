@@ -36,14 +36,14 @@ public class WalletServiceImpl implements WalletService {
 
     @Override
     @Transactional(readOnly = true)
-    public Double getTotalTokenValueByType(Long userId, IssueType issueType) {
+    public Long getTotalTokenValueByType(Long userId, IssueType issueType) {
         User user = userRepository.findById(userId).orElseThrow(() -> new DataNotFoundException(WwoossResponseCode.NOT_FOUND_DATA, "유저를 찾을 수 없습니다."));
         Wallet wallet = walletRepository.findByUser(user).orElseThrow(() -> new DataNotFoundException(WwoossResponseCode.NOT_FOUND_DATA, "유저를 찾을 수 없습니다."));
         List<WwoossToken> wwoossTokens = Objects.isNull(issueType) ? wwoossTokenRepository.findWwoossTokenByWallet(wallet)
                 : wwoossTokenRepository.findWwoossTokenByWalletAndIssueType(wallet, issueType);
 
         return wwoossTokens.stream()
-                .mapToDouble(WwoossToken::getValue)
+                .mapToLong(WwoossToken::getValue)
                 .sum();
     }
 }

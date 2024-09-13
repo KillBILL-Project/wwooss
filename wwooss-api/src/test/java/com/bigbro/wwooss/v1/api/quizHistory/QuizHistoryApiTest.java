@@ -56,7 +56,7 @@ class QuizHistoryApiTest {
         // given
         Quiz quiz = Quiz.builder()
                 .quizId(1L)
-                .tokenValue(1.0D)
+                .tokenValue(1L)
                 .build();
         QuizHistory quizHistory = QuizHistory.builder()
                 .quizHistoryId(1L)

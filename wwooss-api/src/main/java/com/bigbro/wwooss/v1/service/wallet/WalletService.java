@@ -12,5 +12,5 @@ public interface WalletService {
      * @param issueType
      * @return
      */
-    Double getTotalTokenValueByType(Long userId, IssueType issueType);
+    Long getTotalTokenValueByType(Long userId, IssueType issueType);
 }

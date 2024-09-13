@@ -54,7 +54,7 @@ class WwoossTokenApiTest {
         IssuedWwoossToken issuedWwoossToken = IssuedWwoossToken.builder()
                 .wwoossTokenId(1L)
                 .issueType(IssueType.QUIZ)
-                .value(10D)
+                .value(10L)
                 .build();
         given(this.wwoossTokenService.issueWwoossToken(any(), any())).willReturn(issuedWwoossToken);
 

@@ -13,7 +13,7 @@ public class QuizHistoryInfo {
     private Long quizHistoryId;
     private Long quizId;
     private QuizStatusType status;
-    private Double tokenValue;
+    private Long tokenValue;
     private LocalDateTime createdAt;
 
     public static QuizHistoryInfo of(QuizHistory quizHistory) {
