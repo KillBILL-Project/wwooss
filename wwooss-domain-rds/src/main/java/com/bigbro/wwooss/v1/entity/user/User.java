@@ -1,6 +1,8 @@
 package com.bigbro.wwooss.v1.entity.user;
 
 import com.bigbro.wwooss.v1.entity.base.BaseEntity;
+import com.bigbro.wwooss.v1.entity.team.Team;
+import com.bigbro.wwooss.v1.entity.teamUser.TeamUser;
 import com.bigbro.wwooss.v1.enumType.Gender;
 import com.bigbro.wwooss.v1.enumType.LoginType;
 import com.bigbro.wwooss.v1.enumType.UserRole;
@@ -12,6 +14,7 @@ import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.Comment;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "user")
@@ -79,6 +82,9 @@ public class User extends BaseEntity {
     @Comment("refresh token")
     @Column(name = "refresh_token")
     private String refreshToken;
+
+    @OneToMany(mappedBy = "user")
+    private List<TeamUser> teamUsers;
 
     public static User of(User user, String encodedPassword, String refreshToken) {
         return User.builder()
