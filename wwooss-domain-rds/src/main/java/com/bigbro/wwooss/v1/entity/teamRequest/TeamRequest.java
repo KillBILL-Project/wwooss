@@ -1,4 +1,4 @@
-package com.bigbro.wwooss.v1.entity.joinRequest;
+package com.bigbro.wwooss.v1.entity.teamRequest;
 
 import com.bigbro.wwooss.v1.entity.team.Team;
 import com.bigbro.wwooss.v1.entity.user.User;

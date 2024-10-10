@@ -1,6 +1,7 @@
 package com.bigbro.wwooss.v1.entity.team;
 
 import com.bigbro.wwooss.v1.entity.teamUser.TeamUser;
+import com.bigbro.wwooss.v1.entity.user.User;
 import com.bigbro.wwooss.v1.enumType.RequestStatus;
 import com.bigbro.wwooss.v1.enumType.TeamType;
 import lombok.*;
@@ -48,6 +49,11 @@ public class Team {
     @Comment("logo image")
     @Column(name = "logo_image_path")
     private String logoImagePath;
+
+    @Comment("생성자")
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "create_by")
+    private User createBy;
 
     @Comment("사업자 등록증")
     @Column(name = "business_regit_image_path")
