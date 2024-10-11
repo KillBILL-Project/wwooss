@@ -24,7 +24,8 @@ public enum WwoossResponseCode {
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "안내", "서버 내부 오류입니다."),
     DUPLICATION_VALUE(HttpStatus.INTERNAL_SERVER_ERROR, "안내", "중복된 값 입니다."),
     INCORRECT_DATA(HttpStatus.INTERNAL_SERVER_ERROR, "안내", "잘못된 유형의 데이터입니다."),
-    DOCUMENT_BULK_INSERT_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "안내", "ES Document Indexing Error");
+    DOCUMENT_BULK_INSERT_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "안내", "ES Document Indexing Error"),
+    MULTIPART_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "안내", "FILE ERROR");
 
     private final HttpStatus code;
     private final String title;

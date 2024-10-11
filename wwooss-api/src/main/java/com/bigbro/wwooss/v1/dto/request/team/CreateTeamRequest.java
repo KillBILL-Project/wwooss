@@ -9,9 +9,7 @@ import lombok.Getter;
 public class CreateTeamRequest {
     private String teamName;
     private String address;
-    private String logImagePath;
+    private TeamType teamType;
     private String email;
     private String businessNo;
-    private String businessRegitImagePath;
-    private TeamType teamType;
 }

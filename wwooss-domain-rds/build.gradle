@@ -16,6 +16,7 @@ configurations {
 
 dependencies {
     implementation project(path: ':wwooss-common')
+
     // mysql
     runtimeOnly 'com.mysql:mysql-connector-j'
     // jpa

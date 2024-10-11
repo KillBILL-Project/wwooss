@@ -9,12 +9,15 @@ public class ImageUtil {
     @Value("${aws.cloud-front.path}")
     private String imageBase;
 
-    private final String COMPLIMENT_CARD_PATH = "compliment_card";
-    private final String TRASH_PATH = "trash";
+    public static final String COMPLIMENT_CARD_PATH = "compliment_card";
+    public static final String TRASH_PATH = "trash";
 
-    private final String QUIZ_PATH = "quiz";
+    public static final String QUIZ_PATH = "quiz";
 
-    private final String WWOOSS_LOGO = "logo";
+    public static final String WWOOSS_LOGO = "logo";
+
+    public static final String TEAM_LOGO = "/team/logo";
+    public static final String TEAM_BUSINESS_REGIT = "/team/business_register";
 
     public String baseComplimentCardImagePath() {
         return imageBase + COMPLIMENT_CARD_PATH + "/";

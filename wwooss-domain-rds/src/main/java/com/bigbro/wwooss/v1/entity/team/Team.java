@@ -52,7 +52,7 @@ public class Team {
 
     @Comment("생성자")
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "create_by")
+    @JoinColumn(name = "user_id")
     private User createBy;
 
     @Comment("사업자 등록증")

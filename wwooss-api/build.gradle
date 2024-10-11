@@ -22,6 +22,10 @@ dependencies {
     implementation project(path: ':wwooss-domain-redis')
 
     implementation 'org.springframework.boot:spring-boot-starter-data-elasticsearch'
+
+    // aws
+    implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+
     // rest doc
     testImplementation 'com.epages:restdocs-api-spec-mockmvc:0.16.2'
     asciidoctorExt 'org.springframework.restdocs:spring-restdocs-asciidoctor'

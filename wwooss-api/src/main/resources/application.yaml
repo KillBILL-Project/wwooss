@@ -48,6 +48,18 @@ notion:
   database-query-url: https://api.notion.com/v1/databases/{database-id}/query
   database-update-url: https://api.notion.com/v1/pages/{page-id}
   version: 2022-06-28
+cloud:
+  aws:
+    s3:
+      bucket: wwooss-dev
+    credentials:
+      access-key: ENC(tIroOXyuGXQTtv+RBcBP42J0ENhD4U9OI/15qQyn9ug=)
+      secret-key: ENC(XMbOKZXA37FCBWtIIr2+/7ShcTlwiHVTknJtOVQCtcOLcqdZUFGnj16KXLgrDKkAM2DgSWQRgJQ=)
+    region:
+      static: ap-northeast-2
+      auto: false
+    stack:
+      auto: false
 
 ---
 
@@ -91,7 +103,18 @@ notion:
   database-query-url: https://api.notion.com/v1/databases/{database-id}/query
   database-update-url: https://api.notion.com/v1/pages/{page-id}
   version: 2022-06-28
-
+cloud:
+  aws:
+    s3:
+      bucket: wwooss-dev
+    credentials:
+      access-key: ENC(TaDKxkDljfCMgLulhW0UI5Gkgq+TVddu+x5YNdIDR5w=)
+      secret-key: ENC(Gcc/Eu/C/PODPdMlyjTix8svhE/FzmavaYOwBTE/mPIWmJQBMGJtT+gZSggitB6i2hP9DYXpa4k=)
+    region:
+      static: ap-northeast-2
+      auto: false
+    stack:
+      auto: false
 ---
 
 spring:
@@ -134,6 +157,18 @@ notion:
   database-query-url: https://api.notion.com/v1/databases/{database-id}/query
   database-update-url: https://api.notion.com/v1/pages/{page-id}
   version: 2022-06-28
+cloud:
+  aws:
+    s3:
+      bucket: wwooss
+    credentials:
+      access-key: ENC(Q3eZmNmNJiqukkkszqlpubOgYXQGXbBoQsb3eF5TI8U=)
+      secret-key: ENC(0Nn1KdwV2zIPmLOIbrvF+cmtlsy1QYM1CGOkBG9IB40X87aWhSFiAemXUQQ32SqPtWhVPpUqYvs=)
+    region:
+      static: ap-northeast-2
+      auto: false
+    stack:
+      auto: false
 
 ---
 
