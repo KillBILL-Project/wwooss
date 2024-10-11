@@ -17,6 +17,7 @@ public enum WwoossResponseCode {
     UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "안내", "인증이 필요합니다."),
     FORBIDDEN(HttpStatus.FORBIDDEN, "안내", "접근 거부"),
     NOT_FOUND_DATA(HttpStatus.NOT_FOUND, "안내", "존재 하지 않는 값 입니다."),
+    NO_DATA(HttpStatus.NOT_FOUND, "안내", "필수 데이터가 존재하지 않습니다."),
     INVALID_TOKEN(HttpStatus.BAD_REQUEST, "안내", "토큰 파싱 에러입니다. 토큰을 확인해주세요."),
     DUPLICATION_RESOURCE(HttpStatus.BAD_REQUEST, "안내", "중복된 데이터입니다."),
 

@@ -29,6 +29,10 @@ public class Team {
     @Enumerated(value = EnumType.STRING)
     private TeamType teamType;
 
+    @Comment("팀 이름")
+    @Column(name = "team_name")
+    private String teamName;
+
     @Comment("주소")
     @Column(name = "address")
     private String address;
@@ -49,6 +53,10 @@ public class Team {
     @Comment("logo image")
     @Column(name = "logo_image_path")
     private String logoImagePath;
+
+    @Comment("기업 코드")
+    @Column(name = "company_code")
+    private String companyCode;
 
     @Comment("생성자")
     @OneToOne(fetch = FetchType.LAZY)
