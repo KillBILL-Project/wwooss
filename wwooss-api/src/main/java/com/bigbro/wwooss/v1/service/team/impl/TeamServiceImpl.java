@@ -15,6 +15,7 @@ import com.bigbro.wwooss.v1.repository.user.UserRepository;
 import com.bigbro.wwooss.v1.response.WwoossResponseCode;
 import com.bigbro.wwooss.v1.service.s3.S3Service;
 import com.bigbro.wwooss.v1.service.team.TeamService;
+import com.bigbro.wwooss.v1.utils.WwoossUtil;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
@@ -24,7 +25,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.Objects;
-import java.util.UUID;
 
 import static com.bigbro.wwooss.v1.response.WwoossResponseCode.NO_DATA;
 import static com.bigbro.wwooss.v1.utils.ImageUtil.TEAM_BUSINESS_REGIT;
@@ -42,6 +42,7 @@ public class TeamServiceImpl implements TeamService {
 
     private final S3Service s3Service;
 
+    private final WwoossUtil wwoossUtil;
 
     @Override
     @Transactional
@@ -59,7 +60,7 @@ public class TeamServiceImpl implements TeamService {
         User createUser = userRepository.findById(userId).orElseThrow(() -> new DataNotFoundException(WwoossResponseCode.NOT_FOUND_DATA, "존재하지 않는 유저입니다."));
         String companyCode = null;
         if(createTeamRequest.getTeamType().equals(TeamType.COMPANY)) {
-            companyCode = UUID.fromString(userId + createTeamRequest.getTeamName()).toString().substring(0, 15);
+            companyCode = wwoossUtil.makeRandomPw(15);
         }
         Team createTeam = Team.builder()
                 .createBy(createUser)
@@ -115,4 +116,6 @@ public class TeamServiceImpl implements TeamService {
             throw new NoDataException(NO_DATA, "사업자번호, 사업자 등록증은 기업 타입에만 입력해주세요");
         }
     }
+
+
 }
