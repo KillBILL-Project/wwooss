@@ -26,10 +26,10 @@ public class TeamApi {
     // team 생성
     @PostMapping
     public ResponseEntity<WwoossResponse<Void>> createTeam(
-            @RequestParam(name = "logoFile") MultipartFile logoFile,
-            @RequestParam(name = "teamName") String teamName,
-            @RequestParam(name = "address") String address,
-            @RequestParam(name = "teamType") TeamType teamType,
+            @RequestParam("logoFile") MultipartFile logoFile,
+            @RequestParam("teamName") String teamName,
+            @RequestParam("address") String address,
+            @RequestParam("teamType") TeamType teamType,
             @RequestParam(name = "email", required = false) String email,
             @RequestParam(name = "businessNo", required = false) String businessNo,
             @RequestParam(name = "businessRegitFile", required = false) MultipartFile businessRegitFile,
