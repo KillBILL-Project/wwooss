@@ -1,6 +1,7 @@
 package com.bigbro.wwooss.v1.service.team;
 
 import com.bigbro.wwooss.v1.dto.request.team.CreateTeamRequest;
+import com.bigbro.wwooss.v1.dto.request.team.JoinTeamRequest;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -16,5 +17,7 @@ public interface TeamService {
      * @throws IOException
      */
     void createTeam(Long userId, CreateTeamRequest createTeamRequest, MultipartFile logo, MultipartFile businessRegit) throws IOException;
+
+    void requestJoinTeam(Long userId, JoinTeamRequest joinTeamRequest);
 
 }

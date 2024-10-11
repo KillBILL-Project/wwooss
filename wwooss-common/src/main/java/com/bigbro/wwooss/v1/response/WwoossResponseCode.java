@@ -19,6 +19,7 @@ public enum WwoossResponseCode {
     NOT_FOUND_DATA(HttpStatus.NOT_FOUND, "안내", "존재 하지 않는 값 입니다."),
     NO_DATA(HttpStatus.NOT_FOUND, "안내", "필수 데이터가 존재하지 않습니다."),
     INVALID_TOKEN(HttpStatus.BAD_REQUEST, "안내", "토큰 파싱 에러입니다. 토큰을 확인해주세요."),
+    INVALID_DATA(HttpStatus.BAD_REQUEST, "안내", "잘못된 데이터입니다."),
     DUPLICATION_RESOURCE(HttpStatus.BAD_REQUEST, "안내", "중복된 데이터입니다."),
 
     // server error

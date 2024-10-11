@@ -1,6 +1,7 @@
 package com.bigbro.wwooss.v1.service.team.impl;
 
 import com.bigbro.wwooss.v1.dto.request.team.CreateTeamRequest;
+import com.bigbro.wwooss.v1.dto.request.team.JoinTeamRequest;
 import com.bigbro.wwooss.v1.entity.teamRequest.TeamRequest;
 import com.bigbro.wwooss.v1.entity.team.Team;
 import com.bigbro.wwooss.v1.entity.user.User;
@@ -8,6 +9,7 @@ import com.bigbro.wwooss.v1.enumType.RequestStatus;
 import com.bigbro.wwooss.v1.enumType.TeamRequestType;
 import com.bigbro.wwooss.v1.enumType.TeamType;
 import com.bigbro.wwooss.v1.exception.DataNotFoundException;
+import com.bigbro.wwooss.v1.exception.IncorrectDataException;
 import com.bigbro.wwooss.v1.exception.NoDataException;
 import com.bigbro.wwooss.v1.repository.team.TeamRepository;
 import com.bigbro.wwooss.v1.repository.teamRequest.TeamRequestRepository;
@@ -26,6 +28,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.Objects;
 
+import static com.bigbro.wwooss.v1.response.WwoossResponseCode.INVALID_DATA;
 import static com.bigbro.wwooss.v1.response.WwoossResponseCode.NO_DATA;
 import static com.bigbro.wwooss.v1.utils.ImageUtil.TEAM_BUSINESS_REGIT;
 import static com.bigbro.wwooss.v1.utils.ImageUtil.TEAM_LOGO;
@@ -86,6 +89,25 @@ public class TeamServiceImpl implements TeamService {
         teamRequestRepository.save(teamRequest);
     }
 
+    @Override
+    @Transactional
+    public void requestJoinTeam(Long userId, JoinTeamRequest joinTeamRequest) {
+        if(joinTeamRequest.getTeamType().equals(TeamType.COMPANY)) {
+            checkCompanyCode(joinTeamRequest.getTeamId(), joinTeamRequest.getCompanyCode());
+        }
+
+        User requestUser = userRepository.findById(userId).orElseThrow(() -> new DataNotFoundException(WwoossResponseCode.NOT_FOUND_DATA, "존재하지 않는 유저입니다."));
+        Team receiveTeam = teamRepository.findById(joinTeamRequest.getTeamId()).orElseThrow(() -> new DataNotFoundException(WwoossResponseCode.NOT_FOUND_DATA, "존재하지 팀입니다."));
+
+        TeamRequest teamRequest = TeamRequest.builder()
+                .requestUser(requestUser)
+                .receiveTeam(receiveTeam)
+                .status(RequestStatus.PENDING)
+                .teamRequestType(TeamRequestType.JOIN)
+                .build();
+        teamRequestRepository.save(teamRequest);
+    }
+
     private void checkValidRequest(CreateTeamRequest createTeamRequest, MultipartFile logo, MultipartFile businessRegit) {
         // 공통 필수값
         if(StringUtils.isBlank(createTeamRequest.getTeamName())
@@ -117,5 +139,11 @@ public class TeamServiceImpl implements TeamService {
         }
     }
 
+    private void checkCompanyCode(Long teamId, String companyCode) {
+        Team team = teamRepository.findTeamByTeamIdAndCompanyCode(teamId, companyCode);
+        if(Objects.isNull(team)) {
+            throw new IncorrectDataException(INVALID_DATA, "유효하지 않은 기업 코드입니다.");
+        }
+    }
 
 }

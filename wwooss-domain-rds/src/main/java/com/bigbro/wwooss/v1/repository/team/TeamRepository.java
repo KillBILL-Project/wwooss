@@ -4,4 +4,5 @@ import com.bigbro.wwooss.v1.entity.team.Team;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface TeamRepository extends JpaRepository<Team, Long> {
+    Team findTeamByTeamIdAndCompanyCode(Long teamId, String companyCode);
 }

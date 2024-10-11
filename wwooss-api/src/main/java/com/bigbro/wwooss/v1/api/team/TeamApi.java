@@ -1,6 +1,7 @@
 package com.bigbro.wwooss.v1.api.team;
 
 import com.bigbro.wwooss.v1.dto.request.team.CreateTeamRequest;
+import com.bigbro.wwooss.v1.dto.request.team.JoinTeamRequest;
 import com.bigbro.wwooss.v1.dto.request.user.UserCredential;
 import com.bigbro.wwooss.v1.enumType.TeamType;
 import com.bigbro.wwooss.v1.response.WwoossResponse;
@@ -8,10 +9,7 @@ import com.bigbro.wwooss.v1.response.WwoossResponseUtil;
 import com.bigbro.wwooss.v1.service.team.TeamService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -47,6 +45,11 @@ public class TeamApi {
     }
 
     // team join
+    @PostMapping("/request-join")
+    public ResponseEntity<WwoossResponse<Void>> requestJoin(@RequestBody JoinTeamRequest requestJoinTeam, UserCredential userCredential) {
+        teamService.requestJoinTeam(userCredential.getUserId(), requestJoinTeam);
+        return WwoossResponseUtil.responseCreatedNoData();
+    }
 
     // 승인, 거절, 대기
 
