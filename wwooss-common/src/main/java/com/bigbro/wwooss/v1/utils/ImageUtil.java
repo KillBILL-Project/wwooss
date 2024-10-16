@@ -32,4 +32,5 @@ public class ImageUtil {
     }
 
     public String wwoossBlackLogo() {return imageBase + WWOOSS_LOGO + "/" + "black_logo.png";}
+    public String baseTeamLogo() {return imageBase + TEAM_LOGO;}
 }

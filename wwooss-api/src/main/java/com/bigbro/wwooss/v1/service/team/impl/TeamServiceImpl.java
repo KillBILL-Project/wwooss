@@ -3,6 +3,7 @@ package com.bigbro.wwooss.v1.service.team.impl;
 import com.bigbro.wwooss.v1.dto.request.team.JoinResultRequest;
 import com.bigbro.wwooss.v1.dto.request.team.CreateTeamRequest;
 import com.bigbro.wwooss.v1.dto.request.team.JoinTeamRequest;
+import com.bigbro.wwooss.v1.dto.response.team.TeamResponse;
 import com.bigbro.wwooss.v1.entity.teamRequest.TeamRequest;
 import com.bigbro.wwooss.v1.entity.team.Team;
 import com.bigbro.wwooss.v1.entity.teamUser.TeamUser;
@@ -20,6 +21,7 @@ import com.bigbro.wwooss.v1.repository.user.UserRepository;
 import com.bigbro.wwooss.v1.response.WwoossResponseCode;
 import com.bigbro.wwooss.v1.service.s3.S3Service;
 import com.bigbro.wwooss.v1.service.team.TeamService;
+import com.bigbro.wwooss.v1.utils.ImageUtil;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
@@ -28,6 +30,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Objects;
 
 import static com.bigbro.wwooss.v1.response.WwoossResponseCode.*;
@@ -47,6 +50,8 @@ public class TeamServiceImpl implements TeamService {
     private final TeamUserRepository teamUserRepository;
 
     private final S3Service s3Service;
+
+    private final ImageUtil imageUtil;
 
     @Override
     @Transactional
@@ -126,6 +131,20 @@ public class TeamServiceImpl implements TeamService {
                 .user(requestUser)
                 .build();
         teamUserRepository.save(teamUser);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<TeamResponse> getMyTeam(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new DataNotFoundException(WwoossResponseCode.NOT_FOUND_DATA, "존재하지 않는 유저입니다."));
+        List<TeamUser> teamUsers = teamUserRepository.findByUser(user);
+        return teamUsers.stream().map((teamUser) -> TeamResponse.builder()
+                .teamId(teamUser.getTeam().getTeamId())
+                .teamName(teamUser.getTeam().getTeamName())
+                .status(teamUser.getTeam().getStatus())
+                .logoImage(imageUtil.baseTeamLogo() + "/" + teamUser.getTeam().getLogoImagePath())
+                .build()
+        ).toList();
     }
 
     private void checkValidRequest(CreateTeamRequest createTeamRequest, MultipartFile logo, MultipartFile businessRegit) {

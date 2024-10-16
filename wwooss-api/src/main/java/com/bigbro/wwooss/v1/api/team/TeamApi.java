@@ -4,6 +4,7 @@ import com.bigbro.wwooss.v1.dto.request.team.CreateTeamRequest;
 import com.bigbro.wwooss.v1.dto.request.team.JoinTeamRequest;
 import com.bigbro.wwooss.v1.dto.request.user.UserCredential;
 import com.bigbro.wwooss.v1.dto.request.team.JoinResultRequest;
+import com.bigbro.wwooss.v1.dto.response.team.TeamResponse;
 import com.bigbro.wwooss.v1.enumType.TeamType;
 import com.bigbro.wwooss.v1.response.WwoossResponse;
 import com.bigbro.wwooss.v1.response.WwoossResponseUtil;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 
 @RestController
 @RequestMapping("/v1/team")
@@ -59,9 +61,11 @@ public class TeamApi {
         return WwoossResponseUtil.responseOkNoData();
     }
 
-    // 거절된거 재심사
-
     // 나의 팀 조회
+    @GetMapping
+    public ResponseEntity<WwoossResponse<List<TeamResponse>>> getMyTeam(UserCredential userCredential) {
+        return WwoossResponseUtil.responseOkAddData(teamService.getMyTeam(userCredential.getUserId()));
+    }
 
     // 팀별 검색
 

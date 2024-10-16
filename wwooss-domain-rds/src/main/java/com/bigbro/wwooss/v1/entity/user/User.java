@@ -83,7 +83,7 @@ public class User extends BaseEntity {
     @Column(name = "refresh_token")
     private String refreshToken;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<TeamUser> teamUsers;
 
     public static User of(User user, String encodedPassword, String refreshToken) {

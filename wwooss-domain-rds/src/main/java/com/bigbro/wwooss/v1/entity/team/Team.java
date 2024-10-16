@@ -63,7 +63,7 @@ public class Team {
     @Column(name = "business_regit_image_path")
     private String businessRegitImagePath;
 
-    @OneToMany(mappedBy = "team")
+    @OneToMany(mappedBy = "team", fetch = FetchType.LAZY)
     private List<TeamUser> teamUsers;
 
     public void updateStatus(RequestStatus status) {
