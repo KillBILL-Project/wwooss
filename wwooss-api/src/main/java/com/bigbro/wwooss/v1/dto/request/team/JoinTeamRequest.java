@@ -14,5 +14,4 @@ public class JoinTeamRequest {
     private Long teamId;
     @NotNull(message = "팀 타입은 필수값입니다. [SCHOOL/COMPANY/CREW/REGION]")
     private TeamType teamType;
-    private String companyCode;
 }

@@ -1,4 +1,4 @@
-package com.bigbro.wwooss.v1.repository.teamRequest;
+package com.bigbro.wwooss.v1.repository.team;
 
 import com.bigbro.wwooss.v1.entity.teamRequest.TeamRequest;
 import org.springframework.data.jpa.repository.JpaRepository;

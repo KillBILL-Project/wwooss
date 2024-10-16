@@ -54,10 +54,6 @@ public class Team {
     @Column(name = "logo_image_path")
     private String logoImagePath;
 
-    @Comment("기업 코드")
-    @Column(name = "company_code")
-    private String companyCode;
-
     @Comment("생성자")
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
@@ -69,5 +65,9 @@ public class Team {
 
     @OneToMany(mappedBy = "team")
     private List<TeamUser> teamUsers;
+
+    public void updateStatus(RequestStatus status) {
+        this.status = status;
+    }
 
 }

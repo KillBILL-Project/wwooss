@@ -1,23 +1,25 @@
 package com.bigbro.wwooss.v1.service.team.impl;
 
+import com.bigbro.wwooss.v1.dto.request.team.JoinResultRequest;
 import com.bigbro.wwooss.v1.dto.request.team.CreateTeamRequest;
 import com.bigbro.wwooss.v1.dto.request.team.JoinTeamRequest;
 import com.bigbro.wwooss.v1.entity.teamRequest.TeamRequest;
 import com.bigbro.wwooss.v1.entity.team.Team;
+import com.bigbro.wwooss.v1.entity.teamUser.TeamUser;
 import com.bigbro.wwooss.v1.entity.user.User;
 import com.bigbro.wwooss.v1.enumType.RequestStatus;
 import com.bigbro.wwooss.v1.enumType.TeamRequestType;
 import com.bigbro.wwooss.v1.enumType.TeamType;
 import com.bigbro.wwooss.v1.exception.DataNotFoundException;
-import com.bigbro.wwooss.v1.exception.IncorrectDataException;
+import com.bigbro.wwooss.v1.exception.DuplicationException;
 import com.bigbro.wwooss.v1.exception.NoDataException;
 import com.bigbro.wwooss.v1.repository.team.TeamRepository;
-import com.bigbro.wwooss.v1.repository.teamRequest.TeamRequestRepository;
+import com.bigbro.wwooss.v1.repository.team.TeamRequestRepository;
+import com.bigbro.wwooss.v1.repository.team.TeamUserRepository;
 import com.bigbro.wwooss.v1.repository.user.UserRepository;
 import com.bigbro.wwooss.v1.response.WwoossResponseCode;
 import com.bigbro.wwooss.v1.service.s3.S3Service;
 import com.bigbro.wwooss.v1.service.team.TeamService;
-import com.bigbro.wwooss.v1.utils.WwoossUtil;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
@@ -28,8 +30,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.Objects;
 
-import static com.bigbro.wwooss.v1.response.WwoossResponseCode.INVALID_DATA;
-import static com.bigbro.wwooss.v1.response.WwoossResponseCode.NO_DATA;
+import static com.bigbro.wwooss.v1.response.WwoossResponseCode.*;
 import static com.bigbro.wwooss.v1.utils.ImageUtil.TEAM_BUSINESS_REGIT;
 import static com.bigbro.wwooss.v1.utils.ImageUtil.TEAM_LOGO;
 
@@ -43,14 +44,15 @@ public class TeamServiceImpl implements TeamService {
 
     private final UserRepository userRepository;
 
-    private final S3Service s3Service;
+    private final TeamUserRepository teamUserRepository;
 
-    private final WwoossUtil wwoossUtil;
+    private final S3Service s3Service;
 
     @Override
     @Transactional
     public void createTeam(Long userId, CreateTeamRequest createTeamRequest, MultipartFile logo, MultipartFile businessRegit) throws IOException {
         checkValidRequest(createTeamRequest, logo, businessRegit);
+        checkDuplication(createTeamRequest);
 
         // 이미지 추가
         String teamLogoImage = s3Service.s3Upload(logo, TEAM_LOGO);
@@ -61,10 +63,6 @@ public class TeamServiceImpl implements TeamService {
 
         // 팀 생성
         User createUser = userRepository.findById(userId).orElseThrow(() -> new DataNotFoundException(WwoossResponseCode.NOT_FOUND_DATA, "존재하지 않는 유저입니다."));
-        String companyCode = null;
-        if(createTeamRequest.getTeamType().equals(TeamType.COMPANY)) {
-            companyCode = wwoossUtil.makeRandomPw(15);
-        }
         Team createTeam = Team.builder()
                 .createBy(createUser)
                 .logoImagePath(teamLogoImage)
@@ -72,19 +70,18 @@ public class TeamServiceImpl implements TeamService {
                 .teamType(createTeamRequest.getTeamType())
                 .address(createTeamRequest.getAddress())
                 .businessNo(createTeamRequest.getBusinessNo())
-                .companyCode(companyCode)
                 .status(RequestStatus.PENDING)
                 .email(createTeamRequest.getEmail())
                 .teamName(createTeamRequest.getTeamName())
                 .build();
-        Team saveTeam = teamRepository.save(createTeam);
+        Team createdTeam = teamRepository.save(createTeam);
 
         // 요청 생성
         TeamRequest teamRequest = TeamRequest.builder()
-                .requestUser(createUser)
-                .receiveTeam(saveTeam)
-                .status(RequestStatus.PENDING)
                 .teamRequestType(TeamRequestType.CREATE)
+                .team(createdTeam)
+                .status(RequestStatus.PENDING)
+                .requestUser(createUser)
                 .build();
         teamRequestRepository.save(teamRequest);
     }
@@ -92,20 +89,43 @@ public class TeamServiceImpl implements TeamService {
     @Override
     @Transactional
     public void requestJoinTeam(Long userId, JoinTeamRequest joinTeamRequest) {
-        if(joinTeamRequest.getTeamType().equals(TeamType.COMPANY)) {
-            checkCompanyCode(joinTeamRequest.getTeamId(), joinTeamRequest.getCompanyCode());
-        }
-
         User requestUser = userRepository.findById(userId).orElseThrow(() -> new DataNotFoundException(WwoossResponseCode.NOT_FOUND_DATA, "존재하지 않는 유저입니다."));
-        Team receiveTeam = teamRepository.findById(joinTeamRequest.getTeamId()).orElseThrow(() -> new DataNotFoundException(WwoossResponseCode.NOT_FOUND_DATA, "존재하지 팀입니다."));
+        Team team = teamRepository.findById(joinTeamRequest.getTeamId()).orElseThrow(() -> new DataNotFoundException(WwoossResponseCode.NOT_FOUND_DATA, "존재하지 팀입니다."));
 
         TeamRequest teamRequest = TeamRequest.builder()
                 .requestUser(requestUser)
-                .receiveTeam(receiveTeam)
-                .status(RequestStatus.PENDING)
+                .team(team)
+                .status(RequestStatus.APPROVE) // join은 자동 승인 : 추후 승인 과정 넣을 예정
                 .teamRequestType(TeamRequestType.JOIN)
                 .build();
         teamRequestRepository.save(teamRequest);
+    }
+
+    @Override
+    @Transactional
+    public void approvalTeam(Long requestTeamId, JoinResultRequest joinResultRequest) {
+        TeamRequest teamRequest = teamRequestRepository.findById(requestTeamId).orElseThrow(() -> new DataNotFoundException(WwoossResponseCode.NOT_FOUND_DATA, "존재하지 않는 요청입니다."));
+
+        //거절
+        if(joinResultRequest.getStatus().equals(RequestStatus.REJECT)) {
+            teamRequest.rejectResult(joinResultRequest.getRejectReason());
+            teamRequest.getTeam().updateStatus(RequestStatus.REJECT);
+            return;
+        }
+
+        User requestUser = teamRequest.getRequestUser();
+        Team team = teamRequest.getTeam();
+
+        // 생성 승인
+        teamRequest.approveResult();
+        team.updateStatus(RequestStatus.APPROVE);
+
+        // 생성된 팀에 요청자 주입
+        TeamUser teamUser = TeamUser.builder()
+                .team(team)
+                .user(requestUser)
+                .build();
+        teamUserRepository.save(teamUser);
     }
 
     private void checkValidRequest(CreateTeamRequest createTeamRequest, MultipartFile logo, MultipartFile businessRegit) {
@@ -139,10 +159,29 @@ public class TeamServiceImpl implements TeamService {
         }
     }
 
-    private void checkCompanyCode(Long teamId, String companyCode) {
-        Team team = teamRepository.findTeamByTeamIdAndCompanyCode(teamId, companyCode);
-        if(Objects.isNull(team)) {
-            throw new IncorrectDataException(INVALID_DATA, "유효하지 않은 기업 코드입니다.");
+    private void checkDuplication(CreateTeamRequest createTeamRequest) {
+        Team team = null;
+        // 기업
+        // 팀명, 사업자번호 주소 이메일
+        if(createTeamRequest.getTeamType().equals(TeamType.COMPANY)) {
+            team = teamRepository.findCompanyTeam(createTeamRequest.getTeamName(), createTeamRequest.getAddress(),
+                    createTeamRequest.getBusinessNo(), createTeamRequest.getEmail());
+        }
+
+        // 학교
+        // 팀명, 주소, 이메일
+        if(createTeamRequest.getTeamType().equals(TeamType.SCHOOL)) {
+            team = teamRepository.findSchoolTeam(createTeamRequest.getTeamName(), createTeamRequest.getAddress(), createTeamRequest.getEmail());
+        }
+
+        // 크루
+        // 팀명, 이메일
+        if(createTeamRequest.getTeamType().equals(TeamType.CREW)) {
+            team = teamRepository.findCrewTeam(createTeamRequest.getTeamName(), createTeamRequest.getEmail());
+        }
+
+        if(Objects.nonNull(team)) {
+            throw new DuplicationException(DUPLICATION_RESOURCE);
         }
     }
 

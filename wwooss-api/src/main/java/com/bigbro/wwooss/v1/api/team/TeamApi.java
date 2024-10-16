@@ -3,6 +3,7 @@ package com.bigbro.wwooss.v1.api.team;
 import com.bigbro.wwooss.v1.dto.request.team.CreateTeamRequest;
 import com.bigbro.wwooss.v1.dto.request.team.JoinTeamRequest;
 import com.bigbro.wwooss.v1.dto.request.user.UserCredential;
+import com.bigbro.wwooss.v1.dto.request.team.JoinResultRequest;
 import com.bigbro.wwooss.v1.enumType.TeamType;
 import com.bigbro.wwooss.v1.response.WwoossResponse;
 import com.bigbro.wwooss.v1.response.WwoossResponseUtil;
@@ -51,7 +52,14 @@ public class TeamApi {
         return WwoossResponseUtil.responseCreatedNoData();
     }
 
-    // 승인, 거절, 대기
+    // 승인, 거절
+    @PatchMapping("/status/{team-request-id}")
+    public ResponseEntity<WwoossResponse<Void>> approvalRequestTeam(@RequestBody JoinResultRequest joinResultRequest, @PathVariable("team-request-id") Long teamRequestId) {
+        teamService.approvalTeam(teamRequestId, joinResultRequest);
+        return WwoossResponseUtil.responseOkNoData();
+    }
+
+    // 거절된거 재심사
 
     // 나의 팀 조회
 

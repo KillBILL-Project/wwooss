@@ -30,7 +30,7 @@ public class TeamRequest {
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "team_id")
-    private Team receiveTeam;
+    private Team team;
 
     @Comment("상태 - 승인 / 거절 / 대기")
     @Column(name = "status")
@@ -46,4 +46,12 @@ public class TeamRequest {
     @Column(name = "reject_reason")
     private String rejectReason;
 
+    public void rejectResult(String rejectReason) {
+        this.status = RequestStatus.REJECT;
+        this.rejectReason = rejectReason;
+    }
+
+    public void approveResult() {
+        this.status = RequestStatus.APPROVE;
+    }
 }
