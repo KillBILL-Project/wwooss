@@ -67,7 +67,12 @@ public class TeamApi {
         return WwoossResponseUtil.responseOkAddData(teamService.getMyTeam(userCredential.getUserId()));
     }
 
+    // 나의 팀 디테일
+    @GetMapping("/{team-id}")
+    public ResponseEntity<WwoossResponse<TeamResponse>> getTeamDetail(@PathVariable("team-id") Long teamId) {
+        return WwoossResponseUtil.responseOkAddData(teamService.getTeamDetail(teamId));
+    }
+
     // 팀별 검색
 
-    // 나의 팀 디테일
 }

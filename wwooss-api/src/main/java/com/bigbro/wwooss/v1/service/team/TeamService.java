@@ -41,4 +41,11 @@ public interface TeamService {
      * @return
      */
     List<TeamResponse> getMyTeam(Long userId);
+
+    /**
+     * team detail
+     * @param teamId
+     * @return
+     */
+    TeamResponse getTeamDetail(Long teamId);
 }

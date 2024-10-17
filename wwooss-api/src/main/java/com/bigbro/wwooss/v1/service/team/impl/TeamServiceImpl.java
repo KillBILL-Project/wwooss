@@ -148,6 +148,19 @@ public class TeamServiceImpl implements TeamService {
         ).toList();
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public TeamResponse getTeamDetail(Long teamId) {
+        Team team = teamRepository.findById(teamId).orElseThrow(() -> new DataNotFoundException(NOT_FOUND_DATA, "존재하지 않는 팀입니다."));
+        return TeamResponse.builder()
+                .teamId(team.getTeamId())
+                .teamType(team.getTeamType())
+                .teamName(team.getTeamName())
+                .status(team.getStatus())
+                .logoImage(imageUtil.baseTeamLogo() + "/" + team.getLogoImagePath())
+                .build();
+    }
+
     private void checkValidRequest(CreateTeamRequest createTeamRequest, MultipartFile logo, MultipartFile businessRegit) {
         // 공통 필수값
         if(StringUtils.isBlank(createTeamRequest.getTeamName())

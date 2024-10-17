@@ -186,6 +186,48 @@ class TeamApiTest {
                 );
     }
 
+    @Test
+    @WithMockCustomUser
+    @DisplayName("팀 detail")
+    void getTeamDetail() throws Exception {
+        TeamResponse wwoossTeam = TeamResponse.builder()
+                .teamId(1L)
+                .teamType(TeamType.COMPANY)
+                .teamName("WWOOSS")
+                .status(RequestStatus.APPROVE)
+                .logoImage("WWOOSS.png")
+                .build();
+        given(teamService.getTeamDetail(1L)).willReturn(wwoossTeam);
+
+        this.mockMvc.perform(RestDocumentationRequestBuilders.get("/api/v1/team/{team-id}", 1L)
+                        .with(csrf().asHeader())
+                        .header("Authorization", "bearer TEST_ACCESS")
+                        .contextPath("/api")
+                        .contentType(MediaType.APPLICATION_JSON)
+                )
+                .andExpect(status().isOk())
+                .andDo(document("get-team-detail",
+                                resourceDetails().tags("Team Detail 조회")
+                                        .description("팀 디테일 조회"),
+                                DocumentConfig.getDocumentRequest(),
+                                DocumentConfig.getDocumentResponse(),
+                                requestHeaders(
+                                        headerWithName("Authorization").description("인증 토큰")
+                                ),
+                                responseFields(
+                                        fieldWithPath("code").description("응답 코드"),
+                                        fieldWithPath("title").description("응답 코드 별 클라이언트 노출 제목"),
+                                        fieldWithPath("message").description("응답 코드 별 클라이언트 노출 메세지"),
+                                        fieldWithPath("data.teamId").description("팀 ID"),
+                                        fieldWithPath("data.teamType").description("팀 타입 - [COMPANY/SCHOOL/CREW/REGION]"),
+                                        fieldWithPath("data.teamName").description("팀 이름"),
+                                        fieldWithPath("data.logoImage").description("팀 logo"),
+                                        fieldWithPath("data.status").description("팀 승인 상태 - [APPROVE/REJECT/PENDING]")
+                                )
+                        )
+                );
+    }
+
 //    @Test
 //    @WithMockCustomUser
 //    @DisplayName("팀 합류 요청")
