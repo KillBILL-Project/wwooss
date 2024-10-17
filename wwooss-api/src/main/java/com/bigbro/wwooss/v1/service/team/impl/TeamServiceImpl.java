@@ -140,6 +140,7 @@ public class TeamServiceImpl implements TeamService {
         List<TeamUser> teamUsers = teamUserRepository.findByUser(user);
         return teamUsers.stream().map((teamUser) -> TeamResponse.builder()
                 .teamId(teamUser.getTeam().getTeamId())
+                .teamType(teamUser.getTeam().getTeamType())
                 .teamName(teamUser.getTeam().getTeamName())
                 .status(teamUser.getTeam().getStatus())
                 .logoImage(imageUtil.baseTeamLogo() + "/" + teamUser.getTeam().getLogoImagePath())
