@@ -6,7 +6,7 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class CreateTeamRequest {
+public class TeamInfoRequest {
     private String teamName;
     private String address;
     private TeamType teamType;

@@ -1,11 +1,11 @@
 package com.bigbro.wwooss.v1.service.team.impl;
 
 import com.bigbro.wwooss.v1.dto.request.team.JoinResultRequest;
-import com.bigbro.wwooss.v1.dto.request.team.CreateTeamRequest;
+import com.bigbro.wwooss.v1.dto.request.team.TeamInfoRequest;
 import com.bigbro.wwooss.v1.dto.request.team.JoinTeamRequest;
 import com.bigbro.wwooss.v1.dto.response.team.TeamResponse;
-import com.bigbro.wwooss.v1.entity.teamRequest.TeamRequest;
 import com.bigbro.wwooss.v1.entity.team.Team;
+import com.bigbro.wwooss.v1.entity.teamRequest.TeamRequest;
 import com.bigbro.wwooss.v1.entity.teamUser.TeamUser;
 import com.bigbro.wwooss.v1.entity.user.User;
 import com.bigbro.wwooss.v1.enumType.RequestStatus;
@@ -13,6 +13,7 @@ import com.bigbro.wwooss.v1.enumType.TeamRequestType;
 import com.bigbro.wwooss.v1.enumType.TeamType;
 import com.bigbro.wwooss.v1.exception.DataNotFoundException;
 import com.bigbro.wwooss.v1.exception.DuplicationException;
+import com.bigbro.wwooss.v1.exception.IncorrectDataException;
 import com.bigbro.wwooss.v1.exception.NoDataException;
 import com.bigbro.wwooss.v1.repository.team.TeamRepository;
 import com.bigbro.wwooss.v1.repository.team.TeamRequestRepository;
@@ -55,9 +56,9 @@ public class TeamServiceImpl implements TeamService {
 
     @Override
     @Transactional
-    public void createTeam(Long userId, CreateTeamRequest createTeamRequest, MultipartFile logo, MultipartFile businessRegit) throws IOException {
-        checkValidRequest(createTeamRequest, logo, businessRegit);
-        checkDuplication(createTeamRequest);
+    public void createTeam(Long userId, TeamInfoRequest createTeamInfoRequest, MultipartFile logo, MultipartFile businessRegit) throws IOException {
+        checkValidRequest(createTeamInfoRequest, logo, businessRegit);
+        checkDuplication(createTeamInfoRequest);
 
         // 이미지 추가
         String teamLogoImage = s3Service.s3Upload(logo, TEAM_LOGO);
@@ -72,12 +73,12 @@ public class TeamServiceImpl implements TeamService {
                 .createBy(createUser)
                 .logoImagePath(teamLogoImage)
                 .businessRegitImagePath(teamBusinessRegitImage)
-                .teamType(createTeamRequest.getTeamType())
-                .address(createTeamRequest.getAddress())
-                .businessNo(createTeamRequest.getBusinessNo())
+                .teamType(createTeamInfoRequest.getTeamType())
+                .address(createTeamInfoRequest.getAddress())
+                .businessNo(createTeamInfoRequest.getBusinessNo())
                 .status(RequestStatus.PENDING)
-                .email(createTeamRequest.getEmail())
-                .teamName(createTeamRequest.getTeamName())
+                .email(createTeamInfoRequest.getEmail())
+                .teamName(createTeamInfoRequest.getTeamName())
                 .build();
         Team createdTeam = teamRepository.save(createTeam);
 
@@ -97,7 +98,7 @@ public class TeamServiceImpl implements TeamService {
         User requestUser = userRepository.findById(userId).orElseThrow(() -> new DataNotFoundException(WwoossResponseCode.NOT_FOUND_DATA, "존재하지 않는 유저입니다."));
         Team team = teamRepository.findById(joinTeamRequest.getTeamId()).orElseThrow(() -> new DataNotFoundException(WwoossResponseCode.NOT_FOUND_DATA, "존재하지 팀입니다."));
 
-        TeamRequest teamRequest = TeamRequest.builder()
+        com.bigbro.wwooss.v1.entity.teamRequest.TeamRequest teamRequest = com.bigbro.wwooss.v1.entity.teamRequest.TeamRequest.builder()
                 .requestUser(requestUser)
                 .team(team)
                 .status(RequestStatus.APPROVE) // join은 자동 승인 : 추후 승인 과정 넣을 예정
@@ -143,6 +144,7 @@ public class TeamServiceImpl implements TeamService {
                 .teamType(teamUser.getTeam().getTeamType())
                 .teamName(teamUser.getTeam().getTeamName())
                 .status(teamUser.getTeam().getStatus())
+                .owner(teamUser.getTeam().getCreateBy().getUserId().equals(user.getUserId()))
                 .logoImage(imageUtil.baseTeamLogo() + "/" + teamUser.getTeam().getLogoImagePath())
                 .build()
         ).toList();
@@ -150,67 +152,87 @@ public class TeamServiceImpl implements TeamService {
 
     @Override
     @Transactional(readOnly = true)
-    public TeamResponse getTeamDetail(Long teamId) {
+    public TeamResponse getTeamDetail(Long teamId, Long userId) {
         Team team = teamRepository.findById(teamId).orElseThrow(() -> new DataNotFoundException(NOT_FOUND_DATA, "존재하지 않는 팀입니다."));
+        boolean isOwner = team.getCreateBy().getUserId().equals(userId);
+
         return TeamResponse.builder()
                 .teamId(team.getTeamId())
                 .teamType(team.getTeamType())
                 .teamName(team.getTeamName())
                 .status(team.getStatus())
+                .owner(isOwner)
                 .logoImage(imageUtil.baseTeamLogo() + "/" + team.getLogoImagePath())
                 .build();
     }
 
-    private void checkValidRequest(CreateTeamRequest createTeamRequest, MultipartFile logo, MultipartFile businessRegit) {
+    @Override
+    @Transactional
+    public void updateTeam(TeamInfoRequest teamInfoRequest, Long teamId, Long userId,
+                           MultipartFile logo) throws IOException {
+        Team team = teamRepository.findByTeamIdAndTeamType(teamId, teamInfoRequest.getTeamType()).orElseThrow(() -> new DataNotFoundException(NOT_FOUND_DATA, "존재하지 않는 팀입니다."));
+        if(!team.getCreateBy().getUserId().equals(userId)) {
+            throw new IncorrectDataException(INVALID_DATA, "팀의 주인이 아닙니다.");
+        }
+
+        // 이미지 변경
+        if(Objects.nonNull(logo)) {
+            team.updateLogo(s3Service.s3Upload(logo, TEAM_LOGO));
+        }
+
+        team.updateTeamInfo(teamInfoRequest.getEmail());
+    }
+
+    private void checkValidRequest(TeamInfoRequest teamInfoRequest, MultipartFile logo, MultipartFile businessRegit) {
         // 공통 필수값
-        if(StringUtils.isBlank(createTeamRequest.getTeamName())
+        if(StringUtils.isBlank(teamInfoRequest.getTeamName())
                 || Objects.isNull(logo)) {
             throw new NoDataException(NO_DATA, "팀 이름, 로고는 필수 값입니다.");
         }
 
         // 회사 필수값
-        if(createTeamRequest.getTeamType().equals(TeamType.COMPANY)
-                && (StringUtils.isBlank(createTeamRequest.getBusinessNo()) || Objects.isNull(businessRegit))) {
+        if(teamInfoRequest.getTeamType().equals(TeamType.COMPANY)
+                && (StringUtils.isBlank(teamInfoRequest.getBusinessNo()) || Objects.isNull(businessRegit))) {
             throw new NoDataException(NO_DATA, "회사인 경우 사업자 번호, 사업자 등록증 필수 입니다.");
         }
 
         // 크루, 학교 공통 필수값
-        if((createTeamRequest.getTeamType().equals(TeamType.CREW) || createTeamRequest.getTeamType().equals(TeamType.SCHOOL))
-                && StringUtils.isBlank(createTeamRequest.getEmail())) {
+        if((teamInfoRequest.getTeamType().equals(TeamType.CREW) || teamInfoRequest.getTeamType().equals(TeamType.SCHOOL))
+                && StringUtils.isBlank(teamInfoRequest.getEmail())) {
             throw new NoDataException(NO_DATA, "email은 필수입니다..");
         }
 
         // 회사, 학교 공통 필수
-        if((createTeamRequest.getTeamType().equals(TeamType.COMPANY) || createTeamRequest.getTeamType().equals(TeamType.SCHOOL)) && StringUtils.isBlank(createTeamRequest.getAddress())){
+        if((teamInfoRequest.getTeamType().equals(TeamType.COMPANY) || teamInfoRequest.getTeamType().equals(TeamType.SCHOOL)) && StringUtils.isBlank(teamInfoRequest.getAddress())){
             throw new NoDataException(NO_DATA, "주소는 필수 입니다.");
         }
 
         // 회사가 아닌데 사업자 관련 정보 있을 때
-        if(!createTeamRequest.getTeamType().equals(TeamType.COMPANY) && (!StringUtils.isBlank(createTeamRequest.getBusinessNo())
+        if(!teamInfoRequest.getTeamType().equals(TeamType.COMPANY) && (!StringUtils.isBlank(teamInfoRequest.getBusinessNo())
         || !Objects.isNull(businessRegit))) {
             throw new NoDataException(NO_DATA, "사업자번호, 사업자 등록증은 기업 타입에만 입력해주세요");
         }
     }
 
-    private void checkDuplication(CreateTeamRequest createTeamRequest) {
+    private void checkDuplication(TeamInfoRequest teamInfoRequest) {
         Team team = null;
         // 기업
         // 팀명, 사업자번호 주소 이메일
-        if(createTeamRequest.getTeamType().equals(TeamType.COMPANY)) {
-            team = teamRepository.findCompanyTeam(createTeamRequest.getTeamName(), createTeamRequest.getAddress(),
-                    createTeamRequest.getBusinessNo(), createTeamRequest.getEmail());
+        if(teamInfoRequest.getTeamType().equals(TeamType.COMPANY)) {
+            team = teamRepository.findCompanyTeam(teamInfoRequest.getTeamName(), teamInfoRequest.getAddress(),
+                    teamInfoRequest.getBusinessNo(), teamInfoRequest.getEmail());
         }
 
         // 학교
         // 팀명, 주소, 이메일
-        if(createTeamRequest.getTeamType().equals(TeamType.SCHOOL)) {
-            team = teamRepository.findSchoolTeam(createTeamRequest.getTeamName(), createTeamRequest.getAddress(), createTeamRequest.getEmail());
+        if(teamInfoRequest.getTeamType().equals(TeamType.SCHOOL)) {
+            team = teamRepository.findSchoolTeam(teamInfoRequest.getTeamName(), teamInfoRequest.getAddress(), teamInfoRequest.getEmail());
         }
 
         // 크루
         // 팀명, 이메일
-        if(createTeamRequest.getTeamType().equals(TeamType.CREW)) {
-            team = teamRepository.findCrewTeam(createTeamRequest.getTeamName(), createTeamRequest.getEmail());
+        if(teamInfoRequest.getTeamType().equals(TeamType.CREW)) {
+            team = teamRepository.findCrewTeam(teamInfoRequest.getTeamName(), teamInfoRequest.getEmail());
         }
 
         if(Objects.nonNull(team)) {

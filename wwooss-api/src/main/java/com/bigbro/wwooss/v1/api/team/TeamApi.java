@@ -1,6 +1,6 @@
 package com.bigbro.wwooss.v1.api.team;
 
-import com.bigbro.wwooss.v1.dto.request.team.CreateTeamRequest;
+import com.bigbro.wwooss.v1.dto.request.team.TeamInfoRequest;
 import com.bigbro.wwooss.v1.dto.request.team.JoinTeamRequest;
 import com.bigbro.wwooss.v1.dto.request.user.UserCredential;
 import com.bigbro.wwooss.v1.dto.request.team.JoinResultRequest;
@@ -36,14 +36,14 @@ public class TeamApi {
             @RequestParam(name = "businessRegitFile", required = false) MultipartFile businessRegitFile,
             UserCredential userCredential) throws IOException {
 
-        CreateTeamRequest createTeamRequest = CreateTeamRequest.builder()
+        TeamInfoRequest teamInfoRequest = TeamInfoRequest.builder()
                 .teamName(teamName)
                 .address(address)
                 .email(email)
                 .businessNo(businessNo)
                 .teamType(teamType)
                 .build();
-        teamService.createTeam(userCredential.getUserId(), createTeamRequest, logoFile, businessRegitFile);
+        teamService.createTeam(userCredential.getUserId(), teamInfoRequest, logoFile, businessRegitFile);
         return WwoossResponseUtil.responseCreatedNoData();
     }
 
@@ -69,10 +69,26 @@ public class TeamApi {
 
     // 나의 팀 디테일
     @GetMapping("/{team-id}")
-    public ResponseEntity<WwoossResponse<TeamResponse>> getTeamDetail(@PathVariable("team-id") Long teamId) {
-        return WwoossResponseUtil.responseOkAddData(teamService.getTeamDetail(teamId));
+    public ResponseEntity<WwoossResponse<TeamResponse>> getTeamDetail(@PathVariable("team-id") Long teamId, UserCredential userCredential) {
+        return WwoossResponseUtil.responseOkAddData(teamService.getTeamDetail(teamId, userCredential.getUserId()));
+    }
+
+    // 팀 정보 업데이트
+    @PatchMapping("/{team-id}")
+    public ResponseEntity<WwoossResponse<Void>> updateTeam(@PathVariable("team-id") Long teamId,
+                                                           UserCredential userCredential,
+                                                           @RequestParam(name = "teamType") TeamType teamType,
+                                                           @RequestParam(name = "email") String email,
+                                                           @RequestParam(name = "logoFile", required = false) MultipartFile logoFile) throws IOException {
+        TeamInfoRequest teamInfoRequest = TeamInfoRequest.builder()
+                .email(email)
+                .teamType(teamType)
+                .build();
+        teamService.updateTeam(teamInfoRequest, teamId, userCredential.getUserId(), logoFile);
+        return WwoossResponseUtil.responseOkNoData();
     }
 
     // 팀별 검색
+
 
 }

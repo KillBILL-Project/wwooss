@@ -70,4 +70,16 @@ public class Team {
         this.status = status;
     }
 
+    public void updateLogo(String logoImagePath) {
+        this.logoImagePath = logoImagePath;
+    }
+
+    public void updateBusinessRegit(String businessRegitImagePath) {
+        this.businessRegitImagePath = businessRegitImagePath;
+    }
+
+    public void updateTeamInfo(String email) {
+        this.email = email;
+    }
+
 }

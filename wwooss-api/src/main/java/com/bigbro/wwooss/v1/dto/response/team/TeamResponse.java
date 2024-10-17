@@ -13,4 +13,5 @@ public class TeamResponse {
     private String logoImage;
     private RequestStatus status;
     private TeamType teamType;
+    private Boolean owner;
 }

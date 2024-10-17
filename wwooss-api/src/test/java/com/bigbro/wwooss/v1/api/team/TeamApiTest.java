@@ -154,6 +154,7 @@ class TeamApiTest {
                 .teamName("WWOOSS")
                 .status(RequestStatus.APPROVE)
                 .logoImage("WWOOSS.png")
+                .owner(true)
                 .build();
         given(teamService.getMyTeam(1L)).willReturn(List.of(wwoossTeam));
 
@@ -180,6 +181,7 @@ class TeamApiTest {
                                         fieldWithPath("data[].teamType").description("팀 타입 - [COMPANY/SCHOOL/CREW/REGION]"),
                                         fieldWithPath("data[].teamName").description("팀 이름"),
                                         fieldWithPath("data[].logoImage").description("팀 logo"),
+                                        fieldWithPath("data[].owner").description("팀 주인 여부"),
                                         fieldWithPath("data[].status").description("팀 승인 상태 - [APPROVE/REJECT/PENDING]")
                                 )
                         )
@@ -196,8 +198,9 @@ class TeamApiTest {
                 .teamName("WWOOSS")
                 .status(RequestStatus.APPROVE)
                 .logoImage("WWOOSS.png")
+                .owner(true)
                 .build();
-        given(teamService.getTeamDetail(1L)).willReturn(wwoossTeam);
+        given(teamService.getTeamDetail(1L, 1L)).willReturn(wwoossTeam);
 
         this.mockMvc.perform(RestDocumentationRequestBuilders.get("/api/v1/team/{team-id}", 1L)
                         .with(csrf().asHeader())
@@ -222,7 +225,59 @@ class TeamApiTest {
                                         fieldWithPath("data.teamType").description("팀 타입 - [COMPANY/SCHOOL/CREW/REGION]"),
                                         fieldWithPath("data.teamName").description("팀 이름"),
                                         fieldWithPath("data.logoImage").description("팀 logo"),
+                                        fieldWithPath("data.owner").description("팀 주인 여부"),
                                         fieldWithPath("data.status").description("팀 승인 상태 - [APPROVE/REJECT/PENDING]")
+                                )
+                        )
+                );
+    }
+
+    @Test
+    @WithMockCustomUser
+    @DisplayName("팀 update")
+    void updateTeam() throws Exception {
+        final String fileName = "sample.jpeg";
+        final String contentType = "image/jpeg";
+        final String filePath = "src/test/resources/images/" + fileName;
+        FileInputStream logofileInputStream = new FileInputStream(filePath);
+
+        MockMultipartFile logoImage = new MockMultipartFile(
+                "logoFile", //name
+                fileName, //originalFilename
+                contentType,
+                logofileInputStream
+        );
+
+        this.mockMvc.perform(RestDocumentationRequestBuilders.multipart("/api/v1/team/{team-id}", 1L)
+                        .file(logoImage)
+                        .param("email", "email")
+                        .param("teamType", "COMPANY")
+                        .with(csrf().asHeader())
+                        .with(request -> {
+                            request.setMethod("PATCH");
+                            return request;
+                        })
+                        .header("Authorization", "bearer TEST_ACCESS")
+                        .contextPath("/api")
+                        .contentType(MediaType.APPLICATION_JSON)
+                )
+                .andExpect(status().isOk())
+                .andDo(document("update-team",
+                                resourceDetails().tags("Team 정보 변경")
+                                        .description("team type, email 필수 변경되지 않아도 보내기, 로그는 optional"),
+                                DocumentConfig.getDocumentRequest(),
+                                DocumentConfig.getDocumentResponse(),
+                                requestHeaders(
+                                        headerWithName("Authorization").description("인증 토큰")
+                                ),
+                                requestParts(
+                                        partWithName("logoFile").description("로고 파일").optional()
+                                ),
+                                responseFields(
+                                        fieldWithPath("code").description("응답 코드"),
+                                        fieldWithPath("title").description("응답 코드 별 클라이언트 노출 제목"),
+                                        fieldWithPath("message").description("응답 코드 별 클라이언트 노출 메세지"),
+                                        fieldWithPath("data").description("데이터 없음")
                                 )
                         )
                 );
