@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.Valid;
 import java.io.IOException;
 import java.util.List;
 
@@ -56,7 +57,7 @@ public class TeamApi {
 
     // 승인, 거절
     @PatchMapping("/status/{team-request-id}")
-    public ResponseEntity<WwoossResponse<Void>> approvalRequestTeam(@RequestBody JoinResultRequest joinResultRequest, @PathVariable("team-request-id") Long teamRequestId) {
+    public ResponseEntity<WwoossResponse<Void>> approvalRequestTeam(@RequestBody @Valid JoinResultRequest joinResultRequest, @PathVariable("team-request-id") Long teamRequestId) {
         teamService.approvalTeam(teamRequestId, joinResultRequest);
         return WwoossResponseUtil.responseOkNoData();
     }
