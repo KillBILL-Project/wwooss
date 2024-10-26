@@ -19,7 +19,7 @@ public interface RedisTemplateService {
      * @param expiredValue 만료 시간
      * @param timeUnit     만료 시간 단위
      */
-    void setRedisValue(final String keyName, final Object value, final Long expiredValue, final TimeUnit timeUnit);
+    void setRedisValue(final String keyName, final String value, final Long expiredValue, final TimeUnit timeUnit);
 
     /**
      * Redis 키 존재여부 확인

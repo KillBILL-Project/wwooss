@@ -27,7 +27,7 @@ public class RedisTemplateServiceImpl implements RedisTemplateService {
     }
 
     @Override
-    public void setRedisValue(final String keyName, final Object value, final Long expiredValue, final TimeUnit timeUnit) {
+    public void setRedisValue(final String keyName, final String value, final Long expiredValue, final TimeUnit timeUnit) {
         this.redisTemplate.opsForValue().set(keyName, value, expiredValue, timeUnit);
     }
 
