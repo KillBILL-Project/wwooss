@@ -1,6 +1,7 @@
 package com.bigbro.wwooss.v1.service.wwoossToken.impl;
 
 import com.bigbro.wwooss.v1.dto.response.wwoossToken.IssuedWwoossToken;
+import com.bigbro.wwooss.v1.entity.quiz.Quiz;
 import com.bigbro.wwooss.v1.entity.token.WwoossToken;
 import com.bigbro.wwooss.v1.entity.user.User;
 import com.bigbro.wwooss.v1.entity.wallet.Wallet;
@@ -48,15 +49,35 @@ public class WwoossTokenServiceImpl implements WwoossTokenService {
     }
 
     /**
-     * api를 통한 발급의 경우 여기서 유효성 검증
-     * 쓰레기 비우기와 같은 경우 토큰
+     * 하루 최대치 체크
      */
     private boolean checkDailyMaxValue(IssueType issueType, Long userId) {
-        if(issueType.equals(IssueType.QUIZ)) {
-            String redisKey = IssueType.QUIZ + userId.toString();
-            String value = redisTemplateService.getRedisByKey(redisKey);
-            return Objects.nonNull(value);
+        String redisKey = getRedisKey(issueType, userId);
+        if(Objects.isNull(redisKey)) {
+            return true;
         }
-        return true;
+
+        String value = redisTemplateService.getRedisByKey(redisKey);
+        return Objects.nonNull(value);
+    }
+
+    private String getRedisKey(IssueType issueType, Long userId) {
+        switch (issueType) {
+            case QUIZ -> {
+                return IssueType.QUIZ.name() + userId.toString();
+            }
+            case CLEAN_TRASH -> {
+                return IssueType.CLEAN_TRASH.name() + userId.toString();
+            }
+            case CHECK_REPORT -> {
+                return IssueType.CHECK_REPORT.name() + userId.toString();
+            }
+            case RECORD_RECYCLE -> {
+                return IssueType.RECORD_RECYCLE.name() + userId.toString();
+            }
+            default -> {
+                return null;
+            }
+        }
     }
 }
