@@ -12,6 +12,7 @@ public enum WwoossResponseCode {
     SUCCESS(HttpStatus.OK, "안내", "정상 처리 되었습니다."),
     CREATED_SUCCESS(HttpStatus.CREATED, "안내", "정상적으로 생성 되었습니다."),
     NO_CONTENT_SUCCESS(HttpStatus.NO_CONTENT, "안내", "정상 처리 되었습니다."),
+    OVER_TOKEN(HttpStatus.OK, "안내", "토큰 하루 최대치 초과."),
 
     // client error
     UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "안내", "인증이 필요합니다."),
@@ -21,6 +22,7 @@ public enum WwoossResponseCode {
     INVALID_TOKEN(HttpStatus.BAD_REQUEST, "안내", "토큰 파싱 에러입니다. 토큰을 확인해주세요."),
     INVALID_DATA(HttpStatus.BAD_REQUEST, "안내", "잘못된 데이터입니다."),
     DUPLICATION_RESOURCE(HttpStatus.BAD_REQUEST, "안내", "중복된 데이터입니다."),
+    TOO_MANY_DATA(HttpStatus.BAD_REQUEST, "안내", "초과 데이터입니다."),
 
     // server error
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "안내", "서버 내부 오류입니다."),

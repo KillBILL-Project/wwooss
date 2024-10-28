@@ -12,18 +12,11 @@ import java.util.concurrent.TimeUnit;
 @RequiredArgsConstructor
 public class RedisTemplateServiceImpl implements RedisTemplateService {
 
-    private final RedisTemplate<String, Object> redisTemplate;
+    private final RedisTemplate<String, String> redisTemplate;
 
     @Override
     public String getRedisByKey(String keyName) {
-
-        Object value = this.redisTemplate.opsForValue().get(keyName);
-
-        if (Objects.isNull(value)) {
-            return "";
-        }
-
-        return String.valueOf(value);
+        return this.redisTemplate.opsForValue().get(keyName);
     }
 
     @Override

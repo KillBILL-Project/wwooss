@@ -12,6 +12,10 @@ public class WwoossResponseUtil {
         return wwoossNoDataResponseEntity(SUCCESS);
     }
 
+    public static <T> ResponseEntity <WwoossResponse<T>> responseOkNoDataCode(WwoossResponseCode code) {
+        return wwoossNoDataResponseEntity(code);
+    }
+
     public static <T> ResponseEntity <WwoossResponse<T>> responseOkAddData(T data) {
         return wwoossResponseEntity(SUCCESS, data);
     }

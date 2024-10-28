@@ -12,6 +12,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Objects;
+
+import static com.bigbro.wwooss.v1.response.WwoossResponseCode.OVER_TOKEN;
 
 @RestController
 @RequestMapping("/v1/wwooss-token")
@@ -22,7 +25,8 @@ public class WwoossTokenApi {
 
     @PostMapping
     public ResponseEntity<WwoossResponse<IssuedWwoossToken>> issueToken(UserCredential userCredential, @Valid @RequestBody IssueTokenRequest issueTokenRequest) {
-        return WwoossResponseUtil.responseCreatedAddData(wwoossTokenService.issueWwoossToken(userCredential.getUserId(), issueTokenRequest.getIssueType()));
+        IssuedWwoossToken issuedWwoossToken = wwoossTokenService.issueWwoossToken(userCredential.getUserId(), issueTokenRequest.getIssueType());
+        return Objects.isNull(issuedWwoossToken) ? WwoossResponseUtil.responseOkNoDataCode(OVER_TOKEN) : WwoossResponseUtil.responseCreatedAddData(issuedWwoossToken);
     }
 
 }

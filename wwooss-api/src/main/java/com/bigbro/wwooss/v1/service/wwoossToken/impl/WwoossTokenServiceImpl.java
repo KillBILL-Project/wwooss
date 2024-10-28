@@ -7,6 +7,7 @@ import com.bigbro.wwooss.v1.entity.user.User;
 import com.bigbro.wwooss.v1.entity.wallet.Wallet;
 import com.bigbro.wwooss.v1.enumType.IssueType;
 import com.bigbro.wwooss.v1.exception.DataNotFoundException;
+import com.bigbro.wwooss.v1.exception.DataTooManyException;
 import com.bigbro.wwooss.v1.repository.quizHistory.QuizHistoryRepository;
 import com.bigbro.wwooss.v1.repository.user.UserRepository;
 import com.bigbro.wwooss.v1.repository.wallet.WalletRepository;
@@ -19,7 +20,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
+
+import static com.bigbro.wwooss.v1.response.WwoossResponseCode.TOO_MANY_DATA;
 
 
 @Service
@@ -37,11 +45,13 @@ public class WwoossTokenServiceImpl implements WwoossTokenService {
     @Override
     @Transactional
     public IssuedWwoossToken issueWwoossToken(Long userId, IssueType issueType) {
-        if(!checkDailyMaxValue(issueType, userId)) {
+        if(checkDailyMaxValue(issueType, userId)) {
             return null;
         }
         User user = userRepository.findById(userId).orElseThrow(() -> new DataNotFoundException(WwoossResponseCode.NOT_FOUND_DATA, "유저를 찾을 수 없습니다."));
-        Wallet wallet = walletRepository.findByUser(user).orElseThrow(() -> new DataNotFoundException(WwoossResponseCode.NOT_FOUND_DATA, "유저를 찾을 수 없습니다."));
+        Wallet wallet = walletRepository.findByUser(user).orElseThrow(() -> new DataNotFoundException(WwoossResponseCode.NOT_FOUND_DATA, "지갑을 찾을 수 없습니다."));
+
+        saveTokenDaily(issueType, userId);
 
         WwoossToken wwoossToken = WwoossToken.of(issueType, wallet);
         WwoossToken savedToken = wwoossTokenRepository.save(wwoossToken);
@@ -54,26 +64,51 @@ public class WwoossTokenServiceImpl implements WwoossTokenService {
     private boolean checkDailyMaxValue(IssueType issueType, Long userId) {
         String redisKey = getRedisKey(issueType, userId);
         if(Objects.isNull(redisKey)) {
-            return true;
+            return false;
         }
 
         String value = redisTemplateService.getRedisByKey(redisKey);
-        return Objects.nonNull(value);
+        if(Objects.isNull(value)) {
+            return false;
+        }
+        return Long.parseLong(value) >= issueType.getMaxValue();
+    }
+
+    /**
+     * 하루 발급된 토큰
+     * @param issueType
+     * @param userId
+     */
+    private void saveTokenDaily(IssueType issueType, Long userId) {
+        String redisKey = getRedisKey(issueType, userId);
+        if(Objects.isNull(redisKey)) {
+            return;
+        }
+
+        String value = redisTemplateService.getRedisByKey(redisKey);
+        Long issueToken = Objects.isNull(value) ? issueType.getValue() : Long.parseLong(value) + issueType.getValue();
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime midnight = LocalDate.now().atTime(LocalTime.MAX);
+        Duration duration = Duration.between(now, midnight);
+        long seconds = duration.getSeconds();
+
+        redisTemplateService.setRedisValue(getRedisKey(issueType, userId), issueToken.toString(), seconds, TimeUnit.SECONDS);
+
     }
 
     private String getRedisKey(IssueType issueType, Long userId) {
         switch (issueType) {
             case QUIZ -> {
-                return IssueType.QUIZ.name() + userId.toString();
+                return IssueType.QUIZ.name() + ":" + userId.toString();
             }
             case CLEAN_TRASH -> {
-                return IssueType.CLEAN_TRASH.name() + userId.toString();
+                return IssueType.CLEAN_TRASH.name() + ":" + userId.toString();
             }
             case CHECK_REPORT -> {
-                return IssueType.CHECK_REPORT.name() + userId.toString();
+                return IssueType.CHECK_REPORT.name() + ":" + userId.toString();
             }
             case RECORD_RECYCLE -> {
-                return IssueType.RECORD_RECYCLE.name() + userId.toString();
+                return IssueType.RECORD_RECYCLE.name() + ":" + userId.toString();
             }
             default -> {
                 return null;
