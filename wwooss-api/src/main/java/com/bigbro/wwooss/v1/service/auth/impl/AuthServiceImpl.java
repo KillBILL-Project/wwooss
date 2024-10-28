@@ -10,6 +10,7 @@ import com.bigbro.wwooss.v1.dto.response.auth.TokenResponse;
 import com.bigbro.wwooss.v1.entity.quiz.Quiz;
 import com.bigbro.wwooss.v1.entity.user.User;
 import com.bigbro.wwooss.v1.entity.user.WithdrawalUser;
+import com.bigbro.wwooss.v1.enumType.IssueType;
 import com.bigbro.wwooss.v1.enumType.LoginType;
 import com.bigbro.wwooss.v1.enumType.NotificationTemplateCode;
 import com.bigbro.wwooss.v1.enumType.SendEmailType;
@@ -36,6 +37,7 @@ import com.bigbro.wwooss.v1.service.notification.NotificationService;
 import com.bigbro.wwooss.v1.service.quiz.QuizService;
 import com.bigbro.wwooss.v1.service.quizHistory.QuizHistoryService;
 import com.bigbro.wwooss.v1.service.wallet.WalletService;
+import com.bigbro.wwooss.v1.service.wwoossToken.WwoossTokenService;
 import com.bigbro.wwooss.v1.utils.WwoossUtil;
 import com.google.gson.*;
 import io.jsonwebtoken.Claims;
@@ -115,6 +117,8 @@ public class AuthServiceImpl implements AuthService {
     private final QuizService quizService;
 
     private final QuizHistoryService quizHistoryService;
+
+    private final WwoossTokenService wwoossTokenService;
 
     private final WwoossUtil wwoossUtil;
 
@@ -273,6 +277,8 @@ public class AuthServiceImpl implements AuthService {
         walletService.createWallet(registeredUser);
         // 오픈된 퀴즈 중 가장 최신 퀴즈
         addQuiz(registeredUser);
+        // 회원가입 토큰 생성
+        wwoossTokenService.issueWwoossToken(registeredUser.getUserId(), IssueType.SIGN_UP);
 
 
         String accessToken = tokenProvider.generateToken(registeredUser, "access");
