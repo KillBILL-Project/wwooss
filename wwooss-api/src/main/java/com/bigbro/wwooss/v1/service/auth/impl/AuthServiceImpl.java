@@ -118,8 +118,6 @@ public class AuthServiceImpl implements AuthService {
 
     private final QuizHistoryService quizHistoryService;
 
-    private final WwoossTokenService wwoossTokenService;
-
     private final WwoossUtil wwoossUtil;
 
 
@@ -277,8 +275,6 @@ public class AuthServiceImpl implements AuthService {
         walletService.createWallet(registeredUser);
         // 오픈된 퀴즈 중 가장 최신 퀴즈
         addQuiz(registeredUser);
-        // 회원가입 토큰 생성
-        wwoossTokenService.issueWwoossToken(registeredUser.getUserId(), IssueType.SIGN_UP);
 
 
         String accessToken = tokenProvider.generateToken(registeredUser, "access");
