@@ -31,8 +31,8 @@ import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.restdocs.request.RequestDocumentation.partWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.requestParts;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -357,6 +357,13 @@ class TeamApiTest {
                                 DocumentConfig.getDocumentResponse(),
                                 requestHeaders(
                                         headerWithName("Authorization").description("인증 토큰")
+                                ),
+                                pathParameters(
+                                        parameterWithName("team-type").description("팀 타입 - [COMPANY/SCHOOL/CREW/REGION]")
+                                ),
+                                requestParameters(
+                                        parameterWithName("page").description("현재 페이지"),
+                                        parameterWithName("size").description("한 페이지 당 결과값").optional()
                                 ),
                                 responseFields(
                                         fieldWithPath("code").description("응답 코드"),
