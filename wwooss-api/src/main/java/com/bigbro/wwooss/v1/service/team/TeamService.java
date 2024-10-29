@@ -4,6 +4,9 @@ import com.bigbro.wwooss.v1.dto.request.team.JoinResultRequest;
 import com.bigbro.wwooss.v1.dto.request.team.TeamInfoRequest;
 import com.bigbro.wwooss.v1.dto.request.team.JoinTeamRequest;
 import com.bigbro.wwooss.v1.dto.response.team.TeamResponse;
+import com.bigbro.wwooss.v1.dto.response.team.TeamSearchListResponse;
+import com.bigbro.wwooss.v1.enumType.TeamType;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -57,4 +60,9 @@ public interface TeamService {
      */
     void updateTeam(TeamInfoRequest teamInfoRequest, Long teamId, Long userId,
                     MultipartFile logo) throws IOException;
+
+    /**
+     * team명 검색
+     */
+    TeamSearchListResponse searchTeam(Pageable pageable, TeamType teamType, String searchText);
 }

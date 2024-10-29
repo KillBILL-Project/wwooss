@@ -5,11 +5,15 @@ import com.bigbro.wwooss.v1.dto.request.team.JoinTeamRequest;
 import com.bigbro.wwooss.v1.dto.request.user.UserCredential;
 import com.bigbro.wwooss.v1.dto.request.team.JoinResultRequest;
 import com.bigbro.wwooss.v1.dto.response.team.TeamResponse;
+import com.bigbro.wwooss.v1.dto.response.team.TeamSearchListResponse;
 import com.bigbro.wwooss.v1.enumType.TeamType;
 import com.bigbro.wwooss.v1.response.WwoossResponse;
 import com.bigbro.wwooss.v1.response.WwoossResponseUtil;
 import com.bigbro.wwooss.v1.service.team.TeamService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -90,6 +94,11 @@ public class TeamApi {
     }
 
     // 팀별 검색
-
+    @GetMapping("/team-type/{team-type}")
+    public ResponseEntity<WwoossResponse<TeamSearchListResponse>> searchTeam(Pageable pageable,
+                                                                             @PathVariable(name = "team-type") TeamType teamType,
+                                                                             @RequestParam(name = "searchText", required = false) String searchText) {
+        return WwoossResponseUtil.responseOkAddData(teamService.searchTeam(pageable, teamType, searchText));
+    }
 
 }

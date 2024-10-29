@@ -5,6 +5,8 @@ import com.bigbro.wwooss.v1.annotation.WithMockCustomUser;
 import com.bigbro.wwooss.v1.config.DocumentConfig;
 import com.bigbro.wwooss.v1.dto.request.team.JoinResultRequest;
 import com.bigbro.wwooss.v1.dto.response.team.TeamResponse;
+import com.bigbro.wwooss.v1.dto.response.team.TeamSearchListResponse;
+import com.bigbro.wwooss.v1.dto.response.team.TeamSearchResponse;
 import com.bigbro.wwooss.v1.enumType.RequestStatus;
 import com.bigbro.wwooss.v1.enumType.TeamType;
 import com.bigbro.wwooss.v1.service.team.TeamService;
@@ -24,6 +26,7 @@ import java.util.List;
 
 import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.document;
 import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.resourceDetails;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
@@ -321,4 +324,51 @@ class TeamApiTest {
 //                        )
 //                );
 //    }
+
+    @Test
+    @WithMockCustomUser
+    @DisplayName("팀 검색")
+    void searchTeam() throws Exception {
+        TeamSearchResponse teamSearchResponse = TeamSearchResponse.builder()
+                .teamId(1L)
+                .teamType(TeamType.COMPANY)
+                .teamName("WWOOSS")
+                .address("주소")
+                .build();
+        TeamSearchListResponse teamSearchListResponse = TeamSearchListResponse.builder()
+                .hasNext(false)
+                .teamSearchList(List.of(teamSearchResponse))
+                .build();
+        given(teamService.searchTeam(any(), any(), any())).willReturn(teamSearchListResponse);
+
+        this.mockMvc.perform(RestDocumentationRequestBuilders.get("/api/v1/team/team-type/{team-type}", "SCHOOL")
+                        .with(csrf().asHeader())
+                        .header("Authorization", "bearer TEST_ACCESS")
+                        .contextPath("/api")
+                        .param("size", "10")
+                        .param("page", "0")
+                        .contentType(MediaType.APPLICATION_JSON)
+                )
+                .andExpect(status().isOk())
+                .andDo(document("search-team",
+                                resourceDetails().tags("Team 검색")
+                                        .description("팀별 팀이름 기반 검색"),
+                                DocumentConfig.getDocumentRequest(),
+                                DocumentConfig.getDocumentResponse(),
+                                requestHeaders(
+                                        headerWithName("Authorization").description("인증 토큰")
+                                ),
+                                responseFields(
+                                        fieldWithPath("code").description("응답 코드"),
+                                        fieldWithPath("title").description("응답 코드 별 클라이언트 노출 제목"),
+                                        fieldWithPath("message").description("응답 코드 별 클라이언트 노출 메세지"),
+                                        fieldWithPath("data.hasNext").description("다음 여부"),
+                                        fieldWithPath("data.teamSearchList[].teamId").description("팀 아이디"),
+                                        fieldWithPath("data.teamSearchList[].teamType").description("팀 타입 - [COMPANY/SCHOOL/CREW/REGION]"),
+                                        fieldWithPath("data.teamSearchList[].teamName").description("팀 이름"),
+                                        fieldWithPath("data.teamSearchList[].address").description("팀 주소")
+                                )
+                        )
+                );
+    }
 }

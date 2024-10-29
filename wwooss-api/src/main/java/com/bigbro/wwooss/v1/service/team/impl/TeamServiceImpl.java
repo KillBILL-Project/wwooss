@@ -4,6 +4,8 @@ import com.bigbro.wwooss.v1.dto.request.team.JoinResultRequest;
 import com.bigbro.wwooss.v1.dto.request.team.TeamInfoRequest;
 import com.bigbro.wwooss.v1.dto.request.team.JoinTeamRequest;
 import com.bigbro.wwooss.v1.dto.response.team.TeamResponse;
+import com.bigbro.wwooss.v1.dto.response.team.TeamSearchListResponse;
+import com.bigbro.wwooss.v1.dto.response.team.TeamSearchResponse;
 import com.bigbro.wwooss.v1.entity.team.Team;
 import com.bigbro.wwooss.v1.entity.teamRequest.TeamRequest;
 import com.bigbro.wwooss.v1.entity.teamUser.TeamUser;
@@ -26,6 +28,8 @@ import com.bigbro.wwooss.v1.utils.ImageUtil;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -181,6 +185,24 @@ public class TeamServiceImpl implements TeamService {
         }
 
         team.updateTeamInfo(teamInfoRequest.getEmail());
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public TeamSearchListResponse searchTeam(Pageable pageable, TeamType teamType, String searchText) {
+        Slice<Team> searchedTeam = teamRepository.findTeamByTeamTypeAndTeamNameContaining(teamType, searchText, pageable);
+        List<TeamSearchResponse> result = searchedTeam.getContent().stream()
+                .map((team) -> TeamSearchResponse.builder()
+                        .teamId(team.getTeamId())
+                        .teamName(team.getTeamName())
+                        .address(team.getAddress())
+                        .teamType(team.getTeamType())
+                        .build()).toList();
+
+        return TeamSearchListResponse.builder()
+                .hasNext(searchedTeam.hasNext())
+                .teamSearchList(result)
+                .build();
     }
 
     private void checkValidRequest(TeamInfoRequest teamInfoRequest, MultipartFile logo, MultipartFile businessRegit) {

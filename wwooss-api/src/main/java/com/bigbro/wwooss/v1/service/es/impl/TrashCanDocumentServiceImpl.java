@@ -9,7 +9,6 @@ import com.bigbro.wwooss.v1.service.trash.can.TrashCanService;
 import com.bigbro.wwooss.v1.utils.ImageUtil;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
