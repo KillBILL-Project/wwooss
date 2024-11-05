@@ -35,8 +35,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import static com.bigbro.wwooss.v1.response.WwoossResponseCode.*;
 import static com.bigbro.wwooss.v1.utils.ImageUtil.TEAM_BUSINESS_REGIT;
@@ -142,8 +144,10 @@ public class TeamServiceImpl implements TeamService {
     @Transactional(readOnly = true)
     public List<TeamResponse> getMyTeam(Long userId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new DataNotFoundException(WwoossResponseCode.NOT_FOUND_DATA, "존재하지 않는 유저입니다."));
+
+        // 승인된 팀
         List<TeamUser> teamUsers = teamUserRepository.findByUser(user);
-        return teamUsers.stream().map((teamUser) -> TeamResponse.builder()
+        ArrayList<TeamResponse> list = teamUsers.stream().map((teamUser) -> TeamResponse.builder()
                 .teamId(teamUser.getTeam().getTeamId())
                 .teamType(teamUser.getTeam().getTeamType())
                 .teamName(teamUser.getTeam().getTeamName())
@@ -151,7 +155,21 @@ public class TeamServiceImpl implements TeamService {
                 .owner(teamUser.getTeam().getCreateBy().getUserId().equals(user.getUserId()))
                 .logoImage(imageUtil.baseTeamLogo() + "/" + teamUser.getTeam().getLogoImagePath())
                 .build()
-        ).toList();
+        ).collect(Collectors.toCollection(ArrayList::new));
+
+        // 승인 요청중인 팀
+        List<TeamRequest> requestTeam = teamRequestRepository.findByRequestUserAndStatusIn(user, List.of(RequestStatus.PENDING, RequestStatus.REJECT));
+         requestTeam.forEach((request) -> {
+            list.add(TeamResponse.builder()
+                    .teamId(request.getTeam().getTeamId())
+                    .teamType(request.getTeam().getTeamType())
+                    .teamName(request.getTeam().getTeamName())
+                    .status(request.getTeam().getStatus())
+                    .owner(request.getTeam().getCreateBy().getUserId().equals(user.getUserId()))
+                    .logoImage(imageUtil.baseTeamLogo() + "/" + request.getTeam().getLogoImagePath())
+                    .build());
+        });
+        return list;
     }
 
     @Override
