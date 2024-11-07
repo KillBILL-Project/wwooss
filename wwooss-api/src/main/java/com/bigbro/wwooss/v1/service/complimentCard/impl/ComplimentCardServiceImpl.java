@@ -10,6 +10,7 @@ import com.bigbro.wwooss.v1.entity.user.User;
 import com.bigbro.wwooss.v1.enumType.CardCode;
 import com.bigbro.wwooss.v1.enumType.CardType;
 import com.bigbro.wwooss.v1.enumType.ComplimentType;
+import com.bigbro.wwooss.v1.enumType.IssueType;
 import com.bigbro.wwooss.v1.exception.DataNotFoundException;
 import com.bigbro.wwooss.v1.repository.complimentCard.ComplimentCardMetaRepository;
 import com.bigbro.wwooss.v1.repository.complimentCard.ComplimentCardRepository;
@@ -22,6 +23,7 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Optional;
 
+import com.bigbro.wwooss.v1.service.wwoossToken.WwoossTokenService;
 import com.bigbro.wwooss.v1.utils.ImageUtil;
 import org.springframework.data.domain.Pageable;
 import java.util.List;
@@ -56,6 +58,7 @@ public class ComplimentCardServiceImpl implements ComplimentCardService {
     private static final int CONTINUITY_VIEW_TRASH_CAN_HISTORY_COUNT = 1;
     private static final int CONTINUITY_FIND_TRASH_CAN_COUNT = 1;
 
+    private final WwoossTokenService wwoossTokenService;
 
     @Override
     @Transactional
@@ -72,6 +75,8 @@ public class ComplimentCardServiceImpl implements ComplimentCardService {
 
         // 주간 칭찬 스티커 생성
         createWeeklyComplimentCard(user, complimentConditionLogs.get(0), getWeeklyComplimentCondition(complimentCardRequest.getComplimentType()));
+        // token 생성
+        wwoossTokenService.issueWwoossToken(complimentCardRequest.getUserId(), IssueType.COMPLIMENT_CARD);
     }
 
     @Override
